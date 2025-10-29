@@ -1,10 +1,10 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-### **Plugin Version:** 0.8.3
+**Plugin Version:** 0.8.3
 
-### **Version Notes:** VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields.
+**Version Notes:** VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields.
 
-### **Author:** Panagiotis Drougas / VapeVida
+**Author:** Panagiotis Drougas / VapeVida
 
 ---
 
