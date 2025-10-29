@@ -166,7 +166,7 @@ function vv_render_details_page() {
     ?>
     <div class="wrap">
         <h1>VapeVida Flavorshot Recommender Quiz</h1>
-        <p class="about-text">Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του custom plugin.</p>
+        <p class="about-text">Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του plugin.</p>
         
         <hr class="wp-header-end">
 
@@ -174,7 +174,7 @@ function vv_render_details_page() {
             
             <div id="vv-settings-form-wrapper" style="flex: 2; min-width: 0;"> 
                 <div id="vv-settings-form" class="postbox" style="margin-bottom: 20px;">
-                    <h2 class="hndle"><span><span class="dashicons dashicons-forms"></span> Ρυθμίσεις Quiz</span></h2>
+                    <h2 class="hndle"><span><span class="dashicons dashicons-admin-generic"></span> Ρυθμίσεις Quiz</span></h2>
                     <div class="inside">
                         <form method="post" action="options.php">
                             <?php 
@@ -187,13 +187,13 @@ function vv_render_details_page() {
                 </div>
             </div> <div id="vv-sidebar-metadata" class="postbox-container" style="flex: 1; min-width: 300px;">
                 <div class="postbox">
-                    <h2 class="hndle"><span><span class="dashicons dashicons-clipboard" style="font-size: 1.2em; vertical-align: middle;"></span> Πληροφορίες Plugin</span></h2>
+                    <h2 class="hndle"><span><span class="dashicons dashicons-info" style="font-size: 1.2em; vertical-align: middle;"></span> Πληροφορίες Plugin</span></h2>
                     <div class="inside">
                         <ul style="list-style: none; padding: 0; margin: 0;">
                             <li style="margin-bottom: 8px;"><strong>Συντάκτης:</strong> <span style="font-weight: bold;"><?php echo $plugin_author; ?></span></li>
                             <li style="margin-bottom: 8px;"><strong>Έκδοση Plugin:</strong> <?php echo $plugin_version; ?></li>
                             <li style="margin-bottom: 12px;"><strong>Version Notes:</strong> <em><?php echo $version_notes; ?></em></li> 
-                            <li style="margin-bottom: 12px;"><strong>Features:</strong> <em><?php echo $features; ?></em></li> 
+                            <li style="margin-bottom: 12px;"><strong>To Be Added Features:</strong> <em><?php echo $features; ?></em></li> 
                             
                             <li style="border-top: 1px solid #eee; padding-top: 12px;"><strong>URL Καταστήματος:</strong> <a href="<?php echo esc_url($shop_url); ?>" target="_blank">Άνοιγμα Καταστήματος</a></li>
                         </ul>
