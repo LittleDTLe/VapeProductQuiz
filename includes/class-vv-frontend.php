@@ -22,6 +22,7 @@ function vv_recommender_quiz_shortcode() {
     $label_primary = isset( $settings['label_primary'] ) ? esc_html($settings['label_primary']) : '2. Βασικό Συστατικό:';
     $label_secondary = isset( $settings['label_secondary'] ) ? esc_html($settings['label_secondary']) : '3. Δευτερεύον Συστατικό:';
     $cta_button_text = isset( $settings['button_cta'] ) ? esc_html($settings['button_cta']) : 'ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ'; 
+    $clear_button_text = isset( $settings['button_clear_cta'] ) ? esc_html($settings['button_clear_cta']) : 'ΚΑΘΑΡΙΣΜΟΣ';
     
     // --- NEW: Dynamic Placeholder for Field 1 ---
     $placeholder_type = isset( $settings['placeholder_type'] ) ? esc_attr($settings['placeholder_type']) : '-- Επιλέξτε Προφίλ --';
@@ -111,13 +112,12 @@ function vv_recommender_quiz_shortcode() {
                 <?php endif; ?>
                 
             </div> 
-            
-            <button type="submit" class="button"><?php echo $cta_button_text; ?></button>
+                <button type="submit" class="button vv-cta-button"> <?php echo $cta_button_text; ?> </button>
         </form>
 
     </div>
     
-    <style>
+   <style>
         /* BASE STYLING (Mobile/Tablet Default) */
         .vv-quiz-container { 
             width: 90%; 
@@ -141,13 +141,13 @@ function vv_recommender_quiz_shortcode() {
         /* Updated: label[required] CSS now targets the dynamic 'required' attribute */
         .vv-quiz-container label[required] { display: block; margin-top: 5px; font-weight: bold; }
         .vv-quiz-container select { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; }
-        
+
         /* Button Style */
         .vv-quiz-container button { 
             width: 100%; 
             padding: 10px; 
             margin-top: 20px; 
-            background-color: #e21e51; /* Custom Color */
+            background-color: #e21e51; 
             color: white; 
             border: none; 
             cursor: pointer; 
@@ -196,6 +196,7 @@ function vv_recommender_quiz_shortcode() {
             }
         }
     </style>
+
 
     <?php
     return ob_get_clean();

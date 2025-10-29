@@ -75,6 +75,7 @@ function vv_quiz_register_settings() {
     add_settings_field('placeholder_secondary', 'Placeholder Δευτερεύοντος Συστατικού', 'vv_quiz_text_field_callback', 'vapevida-quiz-details', 'vv_quiz_main_section', ['field_id' => 'placeholder_secondary', 'default' => '-- Επιλογή Δευτερεύον Συστατικού --']);
     add_settings_field('button_cta', 'Κείμενο Κουμπιού (CTA)', 'vv_quiz_text_field_callback', 'vapevida-quiz-details', 'vv_quiz_main_section', ['field_id' => 'button_cta', 'default' => 'ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ']);
 }
+
 add_action( 'admin_init', 'vv_quiz_register_settings' );
 
 // --- 9. Callbacks for Settings Fields ---
