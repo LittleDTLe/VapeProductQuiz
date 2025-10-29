@@ -18,10 +18,10 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 ## 🛠️ Key Features
 
-- **Dynamic Filtering (AND Logic):** The system ensures that products must match **ALL** selections (Flavor Type AND Ingredients) to appear in the filtered results.
-- **Dynamic Content Control:** All user-facing text (Headings, Labels, Placeholders, and Button Text) is editable via the Admin Settings.
-- **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled **ON** or **OFF** from the settings page.
-- **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms. New flavors appear in the quiz the moment they are assigned to a product.
+- [x] **Dynamic Filtering (AND Logic):** The system ensures that products must match **ALL** selections (Flavor Type AND Ingredients) to appear in the filtered results.
+- [x] **Dynamic Content Control:** All user-facing text (Headings, Labels, Placeholders, and Button Text) is editable via the Admin Settings.
+- [x] **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled **ON** or **OFF** from the settings page.
+- [x] **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms. New flavors appear in the quiz the moment they are assigned to a product.
 
 ---
 
