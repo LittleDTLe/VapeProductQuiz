@@ -25,6 +25,21 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 ---
 
+## To Implement Features
+
+- [] **Admin Dashboard Responsiveness** Add responsiveness to the admin dashboard settings page of the plugin
+- [] **Button Color** Add Admin Control of the CTA button color on all states (Idle, Hover, Active)
+
+---
+
+---
+
+## Feature Ideas
+
+- [] **Multi Quiz Support** Add Multiple Quiz Support to the plugin
+
+---
+
 ## 1. Installation and Required Setup
 
 ### 1.1 Installation
