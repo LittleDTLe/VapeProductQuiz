@@ -39,6 +39,10 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 ## Feature Ideas
 
+To implement the below features / ideas, there would need to be a complete refactoring of the plugin.
+
+It could be possible to either have them as seperate plugins or a **free** version, with the current feature-set and a **premium** version with the added features.
+
 - [ ] **Multi Quiz Support** Add Multiple Quiz Support to the plugin
 - [ ] **Category Page Quiz** Add Dynamic Quizes to Category pages with Ajax Filtering Capabilities
 
