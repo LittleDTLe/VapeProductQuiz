@@ -39,6 +39,7 @@ This section outlines planned features that would require further development (p
 - [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
 - [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
+- [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ### Feature Ideas (Refactoring Required)
 
