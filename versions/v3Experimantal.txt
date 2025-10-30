@@ -1,3 +1,13 @@
+/* This version of the class-vv-admin.php file includes a use defaults checkbox
+*  If Admin selects to use custom attributes, they can then select the Attributes from the dropdowns.
+*/
+
+/* Problems with:
+*  No instant visibility for dropowns
+*  On default attribute usage, the indication for which attribute is used is only
+*  visible in one of the dropowns
+*/
+
 <?php
 /**
  * Admin Logic for VapeVida Quiz.
@@ -34,7 +44,6 @@ function vv_add_plugin_action_links( $actions ) {
 // -----------------------------------------------------------
 // A. SETTINGS API IMPLEMENTATION & CALLBACKS
 // -----------------------------------------------------------
-
 // --- 8. Register Settings Fields ---
 function vv_quiz_register_settings() {
     register_setting( 'vv_quiz_options_group', 'vv_quiz_settings' );
@@ -58,7 +67,10 @@ function vv_quiz_register_settings() {
         'vapevida-quiz-details'
     );
 
-    // Attribute Selectors
+    // Custom Attributes Toggle
+    add_settings_field('use_custom_attributes', 'Χρήση Προσαρμοσμένων Attributes', 'vv_quiz_custom_attributes_toggle_callback', 'vapevida-quiz-details', 'vv_quiz_main_section');
+    
+    // Attribute Selectors (conditional)
     add_settings_field('attribute_type_slug', '1. Attribute για Τύπο', 'vv_quiz_attribute_select_callback', 'vapevida-quiz-details', 'vv_quiz_main_section', ['field_id' => 'attribute_type_slug']);
     add_settings_field('attribute_ingredient_slug', '2. Attribute για Συστατικό', 'vv_quiz_attribute_select_callback', 'vapevida-quiz-details', 'vv_quiz_main_section', ['field_id' => 'attribute_ingredient_slug']);
 
@@ -93,6 +105,21 @@ function vv_quiz_main_section_callback() {
     echo '<p>Εδώ ορίζετε τις ετικέτες και τη δομή του Quiz που εμφανίζεται στην Αρχική Σελίδα.</p>';
 }
 
+// NEW: Custom Attributes Toggle Callback
+function vv_quiz_custom_attributes_toggle_callback() {
+    $options = get_option( 'vv_quiz_settings' );
+    $use_custom = isset( $options['use_custom_attributes'] ) ? $options['use_custom_attributes'] : false;
+    $checked = checked( 1, $use_custom, false );
+    
+    echo '<div class="vv-custom-attributes-toggle">';
+    echo '<label>';
+    echo '<input type="checkbox" id="use_custom_attributes" name="vv_quiz_settings[use_custom_attributes]" value="1" ' . $checked . ' onchange="vvToggleCustomAttributes(this)" />';
+    echo ' <strong>Χρήση προσαρμοσμένων Global Attributes</strong>';
+    echo '</label>';
+    echo '<p class="description">Ενεργοποιήστε αυτή την επιλογή για να επιλέξετε διαφορετικά attributes από τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient).</p>';
+    echo '</div>';
+}
+
 function vv_quiz_status_callback() {
     $options = get_option( 'vv_quiz_settings' );
     $checked = isset( $options['field_status'] ) ? $options['field_status'] : false;
@@ -110,34 +137,70 @@ function vv_quiz_text_field_callback( $args ) {
 }
 
 
-// --- Callback to list all Global WooCommerce Attributes ---
+// --- UPDATED: Callback to list all Global WooCommerce Attributes (with conditional wrapper) ---
 function vv_quiz_attribute_select_callback( $args ) {
     $options = get_option( 'vv_quiz_settings' );
     $field_id = $args['field_id'];
     $current_slug = isset( $options[$field_id] ) ? $options[$field_id] : '';
-
-    // Fetch all global WooCommerce attributes
-    $attributes = wc_get_attribute_taxonomies();
+    $use_custom = isset( $options['use_custom_attributes'] ) ? $options['use_custom_attributes'] : false;
     
-    // Start the dropdown field
-    echo '<select name="vv_quiz_settings[' . esc_attr($field_id) . ']" id="' . esc_attr($field_id) . '" class="regular-text">';
-    echo '<option value="">-- Επιλέξτε Attribute --</option>';
-
-    if ( ! empty( $attributes ) ) {
-        foreach ( $attributes as $attribute ) {
-            $taxonomy_slug = 'pa_' . $attribute->attribute_name;
-            $selected = selected( $current_slug, $taxonomy_slug, false );
-            
-            // Display: Attribute Name (pa_slug)
-            echo '<option value="' . esc_attr($taxonomy_slug) . '" ' . $selected . '>';
-            echo esc_html($attribute->attribute_label) . ' (' . esc_html($taxonomy_slug) . ')';
-            echo '</option>';
-        }
+    // Set defaults based on field
+    $default_slug = '';
+    if ($field_id === 'attribute_type_slug') {
+        $default_slug = 'pa_geuseis';
+    } elseif ($field_id === 'attribute_ingredient_slug') {
+        $default_slug = 'pa_quiz-ingredient';
     }
-    echo '</select>';
-    echo '<p class="description">Επιλέξτε τον Global Attribute που θα γεμίσει αυτό το πεδίο.</p>';
-}
+    
+    // If custom attributes not enabled, use default
+    if (!$use_custom && empty($current_slug)) {
+        $current_slug = $default_slug;
+    }
+    
+    // Add to conditional wrapper (only show if custom attributes enabled)
+    $wrapper_class = ($field_id === 'attribute_type_slug') ? 'vv-custom-attributes-fields' : '';
+    $hidden_class = (!$use_custom && $field_id === 'attribute_type_slug') ? ' hidden' : '';
+    
+    if ($field_id === 'attribute_type_slug') {
+        echo '<div id="vv-custom-attributes-fields" class="' . $wrapper_class . $hidden_class . '">';
+    }
+    
+    echo '<div class="vv-attribute-field-row">';
+    
+    // Show default value info
+    if (!$use_custom) {
+        echo '<p style="background: #f0f0f0; padding: 10px; border-left: 3px solid #2271b1;">';
+        echo '<strong>Προεπιλογή:</strong> <code>' . esc_html($default_slug) . '</code>';
+        echo '</p>';
+    } else {
+        // Fetch all global WooCommerce attributes
+        $attributes = wc_get_attribute_taxonomies();
+        
+        // Start the dropdown field
+        echo '<select name="vv_quiz_settings[' . esc_attr($field_id) . ']" id="' . esc_attr($field_id) . '" class="regular-text">';
+        echo '<option value="">-- Επιλέξτε Attribute --</option>';
 
+        if ( ! empty( $attributes ) ) {
+            foreach ( $attributes as $attribute ) {
+                $taxonomy_slug = 'pa_' . $attribute->attribute_name;
+                $selected = selected( $current_slug, $taxonomy_slug, false );
+                
+                // Display: Attribute Name (pa_slug)
+                echo '<option value="' . esc_attr($taxonomy_slug) . '" ' . $selected . '>';
+                echo esc_html($attribute->attribute_label) . ' (' . esc_html($taxonomy_slug) . ')';
+                echo '</option>';
+            }
+        }
+        echo '</select>';
+        echo '<p class="description">Επιλέξτε τον Global Attribute που θα γεμίσει αυτό το πεδίο.</p>';
+    }
+    
+    echo '</div>'; // Close vv-attribute-field-row
+    
+    if ($field_id === 'attribute_ingredient_slug') {
+        echo '</div>'; // Close vv-custom-attributes-fields
+    }
+}
 // -----------------------------------------------------------
 // B. DASHBOARD RENDERING (vv_render_details_page)
 // -----------------------------------------------------------

@@ -29,9 +29,10 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 - [ ] **Button Color:** Add Admin Control of the CTA button color on all states (Idle, Hover, Active)
 - [x] **Responsive Admin Dashboard:** Add responsiveness to the admin dashboard settings page of the plugin
-- [ ] **Dynamic Cascading Filters** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages
-- [ ] **Result Preview** Combined with the Dynamic CTA, the user can see how many results there are to their search
-- [ ] **Analytics & Tracking** Create a Hook (before rediraction), to track user behavior and overall usage
+- [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages
+- [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search
+- [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage
+- [ ] **Default Attribute Toggle:** Create a Hook (before rediraction), to track user behavior and overall usage
 
 ---
 
