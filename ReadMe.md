@@ -16,36 +16,36 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 ---
 
-## 🛠️ Key Features
+## 🛠️ Key Features (Currently Implemented)
 
-- [x] **Dynamic Filtering (AND Logic):** The system ensures that products must match **ALL** selections (Flavor Type AND Ingredients) to appear in the filtered results.
-- [x] **Dynamic Content Control:** All user-facing text (Headings, Labels, Placeholders, and Button Text) is editable via the Admin Settings.
-- [x] **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled **ON** or **OFF** from the settings page.
-- [x] **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms. New flavors appear in the quiz the moment they are assigned to a product.
-
----
-
-## To Implement Features
-
-- [x] **Button Color:** Add Admin Control of the CTA button color on all states (Idle, Hover, Active)
-- [x] **Responsive Admin Dashboard:** Add responsiveness to the admin dashboard settings page of the plugin
-- [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages
-- [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search
-- [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage
-- [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom
+- **Dynamic Filtering (AND Logic):** The system ensures that products must match **ALL** selections (Flavor Type AND Ingredients) to appear in the filtered results.
+- **Dynamic Content Control:** All user-facing text (Headings, Labels, Placeholders, and Button Text) is editable via the Admin Settings.
+- **Button Color Control:** The background and text colors for the CTA button in both **Idle** and **Hover** states are configurable via color swatches.
+- **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled **ON** or **OFF** from the settings page.
+- **Admin Dashboard Responsiveness:** The settings page automatically adjusts its layout for mobile, tablet, and desktop screens.
+- **Required Field Control:** The admin can set which fields (Type, Primary, Secondary) are mandatory for form submission.
+- **Attribute Remapping:** The admin can select which Global Attributes (`pa_...`) will fill the dropdown fields directly from the dashboard settings.
+- **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
 
 ---
 
----
+## 💡 Future Development & Features
 
-## Feature Ideas
+This section outlines planned features that would require further development (potentially a premium version).
 
-To implement the below features / ideas, there would need to be a complete refactoring of the plugin.
+### To Implement Features (Planned for Next Releases)
 
-It could be possible to either have them as seperate plugins or a **free** version, with the current feature-set and a **premium** version with the added features.
+- [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
+- [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
+- [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
+- [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
 
-- [ ] **Multi Quiz Support** Add Multiple Quiz Support to the plugin
-- [ ] **Category Page Quiz** Add Dynamic Quizes to Category pages with Ajax Filtering Capabilities
+### Feature Ideas (Refactoring Required)
+
+To implement the below features / ideas, there would need to be a complete refactoring of the plugin (e.g., transitioning to a Custom Post Type architecture).
+
+- [ ] **Multi Quiz Support** Add Multiple Quiz Support to the plugin.
+- [ ] **Category Page Quiz** Add Dynamic Quizes to Category pages with Ajax Filtering Capabilities.
 
 ---
 
@@ -54,7 +54,7 @@ It could be possible to either have them as seperate plugins or a **free** versi
 ### 1.1 Installation
 
 1.  Place all plugin files (`vapevida-quiz.php`, `includes/`, etc.) into a folder named `vapevida-quiz` within your WordPress site's plugins directory (`wp-content/plugins/`).
-2.  In your WordPress Dashboard, navigate to **Plugins** and **Activate** the "VapeVida Flavorshot Recommender Quiz."
+2.  In your WordPress Dashboard, navigate to **Plugins** and **Activate** the "VapeVida Flavorshot Recommender Quiz".
 
 ### 1.2 Required Data Mapping (Crucial)
 
@@ -62,14 +62,12 @@ The plugin requires two specific **Global Attributes** to be active and populate
 
 | Filter Purpose                 | Global Attribute Slug | WooCommerce Name | Data Responsibility                                                               |
 | :----------------------------- | :-------------------- | :--------------- | :-------------------------------------------------------------------------------- |
-| **Flavor Type (Field 1)**      | `pa_geuseis`          | Τύπος Γεύσης     | Must contain terms like _Sweet_, _Tobacco_, _Fruity_.                             |
+| **Flavor Type (Field 1)**      | `pa_geuseis`          | Τύπος Γεύσης     | Used for broad selection (e.g., _Sweet_, _Tobacco_, _Fruity_).                    |
 | **Ingredients (Fields 2 & 3)** | `pa_quiz-ingredient`  | Συστατικό (Quiz) | Must contain all individual ingredients (e.g., _Strawberry_, _Cream_, _Vanilla_). |
 
 ---
 
 ## 2. Admin Configuration and Management
-
-All dynamic settings and text modifications are handled in the dedicated plugin page.
 
 ### 2.1 Accessing the Settings
 
@@ -77,12 +75,16 @@ Navigate to the main sidebar and click on the **VapeVida Quiz** menu item.
 
 ### 2.2 Form Structure and Control
 
-| Section                           | Setting                     | Purpose                                                                                                                                                                                     |
-| :-------------------------------- | :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Ρυθμίσεις Απαιτούμενων Πεδίων** | Checkboxes (Is Required?)   | Controls **form validation**. Determines which fields the customer must fill out to submit the quiz.                                                                                        |
-| **Ρυθμίσεις Φόρμας και Ετικετών** | **Ενεργοποίηση 3ου Πεδίου** | Toggles the visibility of the optional "Δευτερεύον Συστατικό" dropdown.                                                                                                                     |
-| **Ρυθμίσεις Φόρμας και Ετικετών** | **Placeholder / Ετικέτες**  | Allows you to change the text for the main headings (H2), subtitle (P), all dropdown labels (e.g., "1. Προφίλ Υγρού:"), and the button CTA.                                                 |
-| **Attribute Selectors**           | Attribute Dropdowns         | (For developers/advanced users) Allows remapping the quiz fields to different Global Attributes (e.g., changing from `pa_geuseis` to `pa_hardware`) if needed for a different quiz purpose. |
+Όλες οι δυναμικές ρυθμίσεις και οι προσαρμογές του κειμένου γίνονται μέσω των παρακάτω ενοτήτων στη σελίδα **VapeVida Quiz** (Admin).
+
+| Ομάδα Ρυθμίσεων                     | Ενεργά Πεδία / Παράμετροι                                                           | Σκοπός και Αποτέλεσμα                                                                                                                        |
+| :---------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Απαιτούμενα Πεδία**               | Checkboxes (Type, Primary, Secondary)                                               | Ελέγχει τη **συμπεριφορά επικύρωσης (validation)** της φόρμας. Ορίζει ποια πεδία ο πελάτης πρέπει να συμπληρώσει για να υποβάλει το Quiz.    |
+| **Επιλογή Attributes**              | **Attribute για Τύπο (Field 1)**, **Attribute για Συστατικό (Fields 2/3)**          | Ορίζει **δυναμικά** τους Global Attribute Slugs (`pa_...`) που θα χρησιμοποιηθούν για τη λήψη των Όρων (Terms) και την εκτέλεση του φίλτρου. |
+| **Ετικέτες Φόρμας**                 | **Label 1, Label 2, Label 3**                                                       | Αλλάζει το εμφανιζόμενο κείμενο μπροστά από κάθε dropdown.                                                                                   |
+| **Πλαίσια Κειμένου (Placeholders)** | **Placeholder 1, Placeholder Primary, Placeholder Secondary**                       | Ορίζει το κείμενο που εμφανίζεται μέσα στα dropdowns πριν γίνει η επιλογή.                                                                   |
+| **Κεφαλίδες Φόρμας**                | **Τίτλος Quiz (H2)**, **Υπότιτλος Quiz (P)**                                        | Ελέγχει τα κύρια μηνύματα marketing της φόρμας.                                                                                              |
+| **Συμπεριφορά & Χρώματα**           | **Ενεργοποίηση 3ου Πεδίου**, **Κείμενο Κουμπιού (CTA)**, **Χρώμα Background/Hover** | Ελέγχει τη συνολική δομή (εάν εμφανίζεται το 3ο πεδίο) και το πλήρες branding των κουμπιών.                                                  |
 
 ---
 
