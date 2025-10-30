@@ -4,8 +4,8 @@
  * Description: Product Recommendation Quiz for Flavorshots, which automatically filters populated Global Access Attributes. Requires pa_geuseis and pa_quiz-ingredient, which get automatically created, if missing.
  * Version: 0.8.6
  * Author: Panagiotis Drougas
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Responsive Admin Page, Easy Shortcode Copy.
- * Features: Button Color Control, Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking.
+ * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy.
+ * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;

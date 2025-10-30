@@ -24,18 +24,24 @@ function vv_recommender_quiz_shortcode() {
     $cta_button_text = isset( $settings['button_cta'] ) ? esc_html($settings['button_cta']) : 'ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ'; 
     $clear_button_text = isset( $settings['button_clear_cta'] ) ? esc_html($settings['button_clear_cta']) : 'ΚΑΘΑΡΙΣΜΟΣ';
     
-    // --- NEW: Dynamic Placeholder for Field 1 ---
+    // --- Dynamic Placeholder for Field 1 ---
     $placeholder_type = isset( $settings['placeholder_type'] ) ? esc_attr($settings['placeholder_type']) : '-- Επιλέξτε Προφίλ --';
     $placeholder_primary = isset( $settings['placeholder_primary'] ) ? esc_attr($settings['placeholder_primary']) : '-- Επιλέξτε Βασικό Συστατικό --';
     $placeholder_secondary = isset( $settings['placeholder_secondary'] ) ? esc_attr($settings['placeholder_secondary']) : '-- Επιλέξτε Δευτερεύον Συστατικό --';
     
-    // --- NEW: Get Required Statuses and generate HTML attribute string ---
+    // --- Get Required Statuses and generate HTML attribute string ---
     $is_type_required_attr = isset( $settings['is_type_required'] ) && $settings['is_type_required'] ? 'required' : '';
     $is_primary_required_attr = isset( $settings['is_primary_required'] ) && $settings['is_primary_required'] ? 'required' : '';
     $is_secondary_required_attr = isset( $settings['is_secondary_required'] ) && $settings['is_secondary_required'] ? 'required' : '';
     
+    // --- DYNAMICALLY READ BUTTON COLORS FROM SAVED SETTINGS ---
+    $btn_bg_color = isset( $settings['btn_bg_color'] ) ? esc_html($settings['btn_bg_color']) : '#e21e51';
+    $btn_bg_hover_color = isset( $settings['btn_bg_hover_color'] ) ? esc_html($settings['btn_bg_hover_color']) : '#4d40ff';
+
+    $btn_txt_color = isset( $settings['btn_txt_color'] ) ? esc_html( $settings['btn_txt_color'] ) : 'white';
+    $btn_txt_hover_color = isset( $settings['btn_txt_hover_color'] ) ? esc_html( $settings['btn_txt_hover_color'] ) : 'white';
     
-    // --- DYNAMICALLY READ ATTRIBUTE SLUGS FROM SAVED SETTINGS (Fix from previous step) ---
+    // --- DYNAMICALLY READ ATTRIBUTE SLUGS FROM SAVED SETTINGS ---
     $type_taxonomy_slug = isset($settings['attribute_type_slug']) ? $settings['attribute_type_slug'] : 'pa_geuseis';
     $ingredient_taxonomy_slug = isset($settings['attribute_ingredient_slug']) ? $settings['attribute_ingredient_slug'] : 'pa_quiz-ingredient';
 
@@ -147,12 +153,18 @@ function vv_recommender_quiz_shortcode() {
             width: 100%; 
             padding: 10px; 
             margin-top: 20px; 
-            background-color: #e21e51; 
-            color: white; 
+            background-color: <?= $btn_bg_color; ?>; 
+            color: <?= $btn_txt_color?>; 
             border: none; 
             cursor: pointer; 
             display: block; 
             font-size: 16px;
+        }
+
+        .vv-quiz-container button:hover{
+            background-color: <?= $btn_bg_hover_color ?>; 
+            color: <?= $btn_txt_hover_color ?>;
+            border: none;
         }
 
         /* Required Field Asterisk - Targets the attribute added dynamically via PHP */
