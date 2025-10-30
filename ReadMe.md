@@ -32,7 +32,7 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages
 - [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage
-- [ ] **Default Attribute Toggle:** Create a Hook (before rediraction), to track user behavior and overall usage
+- [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom
 
 ---
 
