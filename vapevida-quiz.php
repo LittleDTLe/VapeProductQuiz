@@ -2,10 +2,10 @@
 /**
  * Plugin Name: VapeVida Flavorshot Recommender Quiz
  * Description: Product Recommendation Quiz for Flavorshots, which automatically filters populated Global Access Attributes. Requires pa_geuseis and pa_quiz-ingredient, which get automatically created, if missing.
- * Version: 0.8.7
+ * Version: 0.8.9
  * Author: Panagiotis Drougas
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy.
- * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking.
+ * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button.
+ * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking, Dynamic Custom Attribute Selectors.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;

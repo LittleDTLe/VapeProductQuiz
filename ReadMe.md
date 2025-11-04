@@ -1,6 +1,6 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 0.8.7
+**Plugin Version:** 0.8.9
 
 **Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy.
 
@@ -39,6 +39,10 @@ This section outlines planned features that would require further development (p
 - [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
 - [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
+- [ ] **Reset Button:** Add a Reset Button to easily clear selections.
+- [ ] **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
+- [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
+- [ ] **Conditional Dashboard Attribute:** Conditionally load the attribute selectors in the admin page
 - [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ### Feature Ideas (Refactoring Required)

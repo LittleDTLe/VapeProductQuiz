@@ -37,13 +37,23 @@ function vv_recommender_quiz_shortcode() {
     // --- DYNAMICALLY READ BUTTON COLORS FROM SAVED SETTINGS ---
     $btn_bg_color = isset( $settings['btn_bg_color'] ) ? esc_html($settings['btn_bg_color']) : '#e21e51';
     $btn_bg_hover_color = isset( $settings['btn_bg_hover_color'] ) ? esc_html($settings['btn_bg_hover_color']) : '#4d40ff';
-
-    $btn_txt_color = isset( $settings['btn_txt_color'] ) ? esc_html( $settings['btn_txt_color'] ) : 'white';
-    $btn_txt_hover_color = isset( $settings['btn_txt_hover_color'] ) ? esc_html( $settings['btn_txt_hover_color'] ) : 'white';
+    $btn_txt_color = isset( $settings['btn_txt_color'] ) ? esc_html( $settings['btn_txt_color'] ) : '#FFFFFF';
+    $btn_txt_hover_color = isset( $settings['btn_txt_hover_color'] ) ? esc_html( $settings['btn_txt_hover_color'] ) : '#FFFFFF';
+    
+    // Clear Button Colors
+    $clear_btn_bg_color = isset( $settings['clear_btn_bg_color'] ) ? esc_html($settings['clear_btn_bg_color']) : '#6c757d';
+    $clear_btn_bg_hover_color = isset( $settings['clear_btn_bg_hover_color'] ) ? esc_html($settings['clear_btn_bg_hover_color']) : '#5a6268';
+    $clear_btn_txt_color = isset( $settings['clear_btn_txt_color'] ) ? esc_html( $settings['clear_btn_txt_color'] ) : '#FFFFFF';
+    $clear_btn_txt_hover_color = isset( $settings['clear_btn_txt_hover_color'] ) ? esc_html( $settings['clear_btn_txt_hover_color'] ) : '#FFFFFF';
     
     // --- DYNAMICALLY READ ATTRIBUTE SLUGS FROM SAVED SETTINGS ---
-    $type_taxonomy_slug = isset($settings['attribute_type_slug']) ? $settings['attribute_type_slug'] : 'pa_geuseis';
-    $ingredient_taxonomy_slug = isset($settings['attribute_ingredient_slug']) ? $settings['attribute_ingredient_slug'] : 'pa_quiz-ingredient';
+    $use_custom = isset( $settings['use_custom_attributes'] ) ? $settings['use_custom_attributes'] : false;
+    $type_taxonomy_slug = $use_custom && isset($settings['attribute_type_slug']) && !empty($settings['attribute_type_slug']) 
+        ? $settings['attribute_type_slug'] 
+        : 'pa_geuseis';
+    $ingredient_taxonomy_slug = $use_custom && isset($settings['attribute_ingredient_slug']) && !empty($settings['attribute_ingredient_slug']) 
+        ? $settings['attribute_ingredient_slug'] 
+        : 'pa_quiz-ingredient';
 
     // IMPORTANT: The form input name must be the attribute slug without the 'pa_' prefix.
     $form_filter_type_name = str_replace('pa_', 'filter_', $type_taxonomy_slug);
@@ -117,11 +127,28 @@ function vv_recommender_quiz_shortcode() {
                 </div>
                 <?php endif; ?>
                 
-            </div> 
-                <button type="submit" class="button vv-cta-button"> <?php echo $cta_button_text; ?> </button>
+            </div>
+            
+            <div class="vv-button-row">
+                <button type="submit" class="button vv-cta-button"><?php echo $cta_button_text; ?></button>
+                <button type="button" class="button vv-clear-button" onclick="vvClearQuizForm()"><?php echo $clear_button_text; ?></button>
+            </div>
         </form>
 
     </div>
+    
+    <script>
+        function vvClearQuizForm() {
+            const form = document.getElementById('vv-recommender-form');
+            if (form) {
+                // Reset all select elements to their first option (empty value)
+                const selects = form.querySelectorAll('select');
+                selects.forEach(select => {
+                    select.selectedIndex = 0;
+                });
+            }
+        }
+    </script>
     
    <style>
         /* BASE STYLING (Mobile/Tablet Default) */
@@ -144,43 +171,83 @@ function vv_recommender_quiz_shortcode() {
         }
 
         /* Generic styles for all form elements */
-        /* Updated: label[required] CSS now targets the dynamic 'required' attribute */
         .vv-quiz-container label[required] { display: block; margin-top: 5px; font-weight: bold; }
         .vv-quiz-container select { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; }
 
-        /* Button Style */
-        .vv-quiz-container button { 
-            width: 100%; 
-            padding: 10px; 
-            margin-top: 20px; 
+        /* Button Row Container */
+        .vv-button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Submit Button Style */
+        .vv-quiz-container .vv-cta-button { 
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px; 
             background-color: <?= $btn_bg_color; ?>; 
             color: <?= $btn_txt_color?>; 
             border: none; 
+            border-radius: 4px;
             cursor: pointer; 
-            display: block; 
             font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .vv-quiz-container button:hover{
+        .vv-quiz-container .vv-cta-button:hover {
             background-color: <?= $btn_bg_hover_color ?>; 
             color: <?= $btn_txt_hover_color ?>;
-            border: none;
+        }
+        
+        /* Clear Button Style */
+        .vv-quiz-container .vv-clear-button { 
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px; 
+            background-color: <?= $clear_btn_bg_color; ?>; 
+            color: <?= $clear_btn_txt_color?>; 
+            border: none; 
+            border-radius: 4px;
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        /* Required Field Asterisk - Targets the attribute added dynamically via PHP */
+        .vv-quiz-container .vv-clear-button:hover {
+            background-color: <?= $clear_btn_bg_hover_color ?>; 
+            color: <?= $clear_btn_txt_hover_color ?>;
+        }
+
+        /* Required Field Asterisk */
         .vv-quiz-container label[required]:after {
             content: " *"; 
             color: #d9534f; 
             font-weight: bold;
         }
 
-        /* Highlight border of invalid fields (Optional, but highly recommended) */
-        /* Updated: select:required targets the attribute added dynamically via PHP */
+        /* Highlight border of invalid fields */
         .vv-quiz-container select:invalid:required {
             border-color: #d9534f;
             box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
         }
 
+
+        /* --- TABLET STYLING --- */
+        @media (min-width: 600px) {
+            .vv-button-row {
+                justify-content: center;
+            }
+            
+            .vv-quiz-container .vv-cta-button,
+            .vv-quiz-container .vv-clear-button {
+                flex: 0 1 auto;
+                min-width: 200px;
+            }
+        }
 
         /* --- DESKTOP STYLING (Applies when screen width is >= 768px) --- */
         @media (min-width: 768px) {
@@ -200,11 +267,9 @@ function vv_recommender_quiz_shortcode() {
                 margin-bottom: 0; 
             }
 
-            /* Re-center the button for desktop */
-            .vv-quiz-container button {
-                 max-width: 300px; 
-                 margin: 20px auto 0; 
-                 display: block;
+            /* Center buttons for desktop */
+            .vv-button-row {
+                justify-content: center;
             }
         }
     </style>
