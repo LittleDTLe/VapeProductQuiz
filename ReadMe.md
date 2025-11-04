@@ -53,6 +53,12 @@ To implement the below features / ideas, there would need to be a complete refac
 
 ---
 
+### Feature Notes:
+
+Attempted to add Search Functionality to the select dropdowns for ingredients using **Select2**, but had difficulty in styling the dropdowns to look like the default ones. Will need to revisit this feature after some expiramentation.
+
+---
+
 ## 1. Installation and Required Setup
 
 ### 1.1 Installation
