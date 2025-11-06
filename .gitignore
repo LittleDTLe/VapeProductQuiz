@@ -2,6 +2,7 @@
 # OS/IDE Artifacts
 # -------------------------------------------------------------
 .DS_Store               # macOS folder attributes file
+**/.DS_Store
 Thumbs.db               # Windows thumbnail cache
 
 # -------------------------------------------------------------
