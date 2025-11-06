@@ -1,8 +1,8 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 0.8.9
+**Plugin Version:** 0.9.0
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button.
+**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors.
 
 **Author:** Panagiotis Drougas
 
@@ -27,6 +27,7 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - **Attribute Remapping:** The admin can select which Global Attributes (`pa_...`) will fill the dropdown fields directly from the dashboard settings.
 - **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
 - **Reset Button:** Add a Reset Button to easily clear selections.
+- **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
 
 ---
 
@@ -39,7 +40,6 @@ This section outlines planned features that would require further development (p
 - [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
 - [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
-- [ ] **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
 - [ ] **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
 - [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
