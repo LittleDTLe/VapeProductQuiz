@@ -556,7 +556,7 @@ function vv_render_details_page()
         </div><!-- End TOP SECTION -->
 
         <!-- BOTTOM SECTION: Full Width Guide -->
-        <div id="vv-guide-section">
+        <div id="vv-guide-section" style="margin-top: 30px;">
             <div id="vv-main-instructions" class="postbox">
                 <h2 class="hndle"><span><span class="dashicons dashicons-book-alt"></span> Οδηγίες Χρήσης & Συντήρηση</span>
                 </h2>
@@ -566,20 +566,20 @@ function vv_render_details_page()
 
                     <h3><span class="dashicons dashicons-admin-home"></span> Εμφάνιση Quiz & Προσαρμογή Κειμένων</h3>
 
-                    <h4><span class="dashicons dashicons-editor-code"></span> Κωδικός Εμφάνισης (Shortcode)</h4>
-
                     <div style="background: #f0f0f0; padding: 15px; border-left: 4px solid #4a67b2; margin-bottom: 20px;">
                         <p><strong>Κωδικός Εμφάνισης (Shortcode):</strong> Χρησιμοποιήστε τον παρακάτω κωδικό για να
                             εμφανίσετε τη φόρμα σε οποιαδήποτε σελίδα (π.χ. Αρχική):</p>
 
-                        <div
+                        <div class="vv-shortcode-container"
                             style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px;">
-                            <code
+                            <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                        [vapevida_quiz]
+                                        <span class="dashicons dashicons-editor-code"
+                                            style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
                                     </code>
 
-                            <button type="button" class="button button-secondary dashicons-before dashicons-admin-page"
+                            <button type="button" id="vv-copy-shortcode-btn"
+                                class="button button-secondary dashicons-before dashicons-admin-page"
                                 style="flex-shrink: 0;" onclick="vvCopyShortcode(this)">
                                 Αντιγραφή
                             </button>
@@ -587,20 +587,22 @@ function vv_render_details_page()
                     </div>
 
                     <p>Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από την ενότητα
-                        <strong>«Ρυθμίσεις Quiz»</strong> που βρίσκεται ακριβώς επάνω:
+                        <strong>«Ρυθμίσεις Quiz»</strong> που βρίσκεται ακριβώς επάνω. Στην ίδια ενότητα ρυθμίζονται τα
+                        **Attributes Φίλτρου** και τα **Χρώματα**.
                     </p>
 
                     <ul style="padding-left: 20px; color: #555;">
-                        <li><span style="font-weight: bold;">Τίτλοι (H2/P):</span> Αλλάξτε το κύριο μήνυμα για εποχιακά ή
-                            προωθητικά θέματα.</li>
+                        <li><span style="font-weight: bold;">Προσαρμογή Attributes:</span> Χρησιμοποιήστε το checkbox
+                            "Χρήση προσαρμοσμένων Global Attributes" για να αλλάξετε τους Global Attributes που χρησιμοποιεί
+                            η φόρμα (π.χ., από `pa_geuseis` σε `pa_color`).</li>
+                        <li><span style="font-weight: bold;">Χρωματική Παλέτα:</span> Τα πεδία **Background/Hover**
+                            ρυθμίζονται μέσω των Color Pickers.</li>
                         <li><span style="font-weight: bold;">Υποχρεωτικότητα (Required):</span> Ελέγξτε ποια πεδία πρέπει να
                             είναι συμπληρωμένα για την υποβολή της φόρμας.</li>
-                        <li><span style="font-weight: bold;">Ενεργοποίηση 3ου Πεδίου:</span> Επιλέξτε εάν το τρίτο πεδίο
-                            (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα.</li>
                     </ul>
 
                     <h3 style="margin-top: 30px;"><span class="dashicons dashicons-editor-ul"></span> Οδηγός Διαχείρισης
-                        Γεύσεων (Βήματα Group B)</h3>
+                        Γεύσεων</h3>
                     <p style="margin-bottom: 15px;">Η προσθήκη νέων επιλογών στο Quiz γίνεται **αυτόματα**, αρκεί να
                         ενημερωθούν οι σωστές ρυθμίσεις στα Global Attributes του WooCommerce.</p>
 
@@ -609,7 +611,7 @@ function vv_render_details_page()
                         <p style="margin-left: 10px;">Πηγαίνετε: <strong>Προϊόντα &rarr; Χαρακτηριστικά</strong>. Τα δύο
                             Attributes που γεμίζουν το Quiz είναι:</p>
                         <ul style="padding-left: 15px;">
-                            <li>**Τύπος Υγρού (π.χ. Γλυκές, Καπνικές):** <code>pa_geuseis</code></li>
+                            <li>**Τύπος Γεύσης:** <code>pa_geuseis</code></li>
                             <li>**Συστατικό (π.χ. Φράουλα, Κρέμα):** <code>pa_quiz-ingredient</code></li>
                         </ul>
                     </div>
@@ -638,7 +640,7 @@ function vv_render_details_page()
                     </div>
                 </div>
             </div>
-        </div><!-- End BOTTOM SECTION -->
+        </div>
     </div>
     <?php
 }
