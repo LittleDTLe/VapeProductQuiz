@@ -1,0 +1,20 @@
+# -------------------------------------------------------------
+# OS/IDE Artifacts
+# -------------------------------------------------------------
+.DS_Store               # macOS folder attributes file
+Thumbs.db               # Windows thumbnail cache
+
+# -------------------------------------------------------------
+# WordPress Generated Files/Directories
+# -------------------------------------------------------------
+
+# Ignore temporary and installer files often left by deployment tools (e.g., Duplicator)
+*.sql
+*.zip
+*.log
+*.bak
+
+# Ignore version control or backup folders (as specified)
+/versions/
+/backups/
+/wp-content/uploads/    # Generally ignore uploaded media if not needed for versioning
