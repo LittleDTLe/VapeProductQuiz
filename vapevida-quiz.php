@@ -2,8 +2,8 @@
 /**
  * Plugin Name: VapeVida Flavorshot Recommender Quiz
  * Plugin URI: https://github.com/LittleDTLe/VapeProductQuiz
- * Description: Product Recommendation Quiz for Flavorshots, which automatically filters populated Global Access Attributes. Requires pa_geuseis and pa_quiz-ingredient, which get automatically created, if missing.
- * Version: 0.9.0
+ * Description: Simple Product Finder Quiz with settings for quiz customization. Auto-populate the quiz with Global Attribute Terms with connected products.
+ * Version: 0.9.2
  * Author: Panagiotis Drougas
  * Author URI: https://github.com/LittleDTLe
  * Text Domain: vapevida-quiz
@@ -13,7 +13,7 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * 
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors.
+ * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script.
  * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking, Localization.
  */
 
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define Plugin Constants
-define('VV_QUIZ_VERSION', '0.9.0');
+define('VV_QUIZ_VERSION', '0.9.2');
 define('VV_QUIZ_DIR', plugin_dir_path(__FILE__));
 define('VV_QUIZ_URL', plugin_dir_url(__FILE__));
 define('VV_QUIZ_BASENAME', plugin_basename(__FILE__));
