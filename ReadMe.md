@@ -28,6 +28,8 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
 - **Reset Button:** Add a Reset Button to easily clear selections.
 - **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
+- **Uninstall Script:** Add Cleanup Options on Plugin Uninstall.
+- **WooCommerce Activated Script:** Script that checks if WooCommerce is activated.
 
 ---
 

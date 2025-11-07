@@ -18,4 +18,5 @@ Thumbs.db               # Windows thumbnail cache
 # Ignore version control or backup folders (as specified)
 /versions/
 /backups/
+/languages/
 /wp-content/uploads/    # Generally ignore uploaded media if not needed for versioning

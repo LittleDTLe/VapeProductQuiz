@@ -23,16 +23,6 @@ function vv_add_plugin_admin_page()
 }
 add_action('admin_menu', 'vv_add_plugin_admin_page');
 
-// --- 7. Add Settings Link to Plugins Page ---
-add_filter('plugin_action_links_' . plugin_basename(dirname(__FILE__, 2) . '/vapevida-quiz.php'), 'vv_add_plugin_action_links');
-
-function vv_add_plugin_action_links($actions)
-{
-    $settings_link = '<a href="admin.php?page=vapevida-quiz-details">' . __('Quiz Info & Help', 'vapevida-quiz') . '</a>';
-    array_unshift($actions, $settings_link);
-    return $actions;
-}
-
 // -----------------------------------------------------------
 // A. SETTINGS API IMPLEMENTATION & CALLBACKS
 // -----------------------------------------------------------
@@ -574,9 +564,9 @@ function vv_render_details_page()
                             style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px;">
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                        <span class="dashicons dashicons-editor-code"
-                                            style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                    </code>
+                                            <span class="dashicons dashicons-editor-code"
+                                                style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                        </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"

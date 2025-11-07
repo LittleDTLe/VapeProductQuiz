@@ -6,29 +6,55 @@
 if (!defined('ABSPATH'))
     exit;
 
-// --- 2. Automated Attribute Creation ---
+/**
+ * Create Default WooCommerce Global Attributes
+ * Creates pa_geuseis and pa_quiz-ingredient if they don't exist
+ */
 function vv_create_recommender_attributes()
 {
-    if (!function_exists('wc_create_attribute'))
+    // Make sure WooCommerce attribute functions are available
+    if (!function_exists('wc_create_attribute')) {
         return;
+    }
 
-    // These slugs are used by the frontend and query files
-    $attributes = [
-        'geuseis' => 'Τύπος Γεύσης',
-        'quiz-ingredient' => 'Συστατικό (Quiz)',
-    ];
+    // Create pa_geuseis (Flavor Type) if it doesn't exist
+    if (!taxonomy_exists('pa_geuseis')) {
+        $result = wc_create_attribute(array(
+            'name' => __('Flavor Type', 'vapevida-quiz'),  // Translatable name!
+            'slug' => 'geuseis',
+            'type' => 'select',
+            'order_by' => 'menu_order',
+            'has_archives' => false,
+        ));
 
-    foreach ($attributes as $name => $label) {
-        if (!taxonomy_exists('pa_' . $name)) {
-            wc_create_attribute([
-                'name' => $label,
-                'slug' => $name,
-                'type' => 'select',
-                'orderby' => 'menu_order',
-                'has_archives' => true,
-            ]);
+        // Register the taxonomy immediately after creation
+        if (!is_wp_error($result)) {
+            register_taxonomy('pa_geuseis', array('product'));
         }
     }
-}
-add_action('init', 'vv_create_recommender_attributes');
 
+    // Create pa_quiz-ingredient (Ingredient) if it doesn't exist
+    if (!taxonomy_exists('pa_quiz-ingredient')) {
+        $result = wc_create_attribute(array(
+            'name' => __('Ingredient (Quiz)', 'vapevida-quiz'), // Translatable!
+            'slug' => 'quiz-ingredient',
+            'type' => 'select',
+            'order_by' => 'menu_order',
+            'has_archives' => false,
+        ));
+
+        if (!is_wp_error($result)) {
+            register_taxonomy('pa_quiz-ingredient', array('product'));
+        }
+    }
+
+    // Clear attribute cache
+    delete_transient('wc_attribute_taxonomies');
+
+    // Force WooCommerce to refresh attribute cache
+    if (function_exists('wc_get_attribute_taxonomies')) {
+        wc_get_attribute_taxonomies();
+    }
+}
+
+add_action('init', 'vv_create_recommender_attributes');
