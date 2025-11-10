@@ -13,7 +13,7 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * 
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script.
+ * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script
  * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking, Localization.
  */
 
@@ -31,6 +31,7 @@ define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
 /**
  * Load Plugin Text Domain for Translations
  */
+/*
 function vv_quiz_load_textdomain()
 {
     load_plugin_textdomain(
@@ -40,6 +41,8 @@ function vv_quiz_load_textdomain()
     );
 }
 add_action('plugins_loaded', 'vv_quiz_load_textdomain');
+
+*/
 
 /**
  * Check WooCommerce Dependency
