@@ -33,6 +33,12 @@ This tool ensures **maintainability** by allowing store managers to control all 
 
 ---
 
+## Currently Working On
+
+- [x] **Multi-Lingual Support:** Add Localization to settings page.
+
+---
+
 ## 💡 Future Development & Features
 
 This section outlines planned features that would require further development (potentially a premium version).
@@ -45,7 +51,6 @@ This section outlines planned features that would require further development (p
 - [ ] **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
 - [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
-- [ ] **Multi-Lingual Support:** Add Localization to settings page.
 
 ### Feature Ideas (Refactoring Required)
 
