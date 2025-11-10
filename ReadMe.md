@@ -53,6 +53,7 @@ To implement the below features / ideas, there would need to be a complete refac
 
 - [ ] **Multi Quiz Support** Add Multiple Quiz Support to the plugin.
 - [ ] **Category Page Quiz** Add Dynamic Quizes to Category pages with Ajax Filtering Capabilities.
+- [ ] **Modularisation of Admin File** Modularise class-vv-admin.php file.
 
 ---
 
