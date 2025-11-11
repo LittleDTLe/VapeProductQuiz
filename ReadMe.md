@@ -1,8 +1,8 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 0.9.2
+**Plugin Version:** 0.9.5
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script.
+**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview
 
 **Author:** Panagiotis Drougas
 
@@ -32,6 +32,7 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - **WooCommerce Activated Script:** Script that checks if WooCommerce is activated.
 - **Modularisation of Admin File** Modularise class-vv-admin.php file.
 - **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
+- **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 
 ---
 
@@ -47,7 +48,6 @@ This section outlines planned features that would require further development (p
 
 ### To Implement Features (Planned for Next Releases)
 
-- [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
 - [ ] **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
 - [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.

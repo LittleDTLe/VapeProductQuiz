@@ -3,7 +3,7 @@
  * Plugin Name: VapeVida Flavorshot Recommender Quiz
  * Plugin URI: https://github.com/LittleDTLe/VapeProductQuiz
  * Description: Simple Product Finder Quiz with settings for quiz customization. Auto-populate the quiz with Global Attribute Terms with connected products.
- * Version: 0.9.2
+ * Version: 0.9.5
  * Author: Panagiotis Drougas
  * Author URI: https://github.com/LittleDTLe
  * Text Domain: vapevida-quiz
@@ -13,8 +13,8 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * 
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script
- * Features: Multiple Product Recommendation Quizzes, Dynamic Cascading Filters, Result Preview, Analytics & Tracking, Localization.
+ * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview
+ * Features: Multiple Product Recommendation Quizzes, Analytics & Tracking, Localization.
  */
 
 if (!defined('ABSPATH')) {
