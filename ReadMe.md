@@ -31,13 +31,13 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - **Uninstall Script:** Add Cleanup Options on Plugin Uninstall.
 - **WooCommerce Activated Script:** Script that checks if WooCommerce is activated.
 - **Modularisation of Admin File** Modularise class-vv-admin.php file.
+- **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
 
 ---
 
 ## Currently Working On
 
 - [x] **Multi-Lingual Support:** Add Localization to settings page.
-- [x] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
 
 ---
 
