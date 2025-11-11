@@ -308,10 +308,6 @@ function vv_recommender_quiz_shortcode()
                 selects.forEach(select => {
                     select.selectedIndex = 0;
                 });
-
-                // Submit the form to clear filters from the URL
-                // This will redirect to the base shop URL because all filter fields will be empty
-                form.submit();
             }
         }
     </script>
