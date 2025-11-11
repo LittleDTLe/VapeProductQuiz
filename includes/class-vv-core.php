@@ -65,12 +65,14 @@ add_action('init', 'vv_create_recommender_attributes');
  */
 function vv_ajax_filter_ingredients()
 {
+    // START OUTPUT BUFFERING HERE to catch any extraneous spaces/warnings
+    ob_start();
+
     // 1. Get and sanitize the selected Type attribute slug and term
     $type_slug = isset($_POST['type_slug']) ? sanitize_key($_POST['type_slug']) : '';
     $type_term_slug = isset($_POST['type_term_slug']) ? sanitize_key($_POST['type_term_slug']) : '';
 
-    $ingredient_taxonomy = 'pa_quiz-ingredient'; // Assuming pa_quiz-ingredient is the target taxonomy
-
+    $ingredient_taxonomy = 'pa_quiz-ingredient';
     $options_html = '';
 
     if ($type_slug && $type_term_slug) {
@@ -99,29 +101,33 @@ function vv_ajax_filter_ingredients()
                 'orderby' => 'name',
             ));
 
-            // --- C. RENDER HTML OPTIONS (THE FIX IS HERE) ---
+            // C. RENDER HTML OPTIONS
             if (!is_wp_error($terms) && is_array($terms)) {
                 foreach ($terms as $term) {
-
-                    // CRITICAL FIX: Ensure $term is a valid object AND that the slug and name are NOT empty strings.
+                    // CRITICAL FIX: Ensure $term is a valid object and has non-empty required properties
                     if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
                         $options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
                     }
-                    // If the object is malformed or its slug/name is empty, the option is completely skipped.
                 }
             }
         }
     }
 
-    // Always include the default placeholder option
-    $settings = get_option('vv_quiz_settings');
-    $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : '-- Select Secondary Ingredient --';
-    $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : '-- Select Primary Ingredient --';
+    // // Always include the default placeholder option
+    // $settings = get_option('vv_quiz_settings');
+    // $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : '-- Select Secondary Ingredient --';
+    // $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : '-- Select Primary Ingredient --';
 
-    $final_html = $options_html;
+    // Output the clean HTML directly
+    echo $options_html;
 
-    echo $final_html;
-    wp_die(); // Always exit after an AJAX call
+    // Capture the buffer content and discard any output before the intended content
+    $final_output = ob_get_clean();
+
+    // Print only the final, clean output and terminate execution
+    echo $final_output;
+
+    wp_die();
 }
 
 // Register the AJAX hooks for logged-in and logged-out users
