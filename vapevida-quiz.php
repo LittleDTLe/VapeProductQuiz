@@ -136,21 +136,6 @@ function vv_quiz_deactivate()
 register_deactivation_hook(__FILE__, 'vv_quiz_deactivate');
 
 /**
- * Add Settings Link on Plugins Page
- */
-function vv_quiz_add_settings_link($links)
-{
-    $settings_link = sprintf(
-        '<a href="%s">%s</a>',
-        admin_url('admin.php?page=vapevida-quiz-details'),
-        esc_html__('Settings', 'vapevida-quiz')
-    );
-    array_unshift($links, $settings_link);
-    return $links;
-}
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'vv_quiz_add_settings_link');
-
-/**
  * Add useful plugin meta links
  */
 function vv_quiz_plugin_row_meta($links, $file)

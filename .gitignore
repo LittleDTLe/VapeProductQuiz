@@ -19,5 +19,5 @@ Thumbs.db               # Windows thumbnail cache
 /versions/
 /backups/
 /languages/
-/includes/admin/
+#/includes/admin/
 /wp-content/uploads/    # Generally ignore uploaded media if not needed for versioning
