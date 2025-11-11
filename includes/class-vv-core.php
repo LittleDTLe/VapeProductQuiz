@@ -58,3 +58,90 @@ function vv_create_recommender_attributes()
 }
 
 add_action('init', 'vv_create_recommender_attributes');
+
+/**
+ * AJAX Handler for Cascading Filters.
+ * Finds available terms in the Ingredient attribute based on the selected Type.
+ */
+function vv_ajax_filter_ingredients()
+{
+    // 1. Get and sanitize the selected Type attribute slug and term
+    $type_slug = isset($_POST['type_slug']) ? sanitize_key($_POST['type_slug']) : '';
+    $type_term_slug = isset($_POST['type_term_slug']) ? sanitize_key($_POST['type_term_slug']) : '';
+
+    $ingredient_taxonomy = 'pa_quiz-ingredient'; // Assuming pa_quiz-ingredient is the target taxonomy
+
+    $options_html = '';
+
+    if ($type_slug && $type_term_slug) {
+        // --- A. FIND PRODUCTS MATCHING THE SELECTED TYPE ---
+        $product_args = array(
+            'post_type' => 'product',
+            'posts_per_page' => -1,
+            'fields' => 'ids', // We only need the IDs
+            'tax_query' => array(
+                array(
+                    'taxonomy' => $type_slug,
+                    'field' => 'slug',
+                    'terms' => $type_term_slug,
+                    'operator' => 'IN',
+                ),
+            ),
+        );
+        $product_ids = get_posts($product_args);
+
+        // --- B. FIND INGREDIENT TERMS ASSOCIATED WITH THOSE PRODUCTS ---
+        if (!empty($product_ids)) {
+            $terms = get_terms(array(
+                'taxonomy' => $ingredient_taxonomy,
+                'hide_empty' => true,
+                'object_ids' => $product_ids, // Filter terms by the product IDs found
+                'orderby' => 'name',
+            ));
+
+            // --- C. RENDER HTML OPTIONS (THE FIX IS HERE) ---
+            if (!is_wp_error($terms) && is_array($terms)) {
+                foreach ($terms as $term) {
+
+                    // CRITICAL FIX: Ensure $term is a valid object AND that the slug and name are NOT empty strings.
+                    if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
+                        $options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                    }
+                    // If the object is malformed or its slug/name is empty, the option is completely skipped.
+                }
+            }
+        }
+    }
+
+    // Always include the default placeholder option
+    $settings = get_option('vv_quiz_settings');
+    $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : '-- Select Secondary Ingredient --';
+    $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : '-- Select Primary Ingredient --';
+
+    $final_html = $options_html;
+
+    echo $final_html;
+    wp_die(); // Always exit after an AJAX call
+}
+
+// Register the AJAX hooks for logged-in and logged-out users
+add_action('wp_ajax_vv_filter_ingredients', 'vv_ajax_filter_ingredients');
+add_action('wp_ajax_nopriv_vv_filter_ingredients', 'vv_ajax_filter_ingredients');
+
+function vv_enqueue_frontend_scripts()
+{
+    // Load only on the frontend and only on the home page (where the shortcode is used)
+    if (is_front_page() && !is_admin()) {
+
+        wp_enqueue_script(
+            'vv-quiz-frontend-script',
+            VV_QUIZ_URL . 'assets/vv-quiz-dynamic.js', // We will create this file in Step 3
+            array('jquery'),
+            VV_QUIZ_VERSION,
+            true // Load in footer
+        );
+        // The wp_localize_script call must be in the shortcode function itself.
+    }
+}
+add_action('wp_enqueue_scripts', 'vv_enqueue_frontend_scripts');
+

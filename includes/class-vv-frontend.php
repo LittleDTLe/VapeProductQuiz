@@ -36,18 +36,6 @@ function vv_recommender_quiz_shortcode()
     $is_primary_required_attr = isset($settings['is_primary_required']) && $settings['is_primary_required'] ? 'required' : '';
     $is_secondary_required_attr = isset($settings['is_secondary_required']) && $settings['is_secondary_required'] ? 'required' : '';
 
-    // --- DYNAMICALLY READ BUTTON COLORS FROM SAVED SETTINGS ---
-    $btn_bg_color = isset($settings['btn_bg_color']) ? esc_html($settings['btn_bg_color']) : '#e21e51';
-    $btn_bg_hover_color = isset($settings['btn_bg_hover_color']) ? esc_html($settings['btn_bg_hover_color']) : '#4d40ff';
-    $btn_txt_color = isset($settings['btn_txt_color']) ? esc_html($settings['btn_txt_color']) : '#FFFFFF';
-    $btn_txt_hover_color = isset($settings['btn_txt_hover_color']) ? esc_html($settings['btn_txt_hover_color']) : '#FFFFFF';
-
-    // Clear Button Colors
-    $clear_btn_bg_color = isset($settings['clear_btn_bg_color']) ? esc_html($settings['clear_btn_bg_color']) : '#6c757d';
-    $clear_btn_bg_hover_color = isset($settings['clear_btn_bg_hover_color']) ? esc_html($settings['clear_btn_bg_hover_color']) : '#5a6268';
-    $clear_btn_txt_color = isset($settings['clear_btn_txt_color']) ? esc_html($settings['clear_btn_txt_color']) : '#FFFFFF';
-    $clear_btn_txt_hover_color = isset($settings['clear_btn_txt_hover_color']) ? esc_html($settings['clear_btn_txt_hover_color']) : '#FFFFFF';
-
     // --- DYNAMICALLY READ ATTRIBUTE SLUGS FROM SAVED SETTINGS ---
     $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
     $type_taxonomy_slug = $use_custom && isset($settings['attribute_type_slug']) && !empty($settings['attribute_type_slug'])
@@ -75,87 +63,34 @@ function vv_recommender_quiz_shortcode()
         'hide_empty' => true,
     ));
 
-    // Safety Check: If the admin hasn't set the attributes yet, prevent error
+    // Safety Check: 
     if (empty($type_taxonomy_slug) || empty($ingredient_taxonomy_slug) || is_wp_error($flavor_type_terms)) {
         return '<p style="color: red;">[Σφάλμα Ρύθμισης]: Παρακαλούμε ρυθμίστε τους Global Attributes στο Quiz Info page.</p>';
     }
+
+    // --- DYNAMIC BUTTON COLORS ---
+    $btn_bg_color = isset($settings['btn_bg_color']) ? esc_html($settings['btn_bg_color']) : '#e21e51';
+    $btn_bg_hover_color = isset($settings['btn_bg_hover_color']) ? esc_html($settings['btn_bg_hover_color']) : '#c91a48';
+    $btn_txt_color = isset($settings['btn_txt_color']) ? esc_html($settings['btn_txt_color']) : '#FFFFFF';
+    $btn_txt_hover_color = isset($settings['btn_txt_hover_color']) ? esc_html($settings['btn_txt_hover_color']) : '#FFFFFF';
+    $clear_btn_bg_color = isset($settings['clear_btn_bg_color']) ? esc_html($settings['clear_btn_bg_color']) : '#6c757d';
+    $clear_btn_bg_hover_color = isset($settings['clear_btn_bg_hover_color']) ? esc_html($settings['clear_btn_bg_hover_color']) : '#5a6268';
+    $clear_btn_txt_color = isset($settings['clear_btn_txt_color']) ? esc_html($settings['clear_btn_txt_color']) : '#FFFFFF';
+    $clear_btn_txt_hover_color = isset($settings['clear_btn_txt_hover_color']) ? esc_html($settings['clear_btn_txt_hover_color']) : '#FFFFFF';
+
+
+    // Pass essential data to the frontend script
+    wp_localize_script(
+        'vv-quiz-frontend-script', // Handle for the script we'll create below
+        'vv_quiz_ajax',
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            // Other data for future AJAX features could go here
+        )
+    );
+
+
     ?>
-
-    <div class="vv-quiz-container">
-        <h2><?php echo $quiz_heading; ?></h2>
-        <p><?php echo $quiz_subtitle; ?></p>
-
-        <form method="get" action="<?php echo esc_url($shop_url); ?>" id="vv-recommender-form">
-
-            <input type="hidden" name="filter_applied" value="1">
-
-            <div class="vv-select-row">
-
-                <div class="vv-select-col">
-                    <label for="flavor_type" <?php echo $is_type_required_attr; ?>><?php echo $label_type; ?></label>
-                    <select name="<?php echo esc_attr($form_filter_type_name); ?>" id="flavor_type" class="vv-quiz-select"
-                        <?php echo $is_type_required_attr; ?>>
-                        <option value=""><?php echo $placeholder_type; ?></option>
-                        <?php
-                        foreach ($flavor_type_terms as $term) {
-                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="vv-select-col">
-                    <label for="flavor_ingredient" <?php echo $is_primary_required_attr; ?>><?php echo $label_primary; ?></label>
-                    <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>" id="flavor_ingredient"
-                        class="vv-quiz-select" <?php echo $is_primary_required_attr; ?>>
-                        <option value=""><?php echo $placeholder_primary; ?></option>
-                        <?php
-                        foreach ($ingredient_terms as $term) {
-                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <?php if ($show_third_field): ?>
-                    <div class="vv-select-col">
-                        <label for="flavor_ingredient_optional" <?php echo $is_secondary_required_attr; ?>><?php echo $label_secondary; ?></label>
-                        <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>-optional"
-                            id="flavor_ingredient_optional" class="vv-quiz-select" <?php echo $is_secondary_required_attr; ?>>
-                            <option value=""><?php echo $placeholder_secondary; ?></option>
-                            <?php
-                            foreach ($ingredient_terms as $term) {
-                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                <?php endif; ?>
-
-            </div>
-
-            <div class="vv-button-row">
-                <button type="submit" class="button vv-cta-button"><?php echo $cta_button_text; ?></button>
-                <button type="button" class="button vv-clear-button"
-                    onclick="vvClearQuizForm()"><?php echo $clear_button_text; ?></button>
-            </div>
-        </form>
-
-    </div>
-
-    <script>
-        function vvClearQuizForm() {
-            const form = document.getElementById('vv-recommender-form');
-            if (form) {
-                // Reset all select elements to their first option (empty value)
-                const selects = form.querySelectorAll('select');
-                selects.forEach(select => {
-                    select.selectedIndex = 0;
-                });
-            }
-        }
-    </script>
-
     <style>
         /* BASE STYLING (Mobile/Tablet Default) */
         .vv-quiz-container {
@@ -298,6 +233,88 @@ function vv_recommender_quiz_shortcode()
             }
         }
     </style>
+
+    <div class="vv-quiz-container">
+        <h2><?php echo $quiz_heading; ?></h2>
+        <p><?php echo $quiz_subtitle; ?></p>
+
+        <form method="get" action="<?php echo esc_url($shop_url); ?>" id="vv-recommender-form">
+
+            <input type="hidden" name="filter_applied" value="1">
+
+            <div class="vv-select-row">
+
+                <div class="vv-select-col">
+                    <label for="flavor_type" <?php echo $is_type_required_attr; ?>><?php echo $label_type; ?></label>
+                    <select name="<?php echo esc_attr($form_filter_type_name); ?>" id="flavor_type" class="vv-quiz-select"
+                        <?php echo $is_type_required_attr; ?>>
+                        <option value=""><?php echo $placeholder_type; ?></option>
+                        <?php
+                        foreach ($flavor_type_terms as $term) {
+                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="vv-select-col">
+                    <label for="flavor_ingredient" <?php echo $is_primary_required_attr; ?>><?php echo $label_primary; ?></label>
+                    <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>" id="flavor_ingredient"
+                        class="vv-quiz-select" <?php echo $is_primary_required_attr; ?>>
+                        <option value=""><?php echo $placeholder_primary; ?></option>
+                        <?php
+                        foreach ($ingredient_terms as $term) {
+                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <?php if ($show_third_field): ?>
+                    <div class="vv-select-col">
+                        <label for="flavor_ingredient_optional" <?php echo $is_secondary_required_attr; ?>><?php echo $label_secondary; ?></label>
+                        <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>-optional"
+                            id="flavor_ingredient_optional" class="vv-quiz-select" <?php echo $is_secondary_required_attr; ?>>
+                            <option value=""><?php echo $placeholder_secondary; ?></option>
+                            <?php
+                            foreach ($ingredient_terms as $term) {
+                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+
+            <div class="vv-button-row">
+                <button type="button" class="button vv-clear-button" onclick="vvClearQuizForm()">
+                    <?php echo $clear_button_text; ?>
+                </button>
+                <button type="submit" class="button vv-cta-button">
+                    <?php echo $cta_button_text; ?>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // NOTE: This logic should ideally be in a separate, enqueued JS file (class-vv-dynamic.js)
+        function vvClearQuizForm() {
+            const form = document.getElementById('vv-recommender-form');
+            if (form) {
+                // Reset all select elements to their first option (empty value)
+                const selects = form.querySelectorAll('select');
+                selects.forEach(select => {
+                    select.selectedIndex = 0;
+                });
+
+                // Submit the form to clear filters from the URL
+                // This will redirect to the base shop URL because all filter fields will be empty
+                form.submit();
+            }
+        }
+    </script>
 
     <?php
     return ob_get_clean();
