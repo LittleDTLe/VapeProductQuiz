@@ -6,7 +6,17 @@
 if (!defined('ABSPATH'))
     exit;
 
-// NOTE: VV_QUIZ_VERSION, VV_QUIZ_URL, and VV_QUIZ_TEXT_DOMAIN must be defined in vapevida-quiz.php
+// DUMMY CNAME FOR NOW (VV_QUIZ_VERSION, VV_QUIZ_TEXT_DOMAIN must be defined)
+if (!defined('VV_QUIZ_VERSION')) {
+    define('VV_QUIZ_VERSION', '1.0');
+}
+if (!defined('VV_QUIZ_TEXT_DOMAIN')) {
+    define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
+}
+if (!defined('VV_QUIZ_URL')) {
+    define('VV_QUIZ_URL', plugin_dir_url(dirname(__FILE__)));
+}
+
 
 /**
  * Create Default WooCommerce Global Attributes
@@ -21,7 +31,7 @@ function vv_create_recommender_attributes()
     // Create pa_geuseis (Flavor Type) if it doesn't exist
     if (!taxonomy_exists('pa_geuseis')) {
         $result = wc_create_attribute(array(
-            'name' => 'Τύπος Γεύσης',
+            'name' => __('Flavor Type', VV_QUIZ_TEXT_DOMAIN),
             'slug' => 'geuseis',
             'type' => 'select',
             'order_by' => 'menu_order',
@@ -35,7 +45,7 @@ function vv_create_recommender_attributes()
     // Create pa_quiz-ingredient (Ingredient) if it doesn't exist
     if (!taxonomy_exists('pa_quiz-ingredient')) {
         $result = wc_create_attribute(array(
-            'name' => 'Συστατικό (Quiz)',
+            'name' => __('Ingredient (Quiz)', VV_QUIZ_TEXT_DOMAIN),
             'slug' => 'quiz-ingredient',
             'type' => 'select',
             'order_by' => 'menu_order',
@@ -114,7 +124,6 @@ function vv_ajax_filter_ingredients()
     }
 
     // --- E. OUTPUT DELIMITED RESPONSE ---
-    // Returns: [COUNT] ||| [OPTIONS HTML STRING]
     echo intval($product_count) . '|||' . $options_html;
 
     wp_die();

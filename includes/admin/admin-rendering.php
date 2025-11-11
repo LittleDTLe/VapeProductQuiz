@@ -14,7 +14,7 @@ function vv_render_details_page()
         return;
 
     // --- ΔΥΝΑΜΙΚΗ ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ (Plugin Header) ---
-    // NOTE: We assume VV_QUIZ_DIR is defined in the main loader file
+    // NOTE: This assumes VV_QUIZ_DIR is correctly defined in main loader
     $shop_url = get_permalink(wc_get_page_id('shop'));
     $git_url = 'https://github.com/LittleDTLe/VapeProductQuiz';
 
@@ -24,20 +24,9 @@ function vv_render_details_page()
     $chosen_ingredient_slug = isset($settings['attribute_ingredient_slug']) ? esc_html($settings['attribute_ingredient_slug']) : 'pa_quiz-ingredient (Default)';
 
     $all_headers = array('Version' => 'Version', 'Author' => 'Author', 'VersionNotes' => 'VersionNotes', 'Features' => 'Features');
-    // Using a absolute path for the main plugin file
-    $main_plugin_file = dirname(__FILE__, 3) . '/vapevida-quiz.php'; // 3 levels up from /includes/admin/
-
-    // Safety check for the constant (if not defined in the main file)
-    if (defined('VV_QUIZ_DIR')) {
-        $main_plugin_file = VV_QUIZ_DIR . 'vapevida-quiz.php';
-    } else {
-        // Fallback calculation if the constant is not present
-        $main_plugin_file = trailingslashit(WPMU_PLUGIN_DIR) . 'vapevida-quiz/vapevida-quiz.php';
-        // NOTE: This fallback depends entirely on your specific directory structure.
-    }
-
-    // Ανάγνωση δεδομένων με τη σωστή διαδρομή:
-    $plugin_data_raw = get_file_data($main_plugin_file, $all_headers, 'plugin');
+    // Using a relative path for the main plugin file
+    $plugin_file_path = dirname(__FILE__, 2) . '/vapevida-quiz.php';
+    $plugin_data_raw = get_file_data($plugin_file_path, $all_headers, 'plugin');
 
     // Safe assignment and List Conversion
     $plugin_version = isset($plugin_data_raw['Version']) ? esc_html($plugin_data_raw['Version']) : 'N/A';
@@ -287,7 +276,7 @@ function vv_render_details_page()
                         <p>Τα απαραίτητα Global Attributes για το Quiz είναι:</p>
                         <ul style="padding-left: 20px;">
                             <li><strong>Τύπος Γεύσης:** <code><?php echo esc_html($chosen_type_slug); ?></code></li>
-                            <li><strong>Συστατικό:** <code><?php echo esc_html($chosen_ingredient_slug); ?></code></li>
+                            <li>**Συστατικό:** <code><?php echo esc_html($chosen_ingredient_slug); ?></code></li>
                         </ul>
 
                         <h3 style="margin-top: 30px;"><span class="dashicons dashicons-search"></span> Τεχνική Λογική
@@ -325,8 +314,8 @@ function vv_render_details_page()
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                                        </code>
+                                        <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                    </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"
@@ -336,7 +325,7 @@ function vv_render_details_page()
                         </div>
                     </div>
 
-                    <p>Όλα τα κείμετενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από την ενότητα
+                    <p>Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από την ενότητα
                         <strong>«Ρυθμίσεις Quiz»</strong> που βρίσκεται ακριβώς επάνω:
                     </p>
 

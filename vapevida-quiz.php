@@ -12,8 +12,7 @@
  * Requires PHP: 7.4
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * 
- * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview
+ * * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview
  * Features: Multiple Product Recommendation Quizzes, Analytics & Tracking, Localization.
  */
 
@@ -29,20 +28,18 @@ define('VV_QUIZ_BASENAME', plugin_basename(__FILE__));
 define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
 
 /**
- * Load Plugin Text Domain for Translations
+ * Load Plugin Text Domain for Translations (Crucial hook)
  */
-/*
 function vv_quiz_load_textdomain()
 {
     load_plugin_textdomain(
-        'vapevida-quiz',
+        VV_QUIZ_TEXT_DOMAIN,
         false,
-        dirname(plugin_basename(__FILE__)) . '/languages/'
+        dirname(plugin_basename(__FILE__)) . '/languages'
     );
 }
 add_action('plugins_loaded', 'vv_quiz_load_textdomain');
 
-*/
 
 /**
  * Check WooCommerce Dependency
@@ -61,11 +58,11 @@ function vv_quiz_woocommerce_missing_notice()
     ?>
     <div class="notice notice-error">
         <p>
-            <strong><?php esc_html_e('VapeVida Quiz', 'vapevida-quiz'); ?>:</strong>
+            <strong><?php esc_html_e('VapeVida Quiz', VV_QUIZ_TEXT_DOMAIN); ?>:</strong>
             <?php
             /* translators: %s: WooCommerce plugin name */
             echo sprintf(
-                esc_html__('This plugin requires %s to be installed and activated.', 'vapevida-quiz'),
+                esc_html__('This plugin requires %s to be installed and activated.', VV_QUIZ_TEXT_DOMAIN),
                 '<a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a>'
             );
             ?>
@@ -111,11 +108,11 @@ function vv_quiz_activate()
         wp_die(
             sprintf(
                 /* translators: 1: Plugin name, 2: WooCommerce plugin name */
-                esc_html__('%1$s requires %2$s to be installed and activated.', 'vapevida-quiz'),
-                '<strong>' . esc_html__('VapeVida Quiz', 'vapevida-quiz') . '</strong>',
+                esc_html__('%1$s requires %2$s to be installed and activated.', VV_QUIZ_TEXT_DOMAIN),
+                '<strong>' . esc_html__('VapeVida Quiz', VV_QUIZ_TEXT_DOMAIN) . '</strong>',
                 '<strong>WooCommerce</strong>'
             ),
-            esc_html__('Plugin Activation Error', 'vapevida-quiz'),
+            esc_html__('Plugin Activation Error', VV_QUIZ_TEXT_DOMAIN),
             array('back_link' => true)
         );
     }
@@ -142,8 +139,8 @@ function vv_quiz_plugin_row_meta($links, $file)
 {
     if (plugin_basename(__FILE__) === $file) {
         $row_meta = array(
-            'docs' => '<a href="https://github.com/LittleDTLe/VapeProductQuiz" target="_blank">' . esc_html__('Documentation', 'vapevida-quiz') . '</a>',
-            'support' => '<a href="https://github.com/LittleDTLe/VapeProductQuiz/issues" target="_blank">' . esc_html__('Support', 'vapevida-quiz') . '</a>',
+            'docs' => '<a href="https://github.com/LittleDTLe/VapeProductQuiz" target="_blank">' . esc_html__('Documentation', VV_QUIZ_TEXT_DOMAIN) . '</a>',
+            'support' => '<a href="https://github.com/LittleDTLe/VapeProductQuiz/issues" target="_blank">' . esc_html__('Support', VV_QUIZ_TEXT_DOMAIN) . '</a>',
         );
         return array_merge($links, $row_meta);
     }
