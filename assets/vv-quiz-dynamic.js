@@ -41,21 +41,21 @@ jQuery(document).ready(function ($) {
 				security: vv_quiz_ajax.nonce,
 			},
 			success: function (response) {
-				// 1. Create a temporary HTML element to hold the options
-				let $tempDiv = $("<div>").html(response);
+				// 1. Create a jQuery object from the raw HTML response string
+				let $options = $("<div>").html(response).find("option");
 
-				// 2. Client-Side Safety Filter: Remove any options that are empty or malformed
-				let $cleanOptions = $tempDiv.find("option").filter(function () {
+				// 2. Client-Side Safety Filter: Remove malformed options
+				// This filter keeps only options that have a value (i.e., not a malformed placeholder)
+				$options = $options.filter(function () {
 					const text = $(this).text().trim();
 					const value = $(this).val();
 
-					// **CRITICAL FIX:** We remove any option where the value is missing or the text is "undefined"
-					// This ensures no option without a value="" is processed.
-					return value !== "" && text.toLowerCase() !== "undefined";
+					// We only keep the option if it has a non-empty value (i.e., it's a real term, not an empty placeholder)
+					return value !== "";
 				});
 
-				// 3. Get the combined HTML string of the clean options
-				const cleaned_html = $cleanOptions
+				// 3. Convert the filtered jQuery object back to a complete HTML string
+				const cleaned_html = $options
 					.map(function () {
 						return this.outerHTML;
 					})
@@ -64,15 +64,17 @@ jQuery(document).ready(function ($) {
 
 				// 4. Update the HTML in both ingredient dropdowns
 				allIngredientSelects.forEach(function (select) {
-					const placeholder =
-						select.attr("id") === "flavor_ingredient"
-							? vv_quiz_ajax.placeholder_primary
-							: vv_quiz_ajax.placeholder_secondary;
+					// --- CREATE THE PLACEHOLDER LOCALLY AND FORCE IT FIRST ---
+					const isPrimary = select.attr("id") === "flavor_ingredient";
+					const placeholderText = isPrimary
+						? vv_quiz_ajax.placeholder_primary
+						: vv_quiz_ajax.placeholder_secondary;
 
-					// CRITICAL: Insert the correct placeholder and the CLEANED HTML string
-					select.html(
-						'<option value="">' + placeholder + "</option>" + cleaned_html
-					);
+					const localPlaceholder =
+						'<option value="">' + placeholderText + "</option>";
+
+					// CRITICAL FIX: Insert the guaranteed, locally-created placeholder, followed by the cleaned terms.
+					select.html(localPlaceholder + cleaned_html);
 					select.prop("disabled", false);
 				});
 			},

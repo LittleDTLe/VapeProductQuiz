@@ -101,10 +101,12 @@ function vv_ajax_filter_ingredients()
                 'orderby' => 'name',
             ));
 
-            // C. RENDER HTML OPTIONS
+            // --- C. RENDER HTML OPTIONS ---
             if (!is_wp_error($terms) && is_array($terms)) {
                 foreach ($terms as $term) {
-                    // CRITICAL FIX: Ensure $term is a valid object and has non-empty required properties
+
+                    // CRITICAL FIX: Ensure the object is a valid WP_Term instance AND that 
+                    // the required properties (slug and name) are not empty strings.
                     if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
                         $options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
                     }

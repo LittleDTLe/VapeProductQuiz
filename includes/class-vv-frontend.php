@@ -78,17 +78,17 @@ function vv_recommender_quiz_shortcode()
     $clear_btn_txt_color = isset($settings['clear_btn_txt_color']) ? esc_html($settings['clear_btn_txt_color']) : '#FFFFFF';
     $clear_btn_txt_hover_color = isset($settings['clear_btn_txt_hover_color']) ? esc_html($settings['clear_btn_txt_hover_color']) : '#FFFFFF';
 
-
-    // Pass essential data to the frontend script
+    //Pass the calculated PHP variables directly into the localized object.
     wp_localize_script(
-        'vv-quiz-frontend-script', // Handle for the script we'll create below
+        'vv-quiz-frontend-script',
         'vv_quiz_ajax',
         array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            // Other data for future AJAX features could go here
+            'placeholder_primary' => $placeholder_primary,
+            'placeholder_secondary' => $placeholder_secondary,
+            'nonce' => wp_create_nonce('vv-quiz-nonce'),
         )
     );
-
 
     ?>
     <style>
