@@ -30,12 +30,14 @@ This tool ensures **maintainability** by allowing store managers to control all 
 - **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
 - **Uninstall Script:** Add Cleanup Options on Plugin Uninstall.
 - **WooCommerce Activated Script:** Script that checks if WooCommerce is activated.
+- **Modularisation of Admin File** Modularise class-vv-admin.php file.
 
 ---
 
 ## Currently Working On
 
 - [x] **Multi-Lingual Support:** Add Localization to settings page.
+- [x] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
 
 ---
 
@@ -45,7 +47,6 @@ This section outlines planned features that would require further development (p
 
 ### To Implement Features (Planned for Next Releases)
 
-- [ ] **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
 - [ ] **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
 - [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
 - [ ] **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
@@ -58,7 +59,6 @@ To implement the below features / ideas, there would need to be a complete refac
 
 - [ ] **Multi Quiz Support** Add Multiple Quiz Support to the plugin.
 - [ ] **Category Page Quiz** Add Dynamic Quizes to Category pages with Ajax Filtering Capabilities.
-- [ ] **Modularisation of Admin File** Modularise class-vv-admin.php file.
 
 ---
 
