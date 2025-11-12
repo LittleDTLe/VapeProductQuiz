@@ -1,7 +1,6 @@
 <?php
 /**
- * Admin Rendering Logic.
- * Contains the final HTML structure and calls the necessary settings and scripts.
+ * Admin Rendering Logic - FULLY LOCALIZED
  */
 
 if (!defined('ABSPATH'))
@@ -9,45 +8,28 @@ if (!defined('ABSPATH'))
 
 function vv_render_details_page()
 {
-    // SECURITY CHECK
     if (!current_user_can('manage_options'))
         return;
 
-    // --- ΔΥΝΑΜΙΚΗ ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ (Plugin Header) ---
-    // NOTE: We assume VV_QUIZ_DIR is defined in the main loader file
     $shop_url = get_permalink(wc_get_page_id('shop'));
     $git_url = 'https://github.com/LittleDTLe/VapeProductQuiz';
 
     $settings = get_option('vv_quiz_settings');
 
-    $chosen_type_slug = isset($settings['attribute_type_slug']) ? esc_html($settings['attribute_type_slug']) : 'pa_geuseis (Default)';
-    $chosen_ingredient_slug = isset($settings['attribute_ingredient_slug']) ? esc_html($settings['attribute_ingredient_slug']) : 'pa_quiz-ingredient (Default)';
+    $chosen_type_slug = isset($settings['attribute_type_slug']) ? esc_html($settings['attribute_type_slug']) : 'pa_geuseis (' . __('Default', 'vapevida-quiz') . ')';
+    $chosen_ingredient_slug = isset($settings['attribute_ingredient_slug']) ? esc_html($settings['attribute_ingredient_slug']) : 'pa_quiz-ingredient (' . __('Default', 'vapevida-quiz') . ')';
 
     $all_headers = array('Version' => 'Version', 'Author' => 'Author', 'VersionNotes' => 'VersionNotes', 'Features' => 'Features');
-    // Using a absolute path for the main plugin file
-    $main_plugin_file = dirname(__FILE__, 3) . '/vapevida-quiz.php'; // 3 levels up from /includes/admin/
+    $plugin_file_path = dirname(__FILE__, 3) . '/vapevida-quiz.php';
+    $plugin_data_raw = get_file_data($plugin_file_path, $all_headers, 'plugin');
 
-    // Safety check for the constant (if not defined in the main file)
-    if (defined('VV_QUIZ_DIR')) {
-        $main_plugin_file = VV_QUIZ_DIR . 'vapevida-quiz.php';
-    } else {
-        // Fallback calculation if the constant is not present
-        $main_plugin_file = trailingslashit(WPMU_PLUGIN_DIR) . 'vapevida-quiz/vapevida-quiz.php';
-        // NOTE: This fallback depends entirely on your specific directory structure.
-    }
-
-    // Ανάγνωση δεδομένων με τη σωστή διαδρομή:
-    $plugin_data_raw = get_file_data($main_plugin_file, $all_headers, 'plugin');
-
-    // Safe assignment and List Conversion
     $plugin_version = isset($plugin_data_raw['Version']) ? esc_html($plugin_data_raw['Version']) : 'N/A';
-    $plugin_author = isset($plugin_data_raw['Author']) ? esc_html($plugin_data_raw['Author']) : 'Unknown';
+    $plugin_author = isset($plugin_data_raw['Author']) ? esc_html($plugin_data_raw['Author']) : __('Unknown', 'vapevida-quiz');
     $version_notes_list = array_map('trim', array_filter(explode(',', isset($plugin_data_raw['VersionNotes']) ? $plugin_data_raw['VersionNotes'] : '')));
     $features_list = array_map('trim', array_filter(explode(',', isset($plugin_data_raw['Features']) ? $plugin_data_raw['Features'] : '')));
 
     ?>
     <style>
-        /* Responsive Layout Styles */
         #vv-admin-top-flex {
             display: flex;
             gap: 30px;
@@ -68,7 +50,6 @@ function vv_render_details_page()
             margin-top: 30px;
         }
 
-        /* Conditional Attribute Settings */
         .vv-custom-attributes-toggle {
             background: #fff;
             padding: 15px;
@@ -97,7 +78,6 @@ function vv_render_details_page()
             margin-bottom: 0;
         }
 
-        /* Tablet breakpoint */
         @media screen and (max-width: 1024px) {
             #vv-admin-top-flex {
                 gap: 20px;
@@ -108,7 +88,6 @@ function vv_render_details_page()
             }
         }
 
-        /* Mobile breakpoint - stack vertically */
         @media screen and (max-width: 768px) {
             #vv-admin-top-flex {
                 flex-direction: column;
@@ -134,7 +113,6 @@ function vv_render_details_page()
             }
         }
 
-        /* Small mobile */
         @media screen and (max-width: 480px) {
             .wrap h1 {
                 font-size: 1.5em;
@@ -165,7 +143,7 @@ function vv_render_details_page()
 
             navigator.clipboard.writeText(shortcode).then(function () {
                 const originalHTML = button.innerHTML;
-                button.innerHTML = '<span class="dashicons dashicons-yes"></span>Αντιγράφηκε!';
+                button.innerHTML = '<span class="dashicons dashicons-yes"></span><?php echo esc_js(__('Copied!', 'vapevida-quiz')); ?>';
                 button.classList.add('copied');
 
                 setTimeout(function () {
@@ -174,31 +152,22 @@ function vv_render_details_page()
                 }, 2000);
             }).catch(function (err) {
                 console.error('Failed to copy: ', err);
-                alert('Αποτυχία αντιγραφής. Παρακαλώ αντιγράψτε χειροκίνητα.');
+                alert('<?php echo esc_js(__('Copy failed. Please copy manually.', 'vapevida-quiz')); ?>');
             });
         }
 
-        // Toggle custom attributes visibility (instant, no save required)
         function vvToggleCustomAttributes(checkbox) {
-            // Find ALL default info boxes and select wrappers on the page (not just in one container)
             const allDefaultInfos = document.querySelectorAll('.vv-default-info');
             const allSelectWrappers = document.querySelectorAll('.vv-attribute-select-wrapper');
 
-            console.log('Found default infos:', allDefaultInfos.length);
-            console.log('Found select wrappers:', allSelectWrappers.length);
-
             if (checkbox.checked) {
-                // Custom mode: hide all default info, show all dropdowns
                 allDefaultInfos.forEach(function (info) {
-                    console.log('Hiding default info');
                     info.style.display = 'none';
                 });
                 allSelectWrappers.forEach(function (wrapper) {
-                    console.log('Showing select wrapper');
                     wrapper.style.display = 'block';
                 });
             } else {
-                // Default mode: show all default info, hide all dropdowns
                 allDefaultInfos.forEach(function (info) {
                     info.style.display = 'block';
                 });
@@ -208,7 +177,6 @@ function vv_render_details_page()
             }
         }
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             const useCustomCheckbox = document.getElementById('use_custom_attributes');
             if (useCustomCheckbox) {
@@ -218,8 +186,10 @@ function vv_render_details_page()
     </script>
 
     <div class="wrap">
-        <h1>VapeVida Flavorshot Recommender Quiz</h1>
-        <p class="about-text">Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του custom plugin.</p>
+        <h1><?php _e('VapeVida Flavorshot Recommender Quiz', 'vapevida-quiz'); ?></h1>
+        <p class="about-text">
+            <?php _e('Usage instructions and technical information for managing the custom plugin.', 'vapevida-quiz'); ?>
+        </p>
 
         <hr class="wp-header-end">
 
@@ -228,7 +198,11 @@ function vv_render_details_page()
             <div id="vv-main-content-wrapper" style="flex: 2; min-width: 0;">
 
                 <div id="vv-settings-form" class="postbox" style="margin-bottom: 20px;">
-                    <h2 class="hndle"><span><span class="dashicons dashicons-admin-generic"></span> Ρυθμίσεις Quiz</span>
+                    <h2 class="hndle">
+                        <span>
+                            <span class="dashicons dashicons-admin-generic"></span>
+                            <?php _e('Quiz Settings', 'vapevida-quiz'); ?>
+                        </span>
                     </h2>
                     <div class="inside">
                         <form method="post" action="options.php">
@@ -245,16 +219,26 @@ function vv_render_details_page()
 
             <div id="vv-sidebar-metadata" class="postbox-container" style="flex: 1; min-width: 300px;">
                 <div class="postbox">
-                    <h2 class="hndle"><span><span class="dashicons dashicons-info"
-                                style="font-size: 1.2em; vertical-align: middle;"></span> Πληροφορίες Plugin</span></h2>
+                    <h2 class="hndle">
+                        <span>
+                            <span class="dashicons dashicons-info" style="font-size: 1.2em; vertical-align: middle;"></span>
+                            <?php _e('Plugin Information', 'vapevida-quiz'); ?>
+                        </span>
+                    </h2>
                     <div class="inside">
                         <ul style="list-style: none; padding: 0; margin: 0;">
-                            <li style="margin-bottom: 8px;"><strong>Συντάκτης:</strong> <span
-                                    style="font-weight: bold;"><?php echo $plugin_author; ?></span></li>
-                            <li style="margin-bottom: 8px;"><strong>Έκδοση Plugin:</strong> <?php echo $plugin_version; ?>
+                            <li style="margin-bottom: 8px;">
+                                <strong><?php _e('Author:', 'vapevida-quiz'); ?></strong>
+                                <span style="font-weight: bold;"><?php echo $plugin_author; ?></span>
+                            </li>
+                            <li style="margin-bottom: 8px;">
+                                <strong><?php _e('Plugin Version:', 'vapevida-quiz'); ?></strong>
+                                <?php echo $plugin_version; ?>
                             </li>
 
-                            <li style="margin-top: 15px; margin-bottom: 5px;"><strong>Version Notes:</strong></li>
+                            <li style="margin-top: 15px; margin-bottom: 5px;">
+                                <strong><?php _e('Version Notes:', 'vapevida-quiz'); ?></strong>
+                            </li>
                             <ul style="padding-left: 20px; margin-top: 0;">
                                 <?php
                                 foreach ($version_notes_list as $note) {
@@ -265,7 +249,9 @@ function vv_render_details_page()
                                 ?>
                             </ul>
 
-                            <li style="margin-top: 15px; margin-bottom: 5px;"><strong>Features:</strong></li>
+                            <li style="margin-top: 15px; margin-bottom: 5px;">
+                                <strong><?php _e('Features:', 'vapevida-quiz'); ?></strong>
+                            </li>
                             <ul style="padding-left: 20px; margin-top: 0;">
                                 <?php
                                 foreach ($features_list as $feature) {
@@ -276,114 +262,159 @@ function vv_render_details_page()
                                 ?>
                             </ul>
 
-                            <li style="border-top: 1px solid #eee; padding-top: 12px; margin-top: 15px;"><strong>URL
-                                    Καταστήματος:</strong> <a href="<?php echo esc_url($shop_url); ?>"
-                                    target="_blank">Άνοιγμα Καταστήματος</a></li>
-                            <li style="margin-top: 5px;"><strong>Github Repository:</strong> <a
-                                    href="<?php echo esc_url($git_url); ?>" target="_blank">Μεταφέρσου στο Github</a></li>
+                            <li style="border-top: 1px solid #eee; padding-top: 12px; margin-top: 15px;">
+                                <strong><?php _e('Shop URL:', 'vapevida-quiz'); ?></strong>
+                                <a href="<?php echo esc_url($shop_url); ?>"
+                                    target="_blank"><?php _e('Open Shop', 'vapevida-quiz'); ?></a>
+                            </li>
+                            <li style="margin-top: 5px;">
+                                <strong><?php _e('Github Repository:', 'vapevida-quiz'); ?></strong>
+                                <a href="<?php echo esc_url($git_url); ?>"
+                                    target="_blank"><?php _e('Go to Github', 'vapevida-quiz'); ?></a>
+                            </li>
                         </ul>
 
-                        <h3 style="margin-top: 20px;">Slugs Χαρακτηριστικών</h3>
-                        <p>Τα απαραίτητα Global Attributes για το Quiz είναι:</p>
+                        <h3 style="margin-top: 20px;"><?php _e('Attribute Slugs', 'vapevida-quiz'); ?></h3>
+                        <p><?php _e('The required Global Attributes for the Quiz are:', 'vapevida-quiz'); ?></p>
                         <ul style="padding-left: 20px;">
-                            <li><strong>Τύπος Γεύσης:** <code><?php echo esc_html($chosen_type_slug); ?></code></li>
-                            <li><strong>Συστατικό:** <code><?php echo esc_html($chosen_ingredient_slug); ?></code></li>
+                            <li><strong><?php _e('Flavor Type:', 'vapevida-quiz'); ?></strong>
+                                <code><?php echo $chosen_type_slug; ?></code></li>
+                            <li><strong><?php _e('Ingredient:', 'vapevida-quiz'); ?></strong>
+                                <code><?php echo $chosen_ingredient_slug; ?></code></li>
                         </ul>
 
-                        <h3 style="margin-top: 30px;"><span class="dashicons dashicons-search"></span> Τεχνική Λογική
-                            Φίλτρου</h3>
-                        <p>Ο κώδικας Query Logic εξασφαλίζει ότι το φιλτράρισμα γίνεται με **απόλυτη ακρίβεια** (AND Logic)
-                            ανάμεσα σε όλα τα επιλεγμένα πεδία.</p>
+                        <h3 style="margin-top: 30px;">
+                            <span class="dashicons dashicons-search"></span>
+                            <?php _e('Filter Technical Logic', 'vapevida-quiz'); ?>
+                        </h3>
+                        <p><?php _e('The Query Logic code ensures that filtering is done with **absolute accuracy** (AND Logic) between all selected fields.', 'vapevida-quiz'); ?>
+                        </p>
                         <div style="background: #f7f7f7; padding: 15px; border-left: 4px solid #e21e51; margin-top: 15px;">
-                            <p><strong>&bull; Τύπος Γεύσης:</strong> `filter_geuseis` (Single Select)</p>
-                            <p><strong>&bull; Βασικό & Δευτερεύον Συστατικό:</strong> `filter_quiz-ingredient` (Combined AND
-                                Logic)</p>
-                            <p style="margin-top: 10px; font-style: italic;">Το σύστημα ελέγχει αν το προϊόν έχει το 'Τύπος
-                                Γεύσης' **ΚΑΙ** και τα δύο επιλεγμένα 'Συστατικά' ταυτόχρονα.</p>
+                            <p><strong>&bull; <?php _e('Flavor Type:', 'vapevida-quiz'); ?></strong> `filter_geuseis`
+                                (<?php _e('Single Select', 'vapevida-quiz'); ?>)</p>
+                            <p><strong>&bull; <?php _e('Primary & Secondary Ingredient:', 'vapevida-quiz'); ?></strong>
+                                `filter_quiz-ingredient` (<?php _e('Combined AND Logic', 'vapevida-quiz'); ?>)</p>
+                            <p style="margin-top: 10px; font-style: italic;">
+                                <?php _e('The system checks if the product has the "Flavor Type" AND both selected "Ingredients" simultaneously.', 'vapevida-quiz'); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+        <!-- Continuation of admin-rendering.php -->
         <div id="vv-guide-section" style="margin-top: 30px;">
             <div id="vv-main-instructions" class="postbox">
-                <h2 class="hndle"><span><span class="dashicons dashicons-book-alt"></span> Οδηγίες Χρήσης & Συντήρηση</span>
+                <h2 class="hndle">
+                    <span>
+                        <span class="dashicons dashicons-book-alt"></span>
+                        <?php _e('Usage Instructions & Maintenance', 'vapevida-quiz'); ?>
+                    </span>
                 </h2>
                 <div class="inside">
-                    <p>Αυτό το plugin λειτουργεί ως ένας **Γρήγορος Οδηγός Προϊόντων** (Product Finder). Βασίζεται σε φίλτρα
-                        URL για την άμεση εύρεση υγρών από τον πελάτη.</p>
+                    <p><?php _e('This plugin works as a **Product Finder Guide**. It is based on URL filters for immediate liquid search by the customer.', 'vapevida-quiz'); ?>
+                    </p>
 
-                    <h3><span class="dashicons dashicons-admin-home"></span> Εμφάνιση Quiz & Προσαρμογή Κειμένων</h3>
+                    <h3>
+                        <span class="dashicons dashicons-admin-home"></span>
+                        <?php _e('Quiz Display & Text Customization', 'vapevida-quiz'); ?>
+                    </h3>
 
                     <div style="background: #f0f0f0; padding: 15px; border-left: 4px solid #4a67b2; margin-bottom: 20px;">
-                        <p><strong>Κωδικός Εμφάνισης (Shortcode):</strong> Χρησιμοποιήστε τον παρακάτω κωδικό για να
-                            εμφανίσετε τη φόρμα σε οποιαδήποτε σελίδα (π.χ. Αρχική):</p>
+                        <p><strong><?php _e('Display Code (Shortcode):', 'vapevida-quiz'); ?></strong>
+                            <?php _e('Use the following code to display the form on any page (e.g. Homepage):', 'vapevida-quiz'); ?>
+                        </p>
 
                         <div class="vv-shortcode-container"
                             style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                                        </code>
+                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                        </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"
                                 style="flex-shrink: 0;" onclick="vvCopyShortcode(this)">
-                                Αντιγραφή
+                                <?php _e('Copy', 'vapevida-quiz'); ?>
                             </button>
                         </div>
                     </div>
 
-                    <p>Όλα τα κείμετενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από την ενότητα
-                        <strong>«Ρυθμίσεις Quiz»</strong> που βρίσκεται ακριβώς επάνω:
-                    </p>
+                    <p><?php
+                    printf(
+                        /* translators: %s: Section name in bold */
+                        __('All texts (Titles, Labels, CTA) and Quiz structure are configured from the %s section above.', 'vapevida-quiz'),
+                        '<strong>"' . __('Quiz Settings', 'vapevida-quiz') . '"</strong>'
+                    );
+                    ?></p>
 
                     <ul style="padding-left: 20px; color: #555;">
-                        <li><span style="font-weight: bold;">Τίτλοι (H2/P):</span> Αλλάξτε το κύριο μήνυμα για εποχιακά ή
-                            προωθητικά θέματα.</li>
-                        <li><span style="font-weight: bold;">Υποχρεωτικότητα (Required):</span> Ελέγξτε ποια πεδία πρέπει να
-                            είναι συμπληρωμένα για την υποβολή της φόρμας.</li>
-                        <li><span style="font-weight: bold;">Ενεργοποίηση 3ου Πεδίου:</span> Επιλέξτε εάν το τρίτο πεδίο
-                            (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα.</li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Titles (H2/P):', 'vapevida-quiz'); ?></span>
+                            <?php _e('Change the main message for seasonal or promotional themes.', 'vapevida-quiz'); ?>
+                        </li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Required Fields:', 'vapevida-quiz'); ?></span>
+                            <?php _e('Control which fields must be filled for form submission.', 'vapevida-quiz'); ?>
+                        </li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Enable 3rd Field:', 'vapevida-quiz'); ?></span>
+                            <?php _e('Choose if the third field (Secondary Ingredient) is displayed in the form.', 'vapevida-quiz'); ?>
+                        </li>
                     </ul>
 
-                    <h3 style="margin-top: 30px;"><span class="dashicons dashicons-editor-ul"></span> Οδηγός Διαχείρισης
-                        Γεύσεων</h3>
-                    <p style="margin-bottom: 15px;">Η προσθήκη νέων επιλογών στο Quiz γίνεται **αυτόματα**, αρκεί να
-                        ενημερωθούν οι σωστές ρυθμίσεις στα Global Attributes του WooCommerce.</p>
+                    <h3 style="margin-top: 30px;">
+                        <span class="dashicons dashicons-editor-ul"></span>
+                        <?php _e('Flavor Management Guide', 'vapevida-quiz'); ?>
+                    </h3>
+                    <p style="margin-bottom: 15px;">
+                        <?php _e('Adding new options to the Quiz happens **automatically**, as long as the correct settings are updated in the WooCommerce Global Attributes.', 'vapevida-quiz'); ?>
+                    </p>
 
                     <div style="background: #eef7ff; padding: 15px; border: 1px solid #cceeff; border-radius: 5px;">
-                        <p style="font-weight: bold; margin-top: 0;">Βήμα 1: Εύρεση του Σωστού Φακέλου</p>
-                        <p style="margin-left: 10px;">Πηγαίνετε: <strong>Προϊόντα &rarr; Χαρακτηριστικά</strong>. Τα δύο
-                            Attributes που γεμίζουν το Quiz είναι:</p>
+                        <p style="font-weight: bold; margin-top: 0;">
+                            <?php _e('Step 1: Access the Correct Folder', 'vapevida-quiz'); ?>
+                        </p>
+                        <p style="margin-left: 10px;">
+                            <?php _e('Navigate to: **Products → Attributes**. The two Attributes that populate the Quiz are:', 'vapevida-quiz'); ?>
+                        </p>
                         <ul style="padding-left: 15px;">
-                            <li>**Τύπος Γεύσης:** <code>pa_geuseis</code></li>
-                            <li>**Συστατικό (π.χ. Φράουλα, Κρέμα):** <code>pa_quiz-ingredient</code></li>
+                            <li><strong><?php _e('Flavor Type:', 'vapevida-quiz'); ?></strong> <code>pa_geuseis</code></li>
+                            <li><strong><?php _e('Ingredient (e.g. Strawberry, Cream):', 'vapevida-quiz'); ?></strong>
+                                <code>pa_quiz-ingredient</code>
+                            </li>
                         </ul>
                     </div>
 
                     <div
                         style="background: #fdf5e6; padding: 15px; border: 1px solid #ffaa00; border-radius: 5px; margin-top: 10px;">
-                        <p style="font-weight: bold; margin-top: 0;">Βήμα 2: Προσθήκη Νέου Όρου (Term)</p>
-                        <p style="margin-left: 10px;">Κάντε κλικ στο **"Ρύθμιση όρων"** (Configure Terms) δίπλα στο
-                            Attribute **Συστατικό (Quiz)**.</p>
+                        <p style="font-weight: bold; margin-top: 0;"><?php _e('Step 2: Add New Term', 'vapevida-quiz'); ?>
+                        </p>
+                        <p style="margin-left: 10px;">
+                            <?php _e('Click on **"Configure Terms"** next to the Attribute **Ingredient (Quiz)**.', 'vapevida-quiz'); ?>
+                        </p>
                         <ul style="padding-left: 15px; list-style-type: square;">
-                            <li>**Ονομασία (Name):** Γράψτε την πλήρη ονομασία (π.χ. 'Ακτινίδιο') και ένα καθαρό slug (π.χ.
-                                'actinidio').</li>
+                            <li><strong><?php _e('Name:', 'vapevida-quiz'); ?></strong>
+                                <?php _e('Write the full name (e.g. \'Kiwi\') and a clean slug (e.g. \'kiwi\').', 'vapevida-quiz'); ?>
+                            </li>
                         </ul>
                     </div>
 
                     <div
                         style="background: #f0fff0; padding: 15px; border: 1px solid #3c763d; border-radius: 5px; margin-top: 10px;">
-                        <p style="font-weight: bold; margin-top: 0;">Βήμα 3: Σύνδεση με Προϊόν & Έλεγχος</p>
-                        <p style="margin-left: 10px;">Για να εμφανιστεί ο νέος Όρος στο Quiz, πρέπει να είναι
-                            αντιστοιχισμένος σε τουλάχουν ένα δημοσιευμένο προϊόν.</p>
+                        <p style="font-weight: bold; margin-top: 0;">
+                            <?php _e('Step 3: Connect to Product & Check', 'vapevida-quiz'); ?>
+                        </p>
+                        <p style="margin-left: 10px;">
+                            <?php _e('For the new term to appear in the Quiz, it must be assigned to at least one published product.', 'vapevida-quiz'); ?>
+                        </p>
                         <p style="margin-left: 10px; color: #d9534f; font-weight: bold;">
                             <span class="dashicons dashicons-warning"
-                                style="font-size: 1.2em; vertical-align: middle;"></span> **Πολύ Σημαντικό:** Αν ένας όρος
-                            **δεν** έχει προϊόντα, το Quiz τον αγνοεί (για να μην οδηγεί σε κενά αποτελέσματα).
+                                style="font-size: 1.2em; vertical-align: middle;"></span>
+                            <strong><?php _e('Very Important:', 'vapevida-quiz'); ?></strong>
+                            <?php _e('If a term **does not** have products, the Quiz ignores it (to avoid leading to empty results).', 'vapevida-quiz'); ?>
                         </p>
                     </div>
                 </div>
