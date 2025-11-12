@@ -13,7 +13,7 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * * VersionNotes: Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview, Localization
- * Features: Multiple Product Recommendation Quizzes, Analytics & Tracking, Custom Error Messages
+ * Features: Multiple Product Recommendation Quizzes, Analytics & Tracking, Custom Error Messages, Search in Selects
  */
 
 if (!defined('ABSPATH')) {

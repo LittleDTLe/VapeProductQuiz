@@ -1,6 +1,6 @@
 <?php
 /**
- * Core Logic for VapeVida Quiz. Handles Attribute creation and AJAX handler for filters.
+ * Core Logic for VapeVida Quiz - FIXED CASCADING AJAX
  */
 
 if (!defined('ABSPATH'))
@@ -59,20 +59,83 @@ function vv_create_recommender_attributes()
 add_action('init', 'vv_create_recommender_attributes');
 
 /**
- * AJAX Handler for Cascading Filters AND Result Preview
+ * AJAX Handler - Smart Cascading with Real-Time Product Count
+ * 
+ * Returns: count|||primaryOptions|||secondaryOptions
  */
 function vv_ajax_filter_ingredients()
 {
+    // Get all filter values
     $type_term_slug = isset($_POST['type_term_slug']) ? sanitize_key($_POST['type_term_slug']) : '';
     $type_slug = isset($_POST['type_slug']) ? sanitize_key($_POST['type_slug']) : '';
+    $primary_ingredient = isset($_POST['primary_ingredient']) ? sanitize_key($_POST['primary_ingredient']) : '';
+    $secondary_ingredient = isset($_POST['secondary_ingredient']) ? sanitize_key($_POST['secondary_ingredient']) : '';
 
     $ingredient_taxonomy = 'pa_quiz-ingredient';
-    $options_html = '';
+    $primary_options_html = '';
+    $secondary_options_html = '';
     $product_count = 0;
 
-    if ($type_slug && $type_term_slug) {
+    if (!$type_slug || !$type_term_slug) {
+        echo '0|||||||';
+        wp_die();
+        return;
+    }
 
-        $common_tax_query = array(
+    // --- BUILD TAX QUERY BASED ON SELECTED FILTERS ---
+    $tax_query = array(
+        'relation' => 'AND',
+        array(
+            'taxonomy' => $type_slug,
+            'field' => 'slug',
+            'terms' => $type_term_slug,
+            'operator' => 'IN',
+        ),
+    );
+
+    // Add primary ingredient to query if selected
+    if (!empty($primary_ingredient)) {
+        $tax_query[] = array(
+            'taxonomy' => $ingredient_taxonomy,
+            'field' => 'slug',
+            'terms' => $primary_ingredient,
+            'operator' => 'IN',
+        );
+    }
+
+    // Add secondary ingredient to query if selected
+    if (!empty($secondary_ingredient)) {
+        $tax_query[] = array(
+            'taxonomy' => $ingredient_taxonomy,
+            'field' => 'slug',
+            'terms' => $secondary_ingredient,
+            'operator' => 'IN',
+        );
+    }
+
+    // --- GET PRODUCT IDS MATCHING ALL CURRENT FILTERS ---
+    $product_args = array(
+        'post_type' => 'product',
+        'post_status' => 'publish',
+        'tax_query' => $tax_query,
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+    );
+
+    $products_query = new WP_Query($product_args);
+    $product_ids = $products_query->posts;
+    $product_count = $products_query->found_posts;
+
+    // --- BUILD PRIMARY INGREDIENT OPTIONS ---
+    if (!empty($primary_ingredient)) {
+        // Primary is selected: show only that one + placeholder
+        $selected_term = get_term_by('slug', $primary_ingredient, $ingredient_taxonomy);
+        if ($selected_term && !is_wp_error($selected_term)) {
+            $primary_options_html .= '<option value="' . esc_attr($selected_term->slug) . '">' . esc_html($selected_term->name) . '</option>';
+        }
+    } else {
+        // Primary not selected: show all available based on Type only
+        $primary_tax_query = array(
             array(
                 'taxonomy' => $type_slug,
                 'field' => 'slug',
@@ -81,37 +144,88 @@ function vv_ajax_filter_ingredients()
             ),
         );
 
-        $product_args_base = array(
+        $primary_product_args = array(
             'post_type' => 'product',
             'post_status' => 'publish',
-            'tax_query' => $common_tax_query,
+            'tax_query' => $primary_tax_query,
             'posts_per_page' => -1,
             'fields' => 'ids',
         );
 
-        $products_query = new WP_Query($product_args_base);
-        $product_ids = $products_query->posts;
-        $product_count = $products_query->found_posts;
+        $primary_products_query = new WP_Query($primary_product_args);
+        $primary_product_ids = $primary_products_query->posts;
 
-        if ($product_count > 0 && !empty($product_ids)) {
-            $terms = get_terms(array(
+        if (!empty($primary_product_ids)) {
+            $primary_terms = get_terms(array(
                 'taxonomy' => $ingredient_taxonomy,
                 'hide_empty' => true,
-                'object_ids' => $product_ids,
+                'object_ids' => $primary_product_ids,
                 'orderby' => 'name',
             ));
 
-            if (!is_wp_error($terms) && is_array($terms)) {
-                foreach ($terms as $term) {
+            if (!is_wp_error($primary_terms) && is_array($primary_terms)) {
+                foreach ($primary_terms as $term) {
                     if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
-                        $options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        $primary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
                     }
                 }
             }
         }
     }
 
-    echo intval($product_count) . '|||' . $options_html;
+    // --- BUILD SECONDARY INGREDIENT OPTIONS ---
+    // Always filter by Type + Primary (if selected)
+    $secondary_tax_query = array(
+        'relation' => 'AND',
+        array(
+            'taxonomy' => $type_slug,
+            'field' => 'slug',
+            'terms' => $type_term_slug,
+            'operator' => 'IN',
+        ),
+    );
+
+    // If primary is selected, secondary options must be compatible with it
+    if (!empty($primary_ingredient)) {
+        $secondary_tax_query[] = array(
+            'taxonomy' => $ingredient_taxonomy,
+            'field' => 'slug',
+            'terms' => $primary_ingredient,
+            'operator' => 'IN',
+        );
+    }
+
+    $secondary_product_args = array(
+        'post_type' => 'product',
+        'post_status' => 'publish',
+        'tax_query' => $secondary_tax_query,
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+    );
+
+    $secondary_products_query = new WP_Query($secondary_product_args);
+    $secondary_product_ids = $secondary_products_query->posts;
+
+    if (!empty($secondary_product_ids)) {
+        $secondary_terms = get_terms(array(
+            'taxonomy' => $ingredient_taxonomy,
+            'hide_empty' => true,
+            'object_ids' => $secondary_product_ids,
+            'orderby' => 'name',
+        ));
+
+        if (!is_wp_error($secondary_terms) && is_array($secondary_terms)) {
+            foreach ($secondary_terms as $term) {
+                // Exclude the primary ingredient from secondary options
+                if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name) && $term->slug !== $primary_ingredient) {
+                    $secondary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                }
+            }
+        }
+    }
+
+    // --- OUTPUT: count|||primaryOptions|||secondaryOptions ---
+    echo intval($product_count) . '|||' . $primary_options_html . '|||' . $secondary_options_html;
     wp_die();
 }
 
