@@ -2,7 +2,7 @@
 
 **Plugin Version:** 0.9.7
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Result Preview, Localization.
+**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support.
 
 **Author:** Panagiotis Drougas
 
@@ -12,28 +12,23 @@
 
 The **VapeVida Flavorshot Recommender Quiz** is a custom WooCommerce utility designed to transform product discovery. It provides a simple, dynamic, and fully managed frontend form that guides customers to the exact e-liquids they desire.
 
-This tool ensures **maintainability** by allowing store managers to control all aspects of the form and its content from the WordPress dashboard, minimizing the need for code changes.
+This tool ensures maintainability by allowing store managers to control all aspects of the form and its content from the WordPress dashboard, minimizing the need for code changes.
 
 ---
 
 ## 🛠️ Key Features (Currently Implemented)
 
-- **Dynamic Filtering (AND Logic):** The system ensures that products must match **ALL** selections (Flavor Type AND Ingredients) to appear in the filtered results.
+- **Dynamic Cascading Filters:** Dropdowns update dynamically based on the prior selection, ensuring customers are never led to a 'zero results' page.
+- **Real-Time Result Preview:** The CTA button displays the number of matching products immediately after filter selection, enhancing user experience.
+- **Full Localization Support:** The plugin is fully prepared for translation using `.pot`, `.po`, and `.mo` files, supporting locales like `el_GR` and generic `el`.
+- **Dynamic Filtering (AND Logic):** The system ensures that products must match ALL selections (Flavor Type AND Ingredients) to appear in the filtered results.
 - **Dynamic Content Control:** All user-facing text (Headings, Labels, Placeholders, and Button Text) is editable via the Admin Settings.
-- **Button Color Control:** The background and text colors for the CTA button in both **Idle** and **Hover** states are configurable via color swatches.
-- **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled **ON** or **OFF** from the settings page.
-- **Admin Dashboard Responsiveness:** The settings page automatically adjusts its layout for mobile, tablet, and desktop screens.
+- **Button Color Control:** The background and text colors for the CTA button in both Idle and Hover states are configurable via color swatches.
+- **Conditional Visibility:** The third dropdown (Secondary Ingredient) can be instantly toggled ON or OFF from the settings page.
 - **Required Field Control:** The admin can set which fields (Type, Primary, Secondary) are mandatory for form submission.
-- **Attribute Remapping:** The admin can select which Global Attributes (`pa_...`) will fill the dropdown fields directly from the dashboard settings.
+- **Attribute Remapping:** The admin can select which Global Attributes (`pa\_...`) will fill the dropdown fields directly from the dashboard settings.
 - **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
-- **Reset Button:** Add a Reset Button to easily clear selections.
-- **Default Attribute Toggle:** Add a checkbox to easily toggle between using default attributes or custom.
-- **Uninstall Script:** Add Cleanup Options on Plugin Uninstall.
-- **WooCommerce Activated Script:** Script that checks if WooCommerce is activated.
-- **Modularisation of Admin File** Modularise class-vv-admin.php file.
-- **Dynamic Cascading Filters:** Add Ajax Dropdown Filter logic to the quiz, so that there are no Zero Result Pages.
-- **Result Preview:** Combined with the Dynamic CTA, the user can see how many results there are to their search.
-- **Multi-Lingual Support:** Add Localization to settings page.
+- **Dynamic Clear Button:** A Reset Button is included to easily clear selections and URL filters.
 
 ---
 
@@ -118,7 +113,16 @@ The system automatically manages the options list. Follow these steps to introdu
 
 ---
 
-## 4. Frontend Usage
+## 4. Troubleshooting Localization
+
+If your translations (like Greek) stop working after an update, ensure you have both the generic and region-specific `.mo` files in your `/languages` folder:
+
+- `vapevida-quiz-el.mo` (Generic Greek)
+- `vapevida-quiz-el_GR.mo` (Greek, Greece)
+
+---
+
+## 5. Frontend Usage
 
 To display the fully configured quiz form on your homepage or any other page, use the shortcode:
 

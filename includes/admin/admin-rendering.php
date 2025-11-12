@@ -278,9 +278,11 @@ function vv_render_details_page()
                         <p><?php _e('The required Global Attributes for the Quiz are:', 'vapevida-quiz'); ?></p>
                         <ul style="padding-left: 20px;">
                             <li><strong><?php _e('Flavor Type:', 'vapevida-quiz'); ?></strong>
-                                <code><?php echo $chosen_type_slug; ?></code></li>
+                                <code><?php echo $chosen_type_slug; ?></code>
+                            </li>
                             <li><strong><?php _e('Ingredient:', 'vapevida-quiz'); ?></strong>
-                                <code><?php echo $chosen_ingredient_slug; ?></code></li>
+                                <code><?php echo $chosen_ingredient_slug; ?></code>
+                            </li>
                         </ul>
 
                         <h3 style="margin-top: 30px;">
@@ -331,8 +333,8 @@ function vv_render_details_page()
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                        </code>
+                                                    <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                                </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"
@@ -362,6 +364,10 @@ function vv_render_details_page()
                         <li>
                             <span style="font-weight: bold;"><?php _e('Enable 3rd Field:', 'vapevida-quiz'); ?></span>
                             <?php _e('Choose if the third field (Secondary Ingredient) is displayed in the form.', 'vapevida-quiz'); ?>
+                        </li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Real-Time Updates:', 'vapevida-quiz'); ?></span>
+                            <?php _e('The dropdowns cascade dynamically, ensuring subsequent choices are always valid and have a corresponding product result.', 'vapevida-quiz'); ?>
                         </li>
                     </ul>
 
@@ -399,6 +405,12 @@ function vv_render_details_page()
                             <li><strong><?php _e('Name:', 'vapevida-quiz'); ?></strong>
                                 <?php _e('Write the full name (e.g. \'Kiwi\') and a clean slug (e.g. \'kiwi\').', 'vapevida-quiz'); ?>
                             </li>
+                            <li style="margin-top: 8px;">
+                                <span class="dashicons dashicons-admin-site"
+                                    style="font-size: 1.2em; vertical-align: middle; color: #555;"></span>
+                                <strong><?php _e('Localization Note:', 'vapevida-quiz'); ?></strong>
+                                <?php _e('Ensure all new terms are correctly translated if you are using multiple languages.', 'vapevida-quiz'); ?>
+                            </li>
                         </ul>
                     </div>
 
@@ -416,6 +428,25 @@ function vv_render_details_page()
                             <strong><?php _e('Very Important:', 'vapevida-quiz'); ?></strong>
                             <?php _e('If a term **does not** have products, the Quiz ignores it (to avoid leading to empty results).', 'vapevida-quiz'); ?>
                         </p>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">
+                        <span class="dashicons dashicons-translation"></span>
+                        <?php _e('Localization Troubleshooting', 'vapevida-quiz'); ?>
+                    </h3>
+                    <p style="margin-bottom: 15px;">
+                        <?php _e('If translations fail (e.g., Greek strings remain English), the server may be looking for a different locale code than the one provided.', 'vapevida-quiz'); ?>
+                    </p>
+                    <div style="background: #f7f7f7; padding: 15px; border-left: 4px solid #337ab7;">
+                        <p style="font-weight: bold; margin-top: 0;"><?php _e('Solution:', 'vapevida-quiz'); ?></p>
+                        <p><?php _e('You must ensure both the generic and region-specific compiled files are present in the <code>/languages</code> folder:', 'vapevida-quiz'); ?>
+                        </p>
+                        <ul style="padding-left: 15px; list-style-type: disc;">
+                            <li><code>vapevida-quiz-el.mo</code> (<?php _e('Generic Greek Locale', 'vapevida-quiz'); ?>)
+                            </li>
+                            <li><code>vapevida-quiz-el_GR.mo</code> (<?php _e('Greek, Greece Locale', 'vapevida-quiz'); ?>)
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
