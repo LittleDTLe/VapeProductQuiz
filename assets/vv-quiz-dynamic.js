@@ -118,7 +118,6 @@ jQuery(document).ready(function ($) {
 
         const formAction = form.getAttribute('action');
         const baseShopUrl = formAction.split('?')[0];
-        window.location.href = baseShopUrl;
     });
 
     if (typeSelect.val()) {
