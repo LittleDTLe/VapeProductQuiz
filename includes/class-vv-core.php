@@ -1,13 +1,14 @@
 <?php
 /**
- * Core Logic for VapeVida Quiz - FIXED CASCADING AJAX
+ * Core Logic for VapeVida Quiz. Handles Attribute creation and AJAX handler for filters.
  */
 
 if (!defined('ABSPATH'))
     exit;
 
 if (!defined('VV_QUIZ_VERSION')) {
-    define('VV_QUIZ_VERSION', '1.0');
+    // IMPORTANT: Make sure this is updated every time you change the JS file!
+    define('VV_QUIZ_VERSION', '0.9.4'); // Bumping version for new JS/PHP logic
 }
 if (!defined('VV_QUIZ_TEXT_DOMAIN')) {
     define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
@@ -60,11 +61,16 @@ add_action('init', 'vv_create_recommender_attributes');
 
 /**
  * AJAX Handler - Smart Cascading with Real-Time Product Count
- * 
- * Returns: count|||primaryOptions|||secondaryOptions
+ * * Returns: count|||primaryOptions|||secondaryOptions
  */
 function vv_ajax_filter_ingredients()
 {
+    // Security check
+    if (!isset($_POST['security']) || !check_ajax_referer('vv-quiz-nonce', 'security', false)) {
+        echo '0|||Nonce verification failed|||';
+        wp_die();
+    }
+
     // Get all filter values
     $type_term_slug = isset($_POST['type_term_slug']) ? sanitize_key($_POST['type_term_slug']) : '';
     $type_slug = isset($_POST['type_slug']) ? sanitize_key($_POST['type_slug']) : '';
@@ -77,12 +83,12 @@ function vv_ajax_filter_ingredients()
     $product_count = 0;
 
     if (!$type_slug || !$type_term_slug) {
-        echo '0|||||||';
+        echo '0|||Type missing|||';
         wp_die();
         return;
     }
 
-    // --- BUILD TAX QUERY BASED ON SELECTED FILTERS ---
+    // --- 1. GET PRODUCT COUNT (BASED ON ALL 3 FILTERS) ---
     $tax_query = array(
         'relation' => 'AND',
         array(
@@ -113,68 +119,58 @@ function vv_ajax_filter_ingredients()
         );
     }
 
-    // --- GET PRODUCT IDS MATCHING ALL CURRENT FILTERS ---
-    $product_args = array(
+    $product_args_count = array(
         'post_type' => 'product',
         'post_status' => 'publish',
         'tax_query' => $tax_query,
+        'posts_per_page' => 1, // Only need count, not all posts
+        'fields' => 'ids',
+    );
+
+    $products_query = new WP_Query($product_args_count);
+    $product_count = $products_query->found_posts;
+
+    // --- 2. BUILD PRIMARY INGREDIENT OPTIONS (BASED ON TYPE ONLY) ---
+    // Primary options should only filter by the selected Type, and then the JS will preserve the current selection.
+    $primary_tax_query = array(
+        array(
+            'taxonomy' => $type_slug,
+            'field' => 'slug',
+            'terms' => $type_term_slug,
+            'operator' => 'IN',
+        ),
+    );
+
+    $primary_product_args = array(
+        'post_type' => 'product',
+        'post_status' => 'publish',
+        'tax_query' => $primary_tax_query,
         'posts_per_page' => -1,
         'fields' => 'ids',
     );
 
-    $products_query = new WP_Query($product_args);
-    $product_ids = $products_query->posts;
-    $product_count = $products_query->found_posts;
+    $primary_products_query = new WP_Query($primary_product_args);
+    $primary_product_ids = $primary_products_query->posts;
 
-    // --- BUILD PRIMARY INGREDIENT OPTIONS ---
-    if (!empty($primary_ingredient)) {
-        // Primary is selected: show only that one + placeholder
-        $selected_term = get_term_by('slug', $primary_ingredient, $ingredient_taxonomy);
-        if ($selected_term && !is_wp_error($selected_term)) {
-            $primary_options_html .= '<option value="' . esc_attr($selected_term->slug) . '">' . esc_html($selected_term->name) . '</option>';
-        }
-    } else {
-        // Primary not selected: show all available based on Type only
-        $primary_tax_query = array(
-            array(
-                'taxonomy' => $type_slug,
-                'field' => 'slug',
-                'terms' => $type_term_slug,
-                'operator' => 'IN',
-            ),
-        );
+    if (!empty($primary_product_ids)) {
+        $primary_terms = get_terms(array(
+            'taxonomy' => $ingredient_taxonomy,
+            'hide_empty' => true,
+            'object_ids' => $primary_product_ids,
+            'orderby' => 'name',
+        ));
 
-        $primary_product_args = array(
-            'post_type' => 'product',
-            'post_status' => 'publish',
-            'tax_query' => $primary_tax_query,
-            'posts_per_page' => -1,
-            'fields' => 'ids',
-        );
-
-        $primary_products_query = new WP_Query($primary_product_args);
-        $primary_product_ids = $primary_products_query->posts;
-
-        if (!empty($primary_product_ids)) {
-            $primary_terms = get_terms(array(
-                'taxonomy' => $ingredient_taxonomy,
-                'hide_empty' => true,
-                'object_ids' => $primary_product_ids,
-                'orderby' => 'name',
-            ));
-
-            if (!is_wp_error($primary_terms) && is_array($primary_terms)) {
-                foreach ($primary_terms as $term) {
-                    if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
-                        $primary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                    }
+        if (!is_wp_error($primary_terms) && is_array($primary_terms)) {
+            foreach ($primary_terms as $term) {
+                if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
+                    $primary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
                 }
             }
         }
     }
 
-    // --- BUILD SECONDARY INGREDIENT OPTIONS ---
-    // Always filter by Type + Primary (if selected)
+
+    // --- 3. BUILD SECONDARY INGREDIENT OPTIONS (FILTERED BY TYPE + PRIMARY) ---
     $secondary_tax_query = array(
         'relation' => 'AND',
         array(
@@ -185,7 +181,7 @@ function vv_ajax_filter_ingredients()
         ),
     );
 
-    // If primary is selected, secondary options must be compatible with it
+    // If primary is selected, secondary options MUST be compatible with it
     if (!empty($primary_ingredient)) {
         $secondary_tax_query[] = array(
             'taxonomy' => $ingredient_taxonomy,
@@ -243,7 +239,7 @@ function vv_enqueue_frontend_scripts()
             'vv-quiz-frontend-script',
             VV_QUIZ_URL . 'assets/vv-quiz-dynamic.js',
             array('jquery'),
-            VV_QUIZ_VERSION,
+            VV_QUIZ_VERSION, // Using constant for strong versioning/cache busting
             true
         );
 
