@@ -7,4 +7,4 @@
 # Ignore version control or backup folders (as specified)
 /versions/
 /backups/
-/languages/
+#/languages/
