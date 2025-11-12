@@ -1,7 +1,6 @@
 <?php
 /**
- * Admin Callbacks.
- * Contains all functions responsible for rendering fields and handling specific logic (like color pickers).
+ * Admin Callbacks - FULLY LOCALIZED
  */
 
 if (!defined('ABSPATH'))
@@ -9,7 +8,7 @@ if (!defined('ABSPATH'))
 
 function vv_quiz_required_section_callback()
 {
-    echo '<p>Επιλέξτε ποια από τα πεδία του Quiz πρέπει να είναι υποχρεωτικά.</p>';
+    echo '<p>' . esc_html__('Select which quiz fields should be required.', 'vapevida-quiz') . '</p>';
 }
 
 function vv_quiz_checkbox_callback($args)
@@ -22,15 +21,14 @@ function vv_quiz_checkbox_callback($args)
 
 function vv_quiz_main_section_callback()
 {
-    echo '<p>Εδώ ορίζετε τις ετικέτες και τη δομή του Quiz που εμφανίζεται στην Αρχική Σελίδα.</p>';
+    echo '<p>' . esc_html__('Here you define the labels and structure of the Quiz displayed on the Home Page.', 'vapevida-quiz') . '</p>';
 }
 
 function vv_quiz_button_styling_section_callback()
 {
-    echo '<p>Προσαρμόστε τα χρώματα των κουμπιών της φόρμας Quiz (Κανονική κατάσταση και Hover).</p>';
+    echo '<p>' . esc_html__('Customize the colors of the Quiz form buttons (Normal state and Hover).', 'vapevida-quiz') . '</p>';
 }
 
-// Custom Attributes Toggle Callback
 function vv_quiz_custom_attributes_toggle_callback()
 {
     $options = get_option('vv_quiz_settings');
@@ -40,9 +38,9 @@ function vv_quiz_custom_attributes_toggle_callback()
     echo '<div class="vv-custom-attributes-toggle">';
     echo '<label>';
     echo '<input type="checkbox" id="use_custom_attributes" name="vv_quiz_settings[use_custom_attributes]" value="1" ' . $checked . ' onchange="vvToggleCustomAttributes(this)" />';
-    echo ' <strong>Χρήση προσαρμοσμένων Global Attributes</strong>';
+    echo ' <strong>' . esc_html__('Use custom Global Attributes', 'vapevida-quiz') . '</strong>';
     echo '</label>';
-    echo '<p class="description">Ενεργοποιήστε αυτή την επιλογή για να επιλέξετε διαφορετικά attributes από τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient).</p>';
+    echo '<p class="description">' . esc_html__('Enable this option to select different attributes from the default ones (pa_geuseis and pa_quiz-ingredient).', 'vapevida-quiz') . '</p>';
     echo '</div>';
 }
 
@@ -51,7 +49,7 @@ function vv_quiz_status_callback()
     $options = get_option('vv_quiz_settings');
     $checked = isset($options['field_status']) ? $options['field_status'] : false;
     echo '<input type="checkbox" name="vv_quiz_settings[field_status]" value="1" ' . checked(1, $checked, false) . ' />';
-    echo '<label for="vv_quiz_settings[field_status]">Ενεργοποίηση 3ου Πεδίου (Δευτ. Συστατικό).</label>';
+    echo '<label for="vv_quiz_settings[field_status]">' . esc_html__('Enable 3rd Field (Secondary Ingredient).', 'vapevida-quiz') . '</label>';
 }
 
 function vv_quiz_text_field_callback($args)
@@ -64,8 +62,6 @@ function vv_quiz_text_field_callback($args)
     echo '<input type="text" id="' . esc_attr($field_id) . '" name="vv_quiz_settings[' . esc_attr($field_id) . ']" value="' . esc_attr($current_value) . '" class="regular-text" placeholder="' . esc_attr($default_value) . '" />';
 }
 
-
-// --- Callback to list all Global WooCommerce Attributes ---
 function vv_quiz_attribute_select_callback($args)
 {
     $options = get_option('vv_quiz_settings');
@@ -73,40 +69,39 @@ function vv_quiz_attribute_select_callback($args)
     $current_slug = isset($options[$field_id]) ? $options[$field_id] : '';
     $use_custom = isset($options['use_custom_attributes']) ? $options['use_custom_attributes'] : false;
 
-    // Set defaults based on field
     $default_slug = '';
     $field_label = '';
     if ($field_id === 'attribute_type_slug') {
         $default_slug = 'pa_geuseis';
-        $field_label = 'Τύπου';
+        $field_label = __('Type', 'vapevida-quiz');
     } elseif ($field_id === 'attribute_ingredient_slug') {
         $default_slug = 'pa_quiz-ingredient';
-        $field_label = 'Συστατικό';
+        $field_label = __('Ingredient', 'vapevida-quiz');
     }
 
-    // If custom attributes not enabled, use default
     if (!$use_custom && empty($current_slug)) {
         $current_slug = $default_slug;
     }
 
-    // Open conditional wrapper ONLY for the first field
     if ($field_id === 'attribute_type_slug') {
         echo '<div id="vv-custom-attributes-fields" class="vv-custom-attributes-fields">';
     }
 
     echo '<div class="vv-attribute-field-row" data-field-id="' . esc_attr($field_id) . '">';
 
-    // 1. Default value info box (shown when custom is disabled)
     echo '<p class="vv-default-info" style="background: #f0f0f0; padding: 10px; border-left: 3px solid #2271b1; margin: 0;' . ($use_custom ? ' display:none;' : '') . '">';
-    echo '<strong>Προεπιλογή ' . esc_html($field_label) . ':</strong> <code>' . esc_html($default_slug) . '</code>';
+    echo '<strong>' . sprintf(
+        /* translators: %s: Attribute field label (Type or Ingredient) */
+        esc_html__('Default %s:', 'vapevida-quiz'),
+        esc_html($field_label)
+    ) . '</strong> <code>' . esc_html($default_slug) . '</code>';
     echo '</p>';
 
-    // Always render the select dropdown
     $attributes = wc_get_attribute_taxonomies();
 
     echo '<div class="vv-attribute-select-wrapper" style="' . (!$use_custom ? 'display:none;' : '') . '">';
     echo '<select name="vv_quiz_settings[' . esc_attr($field_id) . ']" id="' . esc_attr($field_id) . '" class="regular-text vv-attribute-dropdown">';
-    echo '<option value="">-- Επιλέξτε Attribute --</option>';
+    echo '<option value="">' . esc_html__('-- Select Attribute --', 'vapevida-quiz') . '</option>';
 
     if (!empty($attributes)) {
         foreach ($attributes as $attribute) {
@@ -119,18 +114,16 @@ function vv_quiz_attribute_select_callback($args)
         }
     }
     echo '</select>';
-    echo '<p class="description">Επιλέξτε τον Global Attribute που θα γεμίσει αυτό το πεδίο.</p>';
-    echo '</div>'; // Close vv-attribute-select-wrapper
+    echo '<p class="description">' . esc_html__('Select the Global Attribute that will populate this field.', 'vapevida-quiz') . '</p>';
+    echo '</div>';
 
-    echo '</div>'; // Close vv-attribute-field-row
+    echo '</div>';
 
-    // Close conditional wrapper ONLY after the second field
     if ($field_id === 'attribute_ingredient_slug') {
-        echo '</div>'; // Close vv-custom-attributes-fields
+        echo '</div>';
     }
 }
 
-// Callback for Color Picker fields
 function vv_quiz_color_field_callback($args)
 {
     $options = get_option('vv_quiz_settings');
@@ -146,7 +139,6 @@ function vv_quiz_color_field_callback($args)
             data-default-color="' . esc_attr($default_value) . '" />';
 }
 
-// Enqueue the Color Picker Assets and Initialization Script
 function vv_enqueue_color_picker_assets($hook_suffix)
 {
     if ('toplevel_page_vapevida-quiz-details' !== $hook_suffix && 'vapevida-quiz-details' !== $hook_suffix) {

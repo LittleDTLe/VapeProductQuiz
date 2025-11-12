@@ -6,7 +6,6 @@
 if (!defined('ABSPATH'))
     exit;
 
-// DUMMY CNAME FOR NOW (VV_QUIZ_VERSION, VV_QUIZ_TEXT_DOMAIN must be defined)
 if (!defined('VV_QUIZ_VERSION')) {
     define('VV_QUIZ_VERSION', '1.0');
 }
@@ -17,10 +16,8 @@ if (!defined('VV_QUIZ_URL')) {
     define('VV_QUIZ_URL', plugin_dir_url(dirname(__FILE__)));
 }
 
-
 /**
  * Create Default WooCommerce Global Attributes
- * Creates pa_geuseis and pa_quiz-ingredient if they don't exist
  */
 function vv_create_recommender_attributes()
 {
@@ -28,7 +25,6 @@ function vv_create_recommender_attributes()
         return;
     }
 
-    // Create pa_geuseis (Flavor Type) if it doesn't exist
     if (!taxonomy_exists('pa_geuseis')) {
         $result = wc_create_attribute(array(
             'name' => __('Flavor Type', VV_QUIZ_TEXT_DOMAIN),
@@ -42,7 +38,6 @@ function vv_create_recommender_attributes()
         }
     }
 
-    // Create pa_quiz-ingredient (Ingredient) if it doesn't exist
     if (!taxonomy_exists('pa_quiz-ingredient')) {
         $result = wc_create_attribute(array(
             'name' => __('Ingredient (Quiz)', VV_QUIZ_TEXT_DOMAIN),
@@ -63,24 +58,20 @@ function vv_create_recommender_attributes()
 }
 add_action('init', 'vv_create_recommender_attributes');
 
-
 /**
- * AJAX Handler for Cascading Filters AND Result Preview. (P1 & P2 Logic)
- * Returns a delimited string containing the product count ||| and the filtered options HTML.
+ * AJAX Handler for Cascading Filters AND Result Preview
  */
 function vv_ajax_filter_ingredients()
 {
-    // 1. Get and sanitize the selected Type attribute slug and term
     $type_term_slug = isset($_POST['type_term_slug']) ? sanitize_key($_POST['type_term_slug']) : '';
     $type_slug = isset($_POST['type_slug']) ? sanitize_key($_POST['type_slug']) : '';
 
-    $ingredient_taxonomy = 'pa_quiz-ingredient'; // Fixed taxonomy slug for ingredient
+    $ingredient_taxonomy = 'pa_quiz-ingredient';
     $options_html = '';
     $product_count = 0;
 
     if ($type_slug && $type_term_slug) {
 
-        // --- A. BUILD THE COMMON TAX QUERY ---
         $common_tax_query = array(
             array(
                 'taxonomy' => $type_slug,
@@ -90,7 +81,6 @@ function vv_ajax_filter_ingredients()
             ),
         );
 
-        // --- B. FIND PRODUCTS AND COUNT (Necessary for filtering terms) ---
         $product_args_base = array(
             'post_type' => 'product',
             'post_status' => 'publish',
@@ -101,9 +91,8 @@ function vv_ajax_filter_ingredients()
 
         $products_query = new WP_Query($product_args_base);
         $product_ids = $products_query->posts;
-        $product_count = $products_query->found_posts; // Get the total count
+        $product_count = $products_query->found_posts;
 
-        // --- C. FIND INGREDIENT TERMS ASSOCIATED WITH THOSE PRODUCTS ---
         if ($product_count > 0 && !empty($product_ids)) {
             $terms = get_terms(array(
                 'taxonomy' => $ingredient_taxonomy,
@@ -112,7 +101,6 @@ function vv_ajax_filter_ingredients()
                 'orderby' => 'name',
             ));
 
-            // --- D. RENDER HTML OPTIONS (Strict Check for Malformed Data) ---
             if (!is_wp_error($terms) && is_array($terms)) {
                 foreach ($terms as $term) {
                     if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
@@ -123,23 +111,18 @@ function vv_ajax_filter_ingredients()
         }
     }
 
-    // --- E. OUTPUT DELIMITED RESPONSE ---
     echo intval($product_count) . '|||' . $options_html;
-
     wp_die();
 }
 
-// Register the AJAX hooks for logged-in and logged-out users
 add_action('wp_ajax_vv_filter_ingredients', 'vv_ajax_filter_ingredients');
 add_action('wp_ajax_nopriv_vv_filter_ingredients', 'vv_ajax_filter_ingredients');
 
-
 /**
- * Enqueue Frontend Scripts
+ * Enqueue Frontend Scripts with Localization
  */
 function vv_enqueue_frontend_scripts()
 {
-    // Load only on the frontend and only on the home page (where the shortcode is used)
     if (is_front_page() && !is_admin()) {
 
         wp_enqueue_script(
@@ -147,9 +130,35 @@ function vv_enqueue_frontend_scripts()
             VV_QUIZ_URL . 'assets/vv-quiz-dynamic.js',
             array('jquery'),
             VV_QUIZ_VERSION,
-            true // Load in footer
+            true
         );
-        // NOTE: wp_localize_script call is in class-vv-frontend.php
+
+        $settings = get_option('vv_quiz_settings');
+        $cta_button_text = isset($settings['button_cta']) ? $settings['button_cta'] : __('FIND YOUR LIQUID', VV_QUIZ_TEXT_DOMAIN);
+        $placeholder_primary = isset($settings['placeholder_primary']) ? $settings['placeholder_primary'] : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
+        $placeholder_secondary = isset($settings['placeholder_secondary']) ? $settings['placeholder_secondary'] : __('-- Select Secondary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
+
+        wp_localize_script(
+            'vv-quiz-frontend-script',
+            'vv_quiz_ajax',
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'placeholder_primary' => $placeholder_primary,
+                'placeholder_secondary' => $placeholder_secondary,
+                'cta_text_default' => $cta_button_text,
+                'nonce' => wp_create_nonce('vv-quiz-nonce'),
+                'i18n' => array(
+                    'loading' => __('Searching...', VV_QUIZ_TEXT_DOMAIN),
+                    'loading_options' => __('Loading...', VV_QUIZ_TEXT_DOMAIN),
+                    'cta_default' => $cta_button_text,
+                    'no_results' => __('🛑 0 RESULTS', VV_QUIZ_TEXT_DOMAIN),
+                    'one_result' => __('FIND 1 PRODUCT', VV_QUIZ_TEXT_DOMAIN),
+                    'multiple_results' => __('FOUND {count} PRODUCTS', VV_QUIZ_TEXT_DOMAIN),
+                    'error_loading' => __('⚠️ DATA ERROR', VV_QUIZ_TEXT_DOMAIN),
+                    'error_loading_options' => __('Loading Error', VV_QUIZ_TEXT_DOMAIN),
+                )
+            )
+        );
     }
 }
 add_action('wp_enqueue_scripts', 'vv_enqueue_frontend_scripts');

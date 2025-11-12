@@ -6,37 +6,30 @@
 if (!defined('ABSPATH'))
     exit;
 
-// --- 1. Shortcode Function: Loads the Form and Populates Selects ---
 function vv_recommender_quiz_shortcode()
 {
     ob_start();
 
-    // --- DYNAMICALLY LOAD SAVED SETTINGS ---
     $settings = get_option('vv_quiz_settings');
 
-    // Checkbox status: Enable/Disable Secondary Ingredient field
     $show_third_field = isset($settings['field_status']) && $settings['field_status'];
 
-    // Placeholders and Label texts (Reading from settings)
-    $quiz_heading = isset($settings['quiz_heading']) ? esc_html($settings['quiz_heading']) : 'Βρες το Ιδανικό Υγρό!';
-    $quiz_subtitle = isset($settings['quiz_subtitle']) ? esc_html($settings['quiz_subtitle']) : 'Επίλεξε το προφίλ γεύσης και τα συστατικά που προτιμάς.';
-    $label_type = isset($settings['label_type']) ? esc_html($settings['label_type']) : '1. Προφίλ Υγρού:';
-    $label_primary = isset($settings['label_primary']) ? esc_html($settings['label_primary']) : '2. Βασικό Συστατικό:';
-    $label_secondary = isset($settings['label_secondary']) ? esc_html($settings['label_secondary']) : '3. Δευτερεύον Συστατικό:';
-    $cta_button_text = isset($settings['button_cta']) ? esc_html($settings['button_cta']) : 'ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ';
-    $clear_button_text = isset($settings['button_clear_cta']) ? esc_html($settings['button_clear_cta']) : 'ΚΑΘΑΡΙΣΜΟΣ';
+    $quiz_heading = isset($settings['quiz_heading']) ? esc_html($settings['quiz_heading']) : __('Find Your Perfect Liquid!', VV_QUIZ_TEXT_DOMAIN);
+    $quiz_subtitle = isset($settings['quiz_subtitle']) ? esc_html($settings['quiz_subtitle']) : __('Select the flavor profile and ingredients you prefer.', VV_QUIZ_TEXT_DOMAIN);
+    $label_type = isset($settings['label_type']) ? esc_html($settings['label_type']) : __('1. Liquid Profile:', VV_QUIZ_TEXT_DOMAIN);
+    $label_primary = isset($settings['label_primary']) ? esc_html($settings['label_primary']) : __('2. Primary Ingredient:', VV_QUIZ_TEXT_DOMAIN);
+    $label_secondary = isset($settings['label_secondary']) ? esc_html($settings['label_secondary']) : __('3. Secondary Ingredient:', VV_QUIZ_TEXT_DOMAIN);
+    $cta_button_text = isset($settings['button_cta']) ? esc_html($settings['button_cta']) : __('FIND YOUR LIQUID', VV_QUIZ_TEXT_DOMAIN);
+    $clear_button_text = isset($settings['button_clear_cta']) ? esc_html($settings['button_clear_cta']) : __('CLEAR', VV_QUIZ_TEXT_DOMAIN);
 
-    // --- Dynamic Placeholder for Field 1 ---
-    $placeholder_type = isset($settings['placeholder_type']) ? esc_attr($settings['placeholder_type']) : '-- Επιλέξτε Προφίλ --';
-    $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : '-- Επιλέξτε Βασικό Συστατικό --';
-    $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : '-- Επιλέξτε Δευτερεύον Συστατικό --';
+    $placeholder_type = isset($settings['placeholder_type']) ? esc_attr($settings['placeholder_type']) : __('-- Select Profile --', VV_QUIZ_TEXT_DOMAIN);
+    $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
+    $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : __('-- Select Secondary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
 
-    // --- Get Required Statuses and generate HTML attribute string ---
     $is_type_required_attr = isset($settings['is_type_required']) && $settings['is_type_required'] ? 'required' : '';
     $is_primary_required_attr = isset($settings['is_primary_required']) && $settings['is_primary_required'] ? 'required' : '';
     $is_secondary_required_attr = isset($settings['is_secondary_required']) && $settings['is_secondary_required'] ? 'required' : '';
 
-    // --- DYNAMICALLY READ ATTRIBUTE SLUGS FROM SAVED SETTINGS ---
     $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
     $type_taxonomy_slug = $use_custom && isset($settings['attribute_type_slug']) && !empty($settings['attribute_type_slug'])
         ? $settings['attribute_type_slug']
@@ -45,14 +38,11 @@ function vv_recommender_quiz_shortcode()
         ? $settings['attribute_ingredient_slug']
         : 'pa_quiz-ingredient';
 
-    // IMPORTANT: The form input name must be the attribute slug without the 'pa_' prefix.
     $form_filter_type_name = str_replace('pa_', 'filter_', $type_taxonomy_slug);
     $form_filter_ingredient_name = str_replace('pa_', 'filter_', $ingredient_taxonomy_slug);
 
-    // Get Shop URL
     $shop_url = get_permalink(wc_get_page_id('shop'));
 
-    // Dynamically fetch all active terms using the retrieved slugs
     $flavor_type_terms = get_terms(array(
         'taxonomy' => $type_taxonomy_slug,
         'hide_empty' => true,
@@ -63,12 +53,10 @@ function vv_recommender_quiz_shortcode()
         'hide_empty' => true,
     ));
 
-    // Safety Check: 
     if (empty($type_taxonomy_slug) || empty($ingredient_taxonomy_slug) || is_wp_error($flavor_type_terms)) {
-        return '<p style="color: red;">[Σφάλμα Ρύθμισης]: Παρακαλούμε ρυθμίστε τους Global Attributes στο Quiz Info page.</p>';
+        return '<p style="color: red;">' . __('[Configuration Error]: Please configure the Global Attributes in the Quiz Info page.', VV_QUIZ_TEXT_DOMAIN) . '</p>';
     }
 
-    // --- DYNAMIC BUTTON COLORS ---
     $btn_bg_color = isset($settings['btn_bg_color']) ? esc_html($settings['btn_bg_color']) : '#e21e51';
     $btn_bg_hover_color = isset($settings['btn_bg_hover_color']) ? esc_html($settings['btn_bg_hover_color']) : '#c91a48';
     $btn_txt_color = isset($settings['btn_txt_color']) ? esc_html($settings['btn_txt_color']) : '#FFFFFF';
@@ -78,7 +66,6 @@ function vv_recommender_quiz_shortcode()
     $clear_btn_txt_color = isset($settings['clear_btn_txt_color']) ? esc_html($settings['clear_btn_txt_color']) : '#FFFFFF';
     $clear_btn_txt_hover_color = isset($settings['clear_btn_txt_hover_color']) ? esc_html($settings['clear_btn_txt_hover_color']) : '#FFFFFF';
 
-    //Pass the calculated PHP variables directly into the localized object.
     wp_localize_script(
         'vv-quiz-frontend-script',
         'vv_quiz_ajax',
@@ -233,7 +220,6 @@ function vv_recommender_quiz_shortcode()
             }
         }
     </style>
-
     <div class="vv-quiz-container">
         <h2><?php echo $quiz_heading; ?></h2>
         <p><?php echo $quiz_subtitle; ?></p>
@@ -288,7 +274,7 @@ function vv_recommender_quiz_shortcode()
             </div>
 
             <div class="vv-button-row">
-                <button type="button" class="button vv-clear-button" onclick="vvClearQuizForm()">
+                <button type="button" class="button vv-clear-button">
                     <?php echo $clear_button_text; ?>
                 </button>
                 <button type="submit" class="button vv-cta-button">
@@ -297,7 +283,6 @@ function vv_recommender_quiz_shortcode()
             </div>
         </form>
     </div>
-
     <script>
         // NOTE: This logic should ideally be in a separate, enqueued JS file (class-vv-dynamic.js)
         function vvClearQuizForm() {
@@ -311,7 +296,6 @@ function vv_recommender_quiz_shortcode()
             }
         }
     </script>
-
     <?php
     return ob_get_clean();
 }
