@@ -30,12 +30,11 @@ This tool ensures maintainability by allowing store managers to control all aspe
 - **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
 - **Dynamic Clear Button:** A Reset Button is included to easily clear selections and URL filters.
 - **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
+- **Updated languages/ Files:** Update languages/ files to include additions made after introduction of localisation DATE: 13 / 11 / 2025.
 
 ---
 
 ## Currently Working On
-
-- [x] **Updating languages/ Files:** Update languages/ files to include additions made after introduction of localisation.
 
 ---
 

@@ -1,12 +1,12 @@
 # Greek translation for VapeVida Quiz Plugin
-# Copyright (C) 2024 Panagiotis Drougas
+# Copyright (C) 2025 Panagiotis Drougas
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: VapeVida Flavorshot Recommender Quiz 0.9.5\n"
 "Report-Msgid-Bugs-To: https://github.com/LittleDTLe/VapeProductQuiz/issues\n"
-"POT-Creation-Date: 2024-11-13 00:00+0000\n"
-"PO-Revision-Date: 2025-11-12 12:13+0000\n"
+"POT-Creation-Date: 2025-11-12 00:00+0000\n"
+"PO-Revision-Date: 2025-11-13 12:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Greek (Greece)\n"
 "Language: el_GR\n"
@@ -14,230 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.8.0; wp-6.8.3; php-8.3.23"
-
-#: includes/admin/admin-callbacks.php:104
-msgid "-- Select Attribute --"
-msgstr "-- Επιλογή Attribute --"
-
-#: includes/admin/admin-settings-api.php:227
-msgid "-- Select Primary Ingredient --"
-msgstr "-- Επιλογή Βασικού Συστατικού --"
-
-#: includes/admin/admin-settings-api.php:218
-msgid "-- Select Profile --"
-msgstr "-- Επιλέξτε Προφίλ --"
-
-#: includes/admin/admin-settings-api.php:236
-msgid "-- Select Secondary Ingredient --"
-msgstr "-- Επιλογή Δευτερεύον Συστατικού --"
-
-#: includes/admin/admin-settings-api.php:68
-msgid "1. Attribute for Type"
-msgstr "1. Attribute για Τύπο"
-
-#: includes/admin/admin-settings-api.php:191
-msgid "1. Liquid Profile:"
-msgstr "1. Προφίλ Υγρού:"
-
-#: includes/admin/admin-settings-api.php:77
-msgid "2. Attribute for Ingredient"
-msgstr "2. Attribute για Συστατικό"
-
-#: includes/admin/admin-settings-api.php:200
-msgid "2. Primary Ingredient:"
-msgstr "2. Βασικό Συστατικό:"
-
-#: includes/admin/admin-settings-api.php:209
-msgid "3. Secondary Ingredient:"
-msgstr "3. Δευτερεύον Συστατικό:"
-
-#: includes/admin/admin-rendering.php:373
-msgid ""
-"Adding new options to the Quiz happens **automatically**, as long as the "
-"correct settings are updated in the WooCommerce Global Attributes."
-msgstr ""
-"Η προσθήκη νέων επιλογών στο Quiz γίνεται **αυτόματα**, αρκεί να ενημερωθούν "
-"οι σωστές ρυθμίσεις στα Global Attributes του WooCommerce."
-
-#. %s: Section name in bold
-#: includes/admin/admin-rendering.php:348
-#, php-format
-msgid ""
-"All texts (Titles, Labels, CTA) and Quiz structure are configured from the "
-"%s section above."
-msgstr ""
-"Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από "
-"την ενότητα %s παραπάνω."
-
-#: includes/admin/admin-rendering.php:277
-msgid "Attribute Slugs"
-msgstr "Slugs Χαρακτηριστικών"
-
-#: includes/admin/admin-rendering.php:231
-msgid "Author:"
-msgstr "Συντάκτης:"
-
-#: includes/admin/admin-settings-api.php:87
-msgid "Button Color (Background)"
-msgstr "Χρώμα Κουμπιού (Background)"
-
-#: includes/admin/admin-settings-api.php:96
-msgid "Button Color (Text)"
-msgstr "Χρώμα Κουμπιού (Κείμενο)"
-
-#: includes/admin/admin-settings-api.php:250
-msgid "Button Text (CLEAR)"
-msgstr "Κείμενο Κουμπιού (ΚΑΘΑΡΙΣΜΟΣ)"
-
-#: includes/admin/admin-settings-api.php:241
-msgid "Button Text (CTA)"
-msgstr "Κείμενο Κουμπιού (CTA)"
-
-#: includes/admin/admin-rendering.php:356
-msgid "Change the main message for seasonal or promotional themes."
-msgstr "Αλλάξτε το κύριο μήνυμα για εποχιακά ή προωθητικά θέματα."
-
-#: includes/admin/admin-rendering.php:364
-msgid ""
-"Choose if the third field (Secondary Ingredient) is displayed in the form."
-msgstr ""
-"Επιλέξτε εάν το τρίτο πεδίο (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα."
-
-#: includes/admin/admin-settings-api.php:254
-msgid "CLEAR"
-msgstr "ΚΑΘΑΡΙΣΜΟΣ"
-
-#: includes/admin/admin-settings-api.php:124
-msgid "Clear Button - Background Color"
-msgstr "Κουμπί Καθαρισμού - Χρώμα Φόντου"
-
-#: includes/admin/admin-settings-api.php:142
-msgid "Clear Button - Hover Background"
-msgstr "Κουμπί Καθαρισμού - Hover Φόντο"
-
-#: includes/admin/admin-settings-api.php:151
-msgid "Clear Button - Hover Text"
-msgstr "Κουμπί Καθαρισμού - Hover Κείμενο"
-
-#: includes/admin/admin-settings-api.php:133
-msgid "Clear Button - Text Color"
-msgstr "Κουμπί Καθαρισμού - Χρώμα Κειμένου"
-
-#: includes/admin/admin-rendering.php:396
-msgid ""
-"Click on **\"Configure Terms\"** next to the Attribute **Ingredient (Quiz)**."
-msgstr ""
-"Κάντε κλικ στο **\"Ρύθμιση όρων\"** δίπλα στο Attribute **Συστατικό (Quiz)**."
-
-#: includes/admin/admin-rendering.php:296
-msgid "Combined AND Logic"
-msgstr "Συνδυασμένη AND Λογική"
-
-#: includes/admin/admin-rendering.php:360
-msgid "Control which fields must be filled for form submission."
-msgstr ""
-"Ελέγξτε ποια πεδία πρέπει να είναι συμπληρωμένα για την υποβολή της φόρμας."
-
-#: includes/admin/admin-rendering.php:146
-msgid "Copied!"
-msgstr "Αντιγράφηκε!"
-
-#: includes/admin/admin-rendering.php:340
-msgid "Copy"
-msgstr "Αντιγραφή"
-
-#: includes/admin/admin-rendering.php:155
-msgid "Copy failed. Please copy manually."
-msgstr "Η αντιγραφή απέτυχε. Παρακαλώ αντιγράψτε χειροκίνητα."
-
-#: includes/admin/admin-callbacks.php:29
-msgid "Customize the colors of the Quiz form buttons (Normal state and Hover)."
-msgstr ""
-"Προσαρμόστε τα χρώματα των κουμπιών της φόρμας Quiz (Κανονική κατάσταση και "
-"Hover)."
-
-#: includes/admin/admin-rendering.php:19 includes/admin/admin-rendering.php:20
-msgid "Default"
-msgstr "Προεπιλογή"
-
-#. %s: Attribute field label (Type or Ingredient)
-#: includes/admin/admin-callbacks.php:95
-#, php-format
-msgid "Default %s:"
-msgstr "Προεπιλογή %s:"
-
-#: includes/admin/admin-rendering.php:325
-msgid "Display Code (Shortcode):"
-msgstr "Κωδικός Εμφάνισης (Shortcode):"
-
-#: includes/admin/admin-settings-api.php:161
-msgid "Enable 3rd Field (Secondary Ingredient)"
-msgstr "Ενεργοποίηση 3ου Πεδίου (Δευτ. Συστατικό)"
-
-#: includes/admin/admin-callbacks.php:52
-msgid "Enable 3rd Field (Secondary Ingredient)."
-msgstr "Ενεργοποίηση 3ου Πεδίου (Δευτερεύον Συστατικό)."
-
-#: includes/admin/admin-rendering.php:363
-msgid "Enable 3rd Field:"
-msgstr "Ενεργοποίηση 3ου Πεδίου:"
-
-#: includes/admin/admin-callbacks.php:43
-msgid ""
-"Enable this option to select different attributes from the default ones "
-"(pa_geuseis and pa_quiz-ingredient)."
-msgstr ""
-"Ενεργοποιήστε αυτήν την επιλογή για να επιλέξετε διαφορετικά attributes από "
-"τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient)."
-
-#: includes/admin/admin-rendering.php:253
-msgid "Features:"
-msgstr "Χαρακτηριστικά:"
-
-#: includes/admin/admin-rendering.php:288
-msgid "Filter Technical Logic"
-msgstr "Τεχνική Λογική Φίλτρου"
-
-#: includes/admin/admin-settings-api.php:245
-msgid "FIND YOUR LIQUID"
-msgstr "ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ"
-
-# Frontend Strings
-#: includes/admin/admin-settings-api.php:173
-msgid "Find Your Perfect Liquid!"
-msgstr "Βρες το Ιδανικό Υγρό!"
-
-#: includes/admin/admin-rendering.php:370
-msgid "Flavor Management Guide"
-msgstr "Οδηγός Διαχείρισης Γεύσεων"
-
-#: includes/admin/admin-rendering.php:280
-#: includes/admin/admin-rendering.php:293
-#: includes/admin/admin-rendering.php:384
-msgid "Flavor Type:"
-msgstr "Τύπος Γεύσης:"
-
-#: includes/admin/admin-rendering.php:411
-msgid ""
-"For the new term to appear in the Quiz, it must be assigned to at least one "
-"published product."
-msgstr ""
-"Για να εμφανιστεί ο νέος όρος στο Quiz, πρέπει να είναι αντιστοιχισμένος σε "
-"τουλάχιστον ένα δημοσιευμένο προϊόν."
-
-#: includes/admin/admin-settings-api.php:51
-msgid "Form and Labels Settings"
-msgstr "Ρυθμίσεις Φόρμας και Ετικετών"
-
-#: includes/admin/admin-rendering.php:271
-msgid "Github Repository:"
-msgstr "Github Repository:"
-
-#: includes/admin/admin-rendering.php:273
-msgid "Go to Github"
-msgstr "Μετάβαση στο Github"
+"X-Generator: Poedit 3.8\n"
+"X-Loco-Version: 2.8.0; wp-6.8.3; php-8.3.23\n"
+#: includes/admin/admin-callbacks.php:11
+msgid "Select which quiz fields should be required."
+msgstr "Επιλέξτε ποια πεδία του quiz πρέπει να είναι υποχρεωτικά."
 
 #: includes/admin/admin-callbacks.php:24
 msgid ""
@@ -247,256 +28,633 @@ msgstr ""
 "Εδώ ορίζετε τις ετικέτες και τη δομή του Quiz που εμφανίζεται στην Αρχική "
 "Σελίδα."
 
-#: includes/admin/admin-settings-api.php:105
-msgid "Hover Color (Background)"
-msgstr "Χρώμα Hover (Background)"
-
-#: includes/admin/admin-settings-api.php:114
-msgid "Hover Color (Text)"
-msgstr "Χρώμα Hover (Κείμενο)"
-
-#. Author URI of the plugin
-msgid "https://github.com/LittleDTLe"
-msgstr "https://github.com/LittleDTLe"
-
-#. URI of the plugin
-msgid "https://github.com/LittleDTLe/VapeProductQuiz"
-msgstr "https://github.com/LittleDTLe/VapeProductQuiz"
-
-#: includes/admin/admin-rendering.php:417
-msgid ""
-"If a term **does not** have products, the Quiz ignores it (to avoid leading "
-"to empty results)."
+#: includes/admin/admin-callbacks.php:34
+msgid "Customize the colors of the Quiz form buttons (Normal state and Hover)."
 msgstr ""
-"Αν ένας όρος **δεν** έχει προϊόντα, το Quiz τον αγνοεί (για να μην οδηγεί σε "
-"κενά αποτελέσματα)."
+"Προσαρμόστε τα χρώματα των κουμπιών της φόρμας Quiz (Κανονική κατάσταση και "
+"Hover)."
 
-#: includes/admin/admin-callbacks.php:79
-msgid "Ingredient"
-msgstr "Συστατικό"
+#: includes/admin/admin-callbacks.php:41
+msgid "Define the custom error messages for form validation."
+msgstr "Ορίστε τα προσαρμοσμένα μηνύματα σφάλματος για την επικύρωση της φόρμας."
 
-#: includes/admin/admin-rendering.php:385
-msgid "Ingredient (e.g. Strawberry, Cream):"
-msgstr "Συστατικό (π.χ. Φράουλα, Κρέμα):"
+#: includes/admin/admin-callbacks.php:48
+msgid "Use custom Global Attributes"
+msgstr "Χρήση Προσαρμοσμένων Attributes"
 
-#: includes/admin/admin-rendering.php:282
-msgid "Ingredient:"
-msgstr "Συστατικό:"
-
-#: includes/admin/admin-settings-api.php:23
-msgid "Is Liquid Type Required?"
-msgstr "Απαιτείται ο Τύπος Υγρού;"
-
-#: includes/admin/admin-settings-api.php:32
-msgid "Is Primary Ingredient Required?"
-msgstr "Απαιτείται το Βασικό Συστατικό;"
-
-#: includes/admin/admin-settings-api.php:41
-msgid "Is Secondary Ingredient Required?"
-msgstr "Απαιτείται το Δευτερεύον Συστατικό;"
-
-#: includes/admin/admin-settings-api.php:187
-msgid "Label 1 (Liquid Type)"
-msgstr "Ετικέτα 1 (Τύπος Υγρού)"
-
-#: includes/admin/admin-settings-api.php:196
-msgid "Label 2 (Primary Ingredient)"
-msgstr "Ετικέτα 2 (Βασικό Συστατικό)"
-
-#: includes/admin/admin-settings-api.php:205
-msgid "Label 3 (Secondary Ingredient)"
-msgstr "Ετικέτα 3 (Δευτ. Συστατικό)"
-
-#: includes/admin/admin-rendering.php:399
-msgid "Name:"
-msgstr "Ονομασία:"
-
-#: includes/admin/admin-rendering.php:381
+#: includes/admin/admin-callbacks.php:50
 msgid ""
-"Navigate to: **Products → Attributes**. The two Attributes that populate the "
-"Quiz are:"
+"Enable this option to select different attributes from the default ones "
+"(pa_geuseis and pa_quiz-ingredient)."
 msgstr ""
-"Πηγαίνετε: **Προϊόντα → Χαρακτηριστικά**. Τα δύο Attributes που γεμίζουν το "
-"Quiz είναι:"
+"Ενεργοποιήστε αυτήν την επιλογή για να επιλέξετε διαφορετικά attributes από "
+"τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient)."
 
-#: includes/admin/admin-rendering.php:268
-msgid "Open Shop"
-msgstr "Άνοιγμα Καταστήματος"
+#: includes/admin/admin-callbacks.php:61
+msgid "Enable 3rd Field (Secondary Ingredient)."
+msgstr "Ενεργοποίηση 3ου Πεδίου (Δευτερεύον Συστατικό)."
 
-#. Author of the plugin
-msgid "Panagiotis Drougas"
-msgstr "Παναγιώτης Δρούγας"
-
-#: includes/admin/admin-settings-api.php:214
-msgid "Placeholder 1 (Liquid Type)"
-msgstr "Placeholder 1 (Τύπος Υγρού)"
-
-#: includes/admin/admin-rendering.php:225
-msgid "Plugin Information"
-msgstr "Πληροφορίες Plugin"
-
-#: includes/admin/admin-rendering.php:235
-msgid "Plugin Version:"
-msgstr "Έκδοση Plugin:"
-
-#: includes/admin/admin-rendering.php:295
-msgid "Primary & Secondary Ingredient:"
-msgstr "Βασικό & Δευτερεύον Συστατικό:"
-
-#: includes/admin/admin-settings-api.php:223
-msgid "Primary Ingredient Placeholder"
-msgstr "Placeholder Βασικού Συστατικού"
-
-#: includes/admin/admin-rendering.php:321
-msgid "Quiz Display & Text Customization"
-msgstr "Εμφάνιση Quiz & Προσαρμογή Κειμένων"
-
-#: includes/admin/admin-rendering.php:204
-#: includes/admin/admin-rendering.php:349
-msgid "Quiz Settings"
-msgstr "Ρυθμίσεις Quiz"
-
-#: includes/admin/admin-settings-api.php:178
-msgid "Quiz Subtitle (P)"
-msgstr "Υπότιτλος Quiz (P)"
-
-#: includes/admin/admin-settings-api.php:169
-msgid "Quiz Title (H2)"
-msgstr "Τίτλος Quiz (H2)"
-
-# Settings Labels
-#: includes/admin/admin-settings-api.php:16
-msgid "Required Fields Settings"
-msgstr "Ρυθμίσεις Απαιτούμενων Πεδίων"
-
-#: includes/admin/admin-rendering.php:359
-msgid "Required Fields:"
-msgstr "Υποχρεωτικά Πεδία:"
-
-#: includes/admin/admin-settings-api.php:232
-msgid "Secondary Ingredient Placeholder"
-msgstr "Placeholder Δευτερεύοντος Συστατικού"
-
-#: includes/admin/admin-settings-api.php:182
-msgid "Select the flavor profile and ingredients you prefer."
-msgstr "Επίλεξε το προφίλ γεύσης και τα συστατικά που προτιμάς."
-
-#: includes/admin/admin-callbacks.php:117
-msgid "Select the Global Attribute that will populate this field."
-msgstr "Επιλέξτε το Global Attribute που θα συμπληρώσει αυτό το πεδίο."
-
-# Admin Section Titles
-#: includes/admin/admin-callbacks.php:11
-msgid "Select which quiz fields should be required."
-msgstr "Επιλέξτε ποια πεδία του quiz πρέπει να είναι υποχρεωτικά."
-
-#: includes/admin/admin-rendering.php:266
-msgid "Shop URL:"
-msgstr "URL Καταστήματος:"
-
-#. Description of the plugin
-msgid ""
-"Simple Product Finder Quiz with settings for quiz customization. Auto-"
-"populate the quiz with Global Attribute Terms with connected products."
-msgstr "Κουίζ Εύρεσης Προϊόντων με σελίδα ρυθμίσεων. "
-
-#: includes/admin/admin-rendering.php:294
-msgid "Single Select"
-msgstr "Μονή Επιλογή"
-
-#: includes/admin/admin-rendering.php:378
-msgid "Step 1: Access the Correct Folder"
-msgstr "Βήμα 1: Εύρεση του Σωστού Φακέλου"
-
-#: includes/admin/admin-rendering.php:393
-msgid "Step 2: Add New Term"
-msgstr "Βήμα 2: Προσθήκη Νέου Όρου"
-
-#: includes/admin/admin-rendering.php:408
-msgid "Step 3: Connect to Product & Check"
-msgstr "Βήμα 3: Σύνδεση με Προϊόν & Έλεγχος"
-
-#: includes/admin/admin-rendering.php:290
-msgid ""
-"The Query Logic code ensures that filtering is done with **absolute "
-"accuracy** (AND Logic) between all selected fields."
-msgstr ""
-"Ο κώδικας Query Logic εξασφαλίζει ότι το φιλτράρισμα γίνεται με **απόλυτη "
-"ακρίβεια** (AND Logic) ανάμεσα σε όλα τα επιλεγμένα πεδία."
-
-#: includes/admin/admin-rendering.php:278
-msgid "The required Global Attributes for the Quiz are:"
-msgstr "Τα απαραίτητα Global Attributes για το Quiz είναι:"
-
-#: includes/admin/admin-rendering.php:298
-msgid ""
-"The system checks if the product has the \"Flavor Type\" AND both selected "
-"\"Ingredients\" simultaneously."
-msgstr ""
-"Το σύστημα ελέγχει αν το προϊόν έχει το \"Τύπο Γεύσης\" ΚΑΙ τα δύο "
-"επιλεγμένα \"Συστατικά\" ταυτόχρονα."
-
-#: includes/admin/admin-rendering.php:316
-msgid ""
-"This plugin works as a **Product Finder Guide**. It is based on URL filters "
-"for immediate liquid search by the customer."
-msgstr ""
-"Αυτό το plugin λειτουργεί ως ένας **Οδηγός Εύρεσης Προϊόντων**. Βασίζεται σε "
-"φίλτρα URL για την άμεση εύρεση υγρών από τον πελάτη."
-
-#: includes/admin/admin-rendering.php:355
-msgid "Titles (H2/P):"
-msgstr "Τίτλοι (H2/P):"
-
-#: includes/admin/admin-callbacks.php:76
+#: includes/admin/admin-callbacks.php:92
 msgid "Type"
 msgstr "Τύπος"
 
-#: includes/admin/admin-rendering.php:27
+#: includes/admin/admin-callbacks.php:95
+msgid "Ingredient"
+msgstr "Συστατικό"
+
+#. %s: Attribute field label (Type or Ingredient)
+#: includes/admin/admin-callbacks.php:111
+#, php-format
+msgid "Default %s:"
+msgstr "Προεπιλογή %s:"
+
+#: includes/admin/admin-callbacks.php:120
+msgid "-- Select Attribute --"
+msgstr "-- Επιλογή Attribute --"
+
+#: includes/admin/admin-callbacks.php:133
+msgid "Select the Global Attribute that will populate this field."
+msgstr "Επιλέξτε το Global Attribute που θα συμπληρώσει αυτό το πεδίο."
+
+#: includes/admin/admin-rendering.php:25
+#: includes/admin/admin-rendering.php:26
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: includes/admin/admin-rendering.php:31
 msgid "Unknown"
 msgstr "Άγνωστος"
 
-#: includes/admin/admin-rendering.php:312
-msgid "Usage Instructions & Maintenance"
-msgstr "Οδηγίες Χρήσης & Συντήρηση"
+#: includes/admin/admin-rendering.php:146
+msgid "Copied!"
+msgstr "Αντιγράφηκε!"
 
-#: includes/admin/admin-rendering.php:191
+#: includes/admin/admin-rendering.php:155
+msgid "Copy failed. Please copy manually."
+msgstr "Η αντιγραφή απέτυχε. Παρακαλώ αντιγράψτε χειροκίνητα."
+
+#: includes/admin/admin-rendering.php:195
+#: vapevida-quiz.php:65
+msgid "VapeVida Quiz"
+msgstr "VapeVida Quiz"
+
+#: includes/admin/admin-rendering.php:197
 msgid ""
 "Usage instructions and technical information for managing the custom plugin."
 msgstr ""
 "Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του custom plugin."
 
-#: includes/admin/admin-settings-api.php:59
-msgid "Use Custom Attributes"
-msgstr "Χρήση Προσαρμοσμένων Attributes"
+#: includes/admin/admin-rendering.php:210
+#: includes/admin/admin-rendering.php:355
+msgid "Quiz Settings"
+msgstr "Ρυθμίσεις Quiz"
 
-# Admin Fields
-#: includes/admin/admin-callbacks.php:41
-msgid "Use custom Global Attributes"
-msgstr "Χρήση Προσαρμοσμένων Attributes"
+#: includes/admin/admin-rendering.php:231
+msgid "Plugin Information"
+msgstr "Πληροφορίες Plugin"
 
-#: includes/admin/admin-rendering.php:326
+#: includes/admin/admin-rendering.php:237
+msgid "Author:"
+msgstr "Συντάκτης:"
+
+#: includes/admin/admin-rendering.php:241
+msgid "Plugin Version:"
+msgstr "Έκδοση Plugin:"
+
+#: includes/admin/admin-rendering.php:246
+msgid "Version Notes:"
+msgstr "Σημειώσεις Έκδοσης:"
+
+#: includes/admin/admin-rendering.php:259
+msgid "Features:"
+msgstr "Χαρακτηριστικά:"
+
+#: includes/admin/admin-rendering.php:272
+msgid "Shop URL:"
+msgstr "URL Καταστήματος:"
+
+#: includes/admin/admin-rendering.php:274
+msgid "Open Shop"
+msgstr "Άνοιγμα Καταστήματος"
+
+#: includes/admin/admin-rendering.php:277
+msgid "Github Repository:"
+msgstr "Github Repository:"
+
+#: includes/admin/admin-rendering.php:279
+msgid "Go to Github"
+msgstr "Μετάβαση στο Github"
+
+#: includes/admin/admin-rendering.php:283
+msgid "Attribute Slugs"
+msgstr "Slugs Χαρακτηριστικών"
+
+#: includes/admin/admin-rendering.php:284
+msgid "The required Global Attributes for the Quiz are:"
+msgstr "Τα απαραίτητα Global Attributes για το Quiz είναι:"
+
+#: includes/admin/admin-rendering.php:286
+#: includes/admin/admin-rendering.php:299
+#: includes/admin/admin-rendering.php:417
+msgid "Flavor Type:"
+msgstr "Τύπος Γεύσης:"
+
+#: includes/admin/admin-rendering.php:288
+msgid "Ingredient:"
+msgstr "Συστατικό:"
+
+#: includes/admin/admin-rendering.php:294
+msgid "Filter Technical Logic"
+msgstr "Τεχνική Λογική Φίλτρου"
+
+#: includes/admin/admin-rendering.php:296
+msgid ""
+"The Query Logic code ensures that filtering is done with absolute "
+"accuracy (AND Logic) between all selected fields."
+msgstr ""
+"Ο κώδικας Query Logic εξασφαλίζει ότι το φιλτράρισμα γίνεται με απόλυτη "
+"ακρίβεια (AND Logic) ανάμεσα σε όλα τα επιλεγμένα πεδία."
+
+#: includes/admin/admin-rendering.php:300
+msgid "Single Select"
+msgstr "Μονή Επιλογή"
+
+#: includes/admin/admin-rendering.php:301
+msgid "Primary & Secondary Ingredient:"
+msgstr "Βασικό & Δευτερεύον Συστατικό:"
+
+#: includes/admin/admin-rendering.php:302
+msgid "Combined AND Logic"
+msgstr "Συνδυασμένη AND Λογική"
+
+#: includes/admin/admin-rendering.php:304
+msgid ""
+"The system checks if the product has the "Flavor Type" AND both selected "
+""Ingredients" simultaneously."
+msgstr ""
+"Το σύστημα ελέγχει αν το προϊόν έχει το "Τύπο Γεύσης" ΚΑΙ τα δύο "
+"επιλεγμένα "Συστατικά" ταυτόχρονα."
+
+#: includes/admin/admin-rendering.php:318
+msgid "Usage Instructions & Maintenance"
+msgstr "Οδηγίες Χρήσης & Συντήρηση"
+
+#: includes/admin/admin-rendering.php:322
+msgid "This plugin works as a Product Finder Guide. It is based on URL filters for immediate liquid search by the customer."
+msgstr "Αυτό το plugin λειτουργεί ως ένας Οδηγός Εύρεσης Προϊόντων. Βασίζεται σε φίλτρα URL για την άμεση εύρεση υγρών από τον πελάτη."
+
+#: includes/admin/admin-rendering.php:327
+msgid "Quiz Display & Text Customization"
+msgstr "Εμφάνιση Quiz & Προσαρμογή Κειμένων"
+
+#: includes/admin/admin-rendering.php:331
+msgid "Display Code (Shortcode):"
+msgstr "Κωδικός Εμφάνισης (Shortcode):"
+
+#: includes/admin/admin-rendering.php:332
 msgid "Use the following code to display the form on any page (e.g. Homepage):"
 msgstr ""
 "Χρησιμοποιήστε τον παρακάτω κωδικό για να εμφανίσετε τη φόρμα σε οποιαδήποτε "
 "σελίδα (π.χ. Αρχική):"
 
-# Admin Page Rendering
-#. Name of the plugin
-#: includes/admin/admin-rendering.php:189
-msgid "VapeVida Flavorshot Recommender Quiz"
-msgstr "VapeVida Flavorshot Recommender Quiz"
+#: includes/admin/admin-rendering.php:346
+msgid "Copy"
+msgstr "Αντιγραφή"
 
-#: includes/admin/admin-rendering.php:240
-msgid "Version Notes:"
-msgstr "Σημειώσεις Έκδοσης:"
+#. %s: Section name in bold
+#: includes/admin/admin-rendering.php:354
+#, php-format
+msgid ""
+"All texts (Titles, Labels, CTA) and Quiz structure are configured from the "
+"%s section above."
+msgstr ""
+"Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από "
+"την ενότητα %s παραπάνω."
 
-#: includes/admin/admin-rendering.php:416
-msgid "Very Important:"
-msgstr "Πολύ Σημαντικό:"
+#: includes/admin/admin-rendering.php:361
+msgid "Titles (H2/P):"
+msgstr "Τίτλοι (H2/P):"
+
+#: includes/admin/admin-rendering.php:362
+msgid "Change the main message for seasonal or promotional themes."
+msgstr "Αλλάξτε το κύριο μήνυμα για εποχιακά ή προωθητικά θέματα."
+
+#: includes/admin/admin-rendering.php:365
+msgid "Required Fields:"
+msgstr "Υποχρεωτικά Πεδία:"
+
+#: includes/admin/admin-rendering.php:366
+msgid "Control which fields must be filled for form submission."
+msgstr ""
+"Ελέγξτε ποια πεδία πρέπει να είναι συμπληρωμένα για την υποβολή της φόρμας."
+
+#: includes/admin/admin-rendering.php:369
+msgid "Enable 3rd Field:"
+msgstr "Ενεργοποίηση 3ου Πεδίου:"
+
+#: includes/admin/admin-rendering.php:370
+msgid ""
+"Choose if the third field (Secondary Ingredient) is displayed in the form."
+msgstr ""
+"Επιλέξτε εάν το τρίτο πεδίο (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα."
+
+#: includes/admin/admin-rendering.php:373
+msgid "Real-Time Updates:"
+msgstr "Ενημερώσεις σε Πραγματικό Χρόνο:"
+
+#: includes/admin/admin-rendering.php:374
+msgid ""
+"The dropdowns cascade dynamically, ensuring subsequent choices are always "
+"valid and have a corresponding product result."
+msgstr ""
+"Οι αναπτυσσόμενες λίστες φιλτράρονται δυναμικά, εξασφαλίζοντας ότι οι "
+"επόμενες επιλογές είναι πάντα έγκυρες και έχουν αντίστοιχο προϊόν."
+
+#: includes/admin/admin-rendering.php:380
+msgid "Flavor Management Guide"
+msgstr "Οδηγός Διαχείρισης Γεύσεων"
+
+#: includes/admin/admin-rendering.php:384
+msgid "Adding new options to the Quiz happens automatically, as long as the correct settings are updated in the WooCommerce Global Attributes."
+msgstr "Η προσθήκη νέων επιλογών στο Quiz γίνεται αυτόματα, αρκεί να ενημερωθούν οι σωστές ρυθμίσεις στα Global Attributes του WooCommerce."
+
+#: includes/admin/admin-rendering.php:391
+msgid "Localization Troubleshooting"
+msgstr "Επίλυση Προβλημάτων Μετάφρασης"
+
+#: includes/admin/admin-rendering.php:395
+msgid ""
+"If translations fail (e.g., Greek strings remain English), the server may "
+"be looking for a different locale code than the one provided."
+msgstr ""
+"Αν οι μεταφράσεις αποτύχουν (π.χ. τα Ελληνικά παραμένουν Αγγλικά), ο "
+"διακομιστής μπορεί να αναζητά διαφορετικό κωδικό τοπικών ρυθμίσεων (locale "
+"code)."
 
 #: includes/admin/admin-rendering.php:400
+msgid "Solution:"
+msgstr "Λύση:"
+
+#: includes/admin/admin-rendering.php:401
+msgid ""
+"You must ensure both the generic and region-specific compiled files are "
+"present in the <code>/languages</code> folder:"
+msgstr ""
+"Πρέπει να βεβαιωθείτε ότι υπάρχουν τόσο το γενικό όσο και το "
+"συγκεκριμένο-ανά-περιοχή αρχείο μεταγλώττισης στον φάκελο "
+"<code>/languages</code>:"
+
+#: includes/admin/admin-rendering.php:403
+msgid "Generic Greek Locale"
+msgstr "Γενικό Locale Ελληνικών"
+
+#: includes/admin/admin-rendering.php:404
+msgid "Greek, Greece Locale"
+msgstr "Locale Ελληνικών, Ελλάδα"
+
+#: includes/admin/admin-rendering.php:411
+msgid "Step 1: Access the Correct Folder"
+msgstr "Βήμα 1: Εύρεση του Σωστού Φακέλου"
+
+#: includes/admin/admin-rendering.php:414
+msgid ""
+"Navigate to: Products → Attributes. The two Attributes that populate the "
+"Quiz are:"
+msgstr ""
+"Πηγαίνετε: Προϊόντα → Χαρακτηριστικά. Τα δύο Attributes που γεμίζουν το "
+"Quiz είναι:"
+
+#: includes/admin/admin-rendering.php:418
+msgid "Ingredient (e.g. Strawberry, Cream):"
+msgstr "Συστατικό (π.χ. Φράουλα, Κρέμα):"
+
+#: includes/admin/admin-rendering.php:423
+msgid "Step 2: Add New Term"
+msgstr "Βήμα 2: Προσθήκη Νέου Όρου"
+
+#: includes/admin/admin-rendering.php:426
+msgid ""
+"Click on "Configure Terms" next to the Attribute Ingredient (Quiz)."
+msgstr ""
+"Κάντε κλικ στο "Ρύθμιση όρων" δίπλα στο Attribute Συστατικό (Quiz)."
+
+#: includes/admin/admin-rendering.php:429
+msgid "Name:"
+msgstr "Ονομασία:"
+
+#: includes/admin/admin-rendering.php:430
 msgid "Write the full name (e.g. 'Kiwi') and a clean slug (e.g. 'kiwi')."
 msgstr ""
 "Γράψτε την πλήρη ονομασία (π.χ. 'Ακτινίδιο') και ένα καθαρό slug (π.χ. "
 "'actinidio')."
+
+#: includes/admin/admin-rendering.php:433
+msgid "Localization Note:"
+msgstr "Σημείωση Μετάφρασης:"
+
+#: includes/admin/admin-rendering.php:434
+msgid ""
+"Ensure all new terms are correctly translated if you are using multiple "
+"languages."
+msgstr ""
+"Βεβαιωθείτε ότι όλοι οι νέοι όροι έχουν μεταφραστεί σωστά εάν "
+"χρησιμοποιείτε πολλαπλές γλώσσες."
+
+#: includes/admin/admin-rendering.php:441
+msgid "Step 3: Connect to Product & Check"
+msgstr "Βήμα 3: Σύνδεση με Προϊόν & Έλεγχος"
+
+#: includes/admin/admin-rendering.php:444
+msgid ""
+"For the new term to appear in the Quiz, it must be assigned to at least one "
+"published product."
+msgstr ""
+"Για να εμφανιστεί ο νέος όρος στο Quiz, πρέπει να είναι αντιστοιχισμένος σε "
+"τουλάχιστον ένα δημοσιευμένο προϊόν."
+
+#: includes/admin/admin-rendering.php:448
+msgid "Very Important:"
+msgstr "Πολύ Σημαντικό:"
+
+#: includes/admin/admin-rendering.php:449
+msgid ""
+"If a term does not have products, the Quiz ignores it (to avoid leading "
+"to empty results)."
+msgstr ""
+"Αν ένας όρος δεν έχει προϊόντα, το Quiz τον αγνοεί (για να μην οδηγεί σε "
+"κενά αποτελέσματα)."
+
+#: includes/admin/admin-settings-api.php:22
+msgid "Required Fields Settings"
+msgstr "Ρυθμίσεις Απαιτούμενων Πεδίων"
+
+#: includes/admin/admin-settings-api.php:31
+msgid "Is Liquid Type Required?"
+msgstr "Απαιτείται ο Τύπος Υγρού;"
+
+#: includes/admin/admin-settings-api.php:40
+msgid "Is Primary Ingredient Required?"
+msgstr "Απαιτείται το Βασικό Συστατικό;"
+
+#: includes/admin/admin-settings-api.php:49
+msgid "Is Secondary Ingredient Required?"
+msgstr "Απαιτείται το Δευτερεύον Συστατικό;"
+
+#: includes/admin/admin-settings-api.php:62
+msgid "Form and Labels Settings"
+msgstr "Ρυθμίσεις Φόρμας και Ετικετών"
+
+#: includes/admin/admin-settings-api.php:70
+msgid "Use Custom Attributes"
+msgstr "Χρήση Προσαρμοσμένων Attributes"
+
+#: includes/admin/admin-settings-api.php:79
+msgid "1. Attribute for Type"
+msgstr "1. Attribute για Τύπο"
+
+#: includes/admin/admin-settings-api.php:88
+msgid "2. Attribute for Ingredient"
+msgstr "2. Attribute για Συστατικό"
+
+#: includes/admin/admin-settings-api.php:98
+msgid "Button Color (Background)"
+msgstr "Χρώμα Κουμπιού (Background)"
+
+#: includes/admin/admin-settings-api.php:107
+msgid "Button Color (Text)"
+msgstr "Χρώμα Κουμπιού (Κείμενο)"
+
+#: includes/admin/admin-settings-api.php:116
+msgid "Hover Color (Background)"
+msgstr "Χρώμα Hover (Background)"
+
+#: includes/admin/admin-settings-api.php:125
+msgid "Hover Color (Text)"
+msgstr "Χρώμα Hover (Κείμενο)"
+
+#: includes/admin/admin-settings-api.php:135
+msgid "Clear Button - Background Color"
+msgstr "Κουμπί Καθαρισμού - Χρώμα Φόντου"
+
+#: includes/admin/admin-settings-api.php:144
+msgid "Clear Button - Text Color"
+msgstr "Κουμπί Καθαρισμού - Χρώμα Κειμένου"
+
+#: includes/admin/admin-settings-api.php:153
+msgid "Clear Button - Hover Background"
+msgstr "Κουμπί Καθαρισμού - Hover Φόντο"
+
+#: includes/admin/admin-settings-api.php:162
+msgid "Clear Button - Hover Text"
+msgstr "Κουμπί Καθαρισμού - Hover Κείμενο"
+
+#: includes/admin/admin-settings-api.php:172
+msgid "Enable 3rd Field (Secondary Ingredient)"
+msgstr "Ενεργοποίηση 3ου Πεδίου (Δευτ. Συστατικό)"
+
+#: includes/admin/admin-settings-api.php:202
+msgid "Quiz Title (H2)"
+msgstr "Τίτλος Quiz (H2)"
+
+#: includes/admin/admin-settings-api.php:206
+msgid "Find Your Perfect Liquid!"
+msgstr "Βρες το Ιδανικό Υγρό!"
+
+#: includes/admin/admin-settings-api.php:211
+msgid "Quiz Subtitle (P)"
+msgstr "Υπότιτλος Quiz (P)"
+
+#: includes/admin/admin-settings-api.php:215
+msgid "Select the flavor profile and ingredients you prefer."
+msgstr "Επίλεξε το προφίλ γεύσης και τα συστατικά που προτιμάς."
+
+#: includes/admin/admin-settings-api.php:220
+msgid "Label 1 (Liquid Type)"
+msgstr "Ετικέτα 1 (Τύπος Υγρού)"
+
+#: includes/admin/admin-settings-api.php:224
+msgid "1. Liquid Profile:"
+msgstr "1. Προφίλ Υγρού:"
+
+#: includes/admin/admin-settings-api.php:229
+msgid "Label 2 (Primary Ingredient)"
+msgstr "Ετικέτα 2 (Βασικό Συστατικό)"
+
+#: includes/admin/admin-settings-api.php:233
+msgid "2. Primary Ingredient:"
+msgstr "2. Βασικό Συστατικό:"
+
+#: includes/admin/admin-settings-api.php:238
+msgid "Label 3 (Secondary Ingredient)"
+msgstr "Ετικέτα 3 (Δευτ. Συστατικό)"
+
+#: includes/admin/admin-settings-api.php:242
+msgid "3. Secondary Ingredient:"
+msgstr "3. Δευτερεύον Συστατικό:"
+
+#: includes/admin/admin-settings-api.php:247
+msgid "Placeholder 1 (Liquid Type)"
+msgstr "Placeholder 1 (Τύπος Υγρού)"
+
+#: includes/admin/admin-settings-api.php:251
+msgid "-- Select Profile --"
+msgstr "-- Επιλέξτε Προφίλ --"
+
+#: includes/admin/admin-settings-api.php:256
+msgid "Primary Ingredient Placeholder"
+msgstr "Placeholder Βασικού Συστατικού"
+
+#: includes/admin/admin-settings-api.php:260
+msgid "-- Select Primary Ingredient --"
+msgstr "-- Επιλογή Βασικού Συστατικού --"
+
+#: includes/admin/admin-settings-api.php:265
+msgid "Secondary Ingredient Placeholder"
+msgstr "Placeholder Δευτερεύοντος Συστατικού"
+
+#: includes/admin/admin-settings-api.php:269
+msgid "-- Select Secondary Ingredient --"
+msgstr "-- Επιλογή Δευτερεύον Συστατικού --"
+
+#: includes/admin/admin-settings-api.php:274
+msgid "Button Text (CTA)"
+msgstr "Κείμενο Κουμπιού (CTA)"
+
+#: includes/admin/admin-settings-api.php:278
+msgid "FIND YOUR LIQUID"
+msgstr "ΒΡΕΣ ΤΟ ΥΓΡΟ ΣΟΥ"
+
+#: includes/admin/admin-settings-api.php:283
+msgid "Button Text (CLEAR)"
+msgstr "Κείμενο Κουμπιού (ΚΑΘΑΡΙΣΜΟΣ)"
+
+#: includes/admin/admin-settings-api.php:287
+msgid "CLEAR"
+msgstr "ΚΑΘΑΡΙΣΜΟΣ"
+
+#: includes/admin/admin-settings-api.php:293
+msgid "Error Messages"
+msgstr "Μηνύματα Σφάλματος"
+
+#: includes/admin/admin-settings-api.php:308
+msgid "Error: Type Required"
+msgstr "Σφάλμα: Απαιτείται Τύπος"
+
+#: includes/admin/admin-settings-api.php:312
+msgid "Please select a Flavor Type."
+msgstr "Παρακαλώ επιλέξτε έναν Τύπο Γεύσης."
+
+#: includes/admin/admin-settings-api.php:317
+msgid "Error: Primary Required"
+msgstr "Σφάλμα: Απαιτείται Βασικό Συστατικό"
+
+#: includes/admin/admin-settings-api.php:321
+msgid "Please select a Primary Ingredient."
+msgstr "Παρακαλώ επιλέξτε ένα Βασικό Συστατικό."
+
+#: includes/admin/admin-settings-api.php:326
+msgid "Error: Secondary Required"
+msgstr "Σφάλμα: Απαιτείται Δευτερεύον Συστατικό"
+
+#: includes/admin/admin-settings-api.php:330
+msgid "Please select a Secondary Ingredient."
+msgstr "Παρακαλώ επιλέξτε ένα Δευτερεύον Συστατικό."
+
+#: includes/class-vv-core.php:40
+msgid "Flavor Type"
+msgstr "Τύπος Γεύσης"
+
+#: includes/class-vv-core.php:51
+msgid "Ingredient (Quiz)"
+msgstr "Συστατικό (Quiz)"
+
+#: includes/class-vv-core.php:310
+msgid "Searching..."
+msgstr "Αναζήτηση..."
+
+#: includes/class-vv-core.php:311
+msgid "Loading..."
+msgstr "Φόρτωση..."
+
+#: includes/class-vv-core.php:313
+msgid "🛑 0 RESULTS"
+msgstr "🛑 0 ΑΠΟΤΕΛΕΣΜΑΤΑ"
+
+#: includes/class-vv-core.php:314
+msgid "FIND 1 PRODUCT"
+msgstr "ΒΡΕΣ 1 ΠΡΟΪΟΝ"
+
+#: includes/class-vv-core.php:315
+msgid "FOUND {count} PRODUCTS"
+msgstr "ΒΡΕΘΗΚΑΝ {count} ΠΡΟΪΟΝΤΑ"
+
+#: includes/class-vv-core.php:316
+msgid "⚠️ DATA ERROR"
+msgstr "⚠️ ΣΦΑΛΜΑ ΔΕΔΟΜΕΝΩΝ"
+
+#: includes/class-vv-core.php:317
+msgid "Loading Error"
+msgstr "Σφάλμα Φόρτωσης"
+
+#: includes/class-vv-frontend.php:120
+msgid ""
+"[Configuration Error]: Please configure the Global Attributes in the Quiz "
+"Info page."
+msgstr ""
+"[Σφάλμα Ρύθμισης]: Παρακαλώ ρυθμίστε τα Global Attributes στη σελίδα Πληροφοριών "
+"Quiz."
+
+#. Name of the plugin
+#: vapevida-quiz.php:4
+msgid "VapeVida Flavorshot Recommender Quiz"
+msgstr "VapeVida Flavorshot Recommender Quiz"
+
+#. Description of the plugin
+#: vapevida-quiz.php:6
+msgid ""
+"Simple Product Finder Quiz with settings for quiz customization. Auto-"
+"populate the quiz with Global Attribute Terms with connected products."
+msgstr "Κουίζ Εύρεσης Προϊόντων με σελίδα ρυθμίσεων. "
+
+#. Author of the plugin
+#: vapevida-quiz.php:9
+msgid "Panagiotis Drougas"
+msgstr "Παναγιώτης Δρούγας"
+
+#. Author URI of the plugin
+#: vapevida-quiz.php:10
+msgid "https://github.com/LittleDTLe"
+msgstr "https://github.com/LittleDTLe"
+
+#. URI of the plugin
+#: vapevida-quiz.php:5
+msgid "https://github.com/LittleDTLe/VapeProductQuiz"
+msgstr "https://github.com/LittleDTLe/VapeProductQuiz"
+
+#: vapevida-quiz.php:65
+msgid "VapeVida Quiz:"
+msgstr "VapeVida Quiz:"
+
+#. translators: %s: WooCommerce plugin name
+#: vapevida-quiz.php:70
+#, php-format
+msgid "This plugin requires %s to be installed and activated."
+msgstr "Αυτό το plugin απαιτεί το %s να είναι εγκατεστημένο και ενεργοποιημένο."
+
+#. translators: 1: Plugin name, 2: WooCommerce plugin name
+#: vapevida-quiz.php:91
+#, php-format
+msgid "%1$s requires %2$s to be installed and activated."
+msgstr "%1$s απαιτεί το %2$s να είναι εγκατεστημένο και ενεργοποιημένο."
+
+#: vapevida-quiz.php:97
+msgid "Plugin Activation Error"
+msgstr "Σφάλμα Ενεργοποίησης Plugin"
+
+#: vapevida-quiz.php:119
+msgid "Documentation"
+msgstr "Τεκμηρίωση"
+
+#: vapevida-quiz.php:120
+msgid "Support"
+msgstr "Υποστήριξη"
