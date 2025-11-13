@@ -1,6 +1,7 @@
 <?php
 /**
  * Custom Query Logic for VapeVida Quiz. Forces AND logic on the product loop.
+ * - Dynamically reads admin settings for custom attributes.
  */
 
 if (!defined('ABSPATH'))
@@ -30,10 +31,29 @@ function vv_custom_three_filter_query($query)
         return;
     }
 
-    // 2. Get and sanitize all three attribute values from the URL
-    $type_term = isset($_GET['filter_geuseis']) ? sanitize_text_field($_GET['filter_geuseis']) : '';
-    $primary_ingredient = isset($_GET['filter_quiz-ingredient']) ? sanitize_text_field($_GET['filter_quiz-ingredient']) : '';
-    $secondary_ingredient = isset($_GET['filter_quiz-ingredient-optional']) ? sanitize_text_field($_GET['filter_quiz-ingredient-optional']) : '';
+    // --- DYNAMIC SETTINGS LOGIC (THE BUG FIX) ---
+    // 1. Get the dynamic settings FIRST
+    $settings = get_option('vv_quiz_settings');
+    $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
+
+    // 2. Determine the correct taxonomy slugs to use
+    $type_slug = $use_custom && !empty($settings['attribute_type_slug'])
+        ? $settings['attribute_type_slug']
+        : 'pa_geuseis';
+    $ingredient_slug = $use_custom && !empty($settings['attribute_ingredient_slug'])
+        ? $settings['attribute_ingredient_slug']
+        : 'pa_quiz-ingredient';
+
+    // 3. Build the DYNAMIC $_GET keys to look for
+    $type_key = str_replace('pa_', 'filter_', $type_slug);
+    $ingredient_key = str_replace('pa_', 'filter_', $ingredient_slug);
+    $secondary_ingredient_key = $ingredient_key . '-optional';
+
+    // 4. NOW check the $_GET array using the dynamic keys
+    $type_term = isset($_GET[$type_key]) ? sanitize_text_field($_GET[$type_key]) : '';
+    $primary_ingredient = isset($_GET[$ingredient_key]) ? sanitize_text_field($_GET[$ingredient_key]) : '';
+    $secondary_ingredient = isset($_GET[$secondary_ingredient_key]) ? sanitize_text_field($_GET[$secondary_ingredient_key]) : '';
+    // --- END DYNAMIC SETTINGS LOGIC ---
 
 
     $filters_applied = false;
@@ -41,10 +61,10 @@ function vv_custom_three_filter_query($query)
     // --- Collect ALL terms that need to be queried ---
     $new_tax_query = array();
 
-    // --- Filter 1: Type (pa_geuseis) ---
+    // --- Filter 1: Type (Using dynamic slug) ---
     if (!empty($type_term)) {
         $new_tax_query[] = array(
-            'taxonomy' => 'pa_geuseis', // The Type Attribute Taxonomy
+            'taxonomy' => $type_slug, // The Type Attribute Taxonomy (DYNAMIC)
             'field' => 'slug',
             'terms' => array($type_term),
             'operator' => 'IN',
@@ -52,14 +72,14 @@ function vv_custom_three_filter_query($query)
         $filters_applied = true;
     }
 
-    // --- Filters 2 & 3: Combined Ingredient Logic ---
+    // --- Filters 2 & 3: Combined Ingredient Logic (Using dynamic slug) ---
     $all_ingredients = array_filter(array($primary_ingredient, $secondary_ingredient));
 
     if (!empty($all_ingredients)) {
 
         // Add the combined, strict AND query for the ingredients
         $new_tax_query[] = array(
-            'taxonomy' => 'pa_quiz-ingredient',
+            'taxonomy' => $ingredient_slug, // The Ingredient Attribute Taxonomy (DYNAMIC)
             'field' => 'slug',
             'terms' => $all_ingredients,
             'operator' => 'AND', // FORCE the product to have ALL selected ingredients
