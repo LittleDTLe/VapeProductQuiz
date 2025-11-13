@@ -7,8 +7,7 @@ if (!defined('ABSPATH'))
     exit;
 
 if (!defined('VV_QUIZ_VERSION')) {
-    // IMPORTANT: Make sure this is updated every time you change the JS file!
-    define('VV_QUIZ_VERSION', '1.0.2'); // Bumping version for new feature
+    define('VV_QUIZ_VERSION', '0.9.9');
 }
 if (!defined('VV_QUIZ_TEXT_DOMAIN')) {
     define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');

@@ -189,7 +189,7 @@ jQuery(document).ready(function ($) {
             errorDiv.fadeOut(300, function() {
                 $(this).text('');
             });
-        }, 3000); // 3 seconds
+        }, 3000); 
     }
 
     /**
@@ -213,10 +213,7 @@ jQuery(document).ready(function ($) {
         // 2. Check Primary Ingredient
         if (settings.is_primary_required && !primaryIngredientSelect.val()) {
             isValid = false;
-            
-            // ==================================================================
-            // THE FIX: Changed 'if (!silent && isValid)' to 'if (!silent)'
-            // ==================================================================
+
             if (!silent) { 
                  showError(primaryIngredientSelect, i18n.error_required_primary);
                  if (!firstErrorField) firstErrorField = primaryIngredientSelect;
@@ -227,9 +224,6 @@ jQuery(document).ready(function ($) {
         if (settings.is_secondary_required && !secondaryIngredientSelect.val() && secondaryIngredientSelect.is(':visible')) {
             isValid = false;
             
-            // ==================================================================
-            // THE FIX: Changed 'if (!silent && isValid)' to 'if (!silent)'
-            // ==================================================================
             if (!silent) { 
                 showError(secondaryIngredientSelect, i18n.error_required_secondary);
                 if (!firstErrorField) firstErrorField = secondaryIngredientSelect;
