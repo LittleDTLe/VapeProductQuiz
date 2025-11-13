@@ -8,7 +8,7 @@ if (!defined('ABSPATH'))
 
 if (!defined('VV_QUIZ_VERSION')) {
     // IMPORTANT: Make sure this is updated every time you change the JS file!
-    define('VV_QUIZ_VERSION', '0.9.4'); // Bumping version for new JS/PHP logic
+    define('VV_QUIZ_VERSION', '1.0.0'); // Bumping version for new feature
 }
 if (!defined('VV_QUIZ_TEXT_DOMAIN')) {
     define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
@@ -77,7 +77,18 @@ function vv_ajax_filter_ingredients()
     $primary_ingredient = isset($_POST['primary_ingredient']) ? sanitize_key($_POST['primary_ingredient']) : '';
     $secondary_ingredient = isset($_POST['secondary_ingredient']) ? sanitize_key($_POST['secondary_ingredient']) : '';
 
-    $ingredient_taxonomy = 'pa_quiz-ingredient';
+    // ==================================================================
+    // FIX #1: Get ingredient taxonomy dynamically from settings
+    // ==================================================================
+    $settings = get_option('vv_quiz_settings');
+    $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
+
+    $ingredient_taxonomy_slug = $use_custom && isset($settings['attribute_ingredient_slug']) && !empty($settings['attribute_ingredient_slug'])
+        ? $settings['attribute_ingredient_slug']
+        : 'pa_quiz-ingredient';
+    // ==================================================================
+
+
     $primary_options_html = '';
     $secondary_options_html = '';
     $product_count = 0;
@@ -102,7 +113,7 @@ function vv_ajax_filter_ingredients()
     // Add primary ingredient to query if selected
     if (!empty($primary_ingredient)) {
         $tax_query[] = array(
-            'taxonomy' => $ingredient_taxonomy,
+            'taxonomy' => $ingredient_taxonomy_slug, // Use dynamic slug
             'field' => 'slug',
             'terms' => $primary_ingredient,
             'operator' => 'IN',
@@ -112,7 +123,7 @@ function vv_ajax_filter_ingredients()
     // Add secondary ingredient to query if selected
     if (!empty($secondary_ingredient)) {
         $tax_query[] = array(
-            'taxonomy' => $ingredient_taxonomy,
+            'taxonomy' => $ingredient_taxonomy_slug, // Use dynamic slug
             'field' => 'slug',
             'terms' => $secondary_ingredient,
             'operator' => 'IN',
@@ -131,7 +142,6 @@ function vv_ajax_filter_ingredients()
     $product_count = $products_query->found_posts;
 
     // --- 2. BUILD PRIMARY INGREDIENT OPTIONS (BASED ON TYPE ONLY) ---
-    // Primary options should only filter by the selected Type, and then the JS will preserve the current selection.
     $primary_tax_query = array(
         array(
             'taxonomy' => $type_slug,
@@ -154,7 +164,7 @@ function vv_ajax_filter_ingredients()
 
     if (!empty($primary_product_ids)) {
         $primary_terms = get_terms(array(
-            'taxonomy' => $ingredient_taxonomy,
+            'taxonomy' => $ingredient_taxonomy_slug, // Use dynamic slug
             'hide_empty' => true,
             'object_ids' => $primary_product_ids,
             'orderby' => 'name',
@@ -184,7 +194,7 @@ function vv_ajax_filter_ingredients()
     // If primary is selected, secondary options MUST be compatible with it
     if (!empty($primary_ingredient)) {
         $secondary_tax_query[] = array(
-            'taxonomy' => $ingredient_taxonomy,
+            'taxonomy' => $ingredient_taxonomy_slug,
             'field' => 'slug',
             'terms' => $primary_ingredient,
             'operator' => 'IN',
@@ -204,7 +214,7 @@ function vv_ajax_filter_ingredients()
 
     if (!empty($secondary_product_ids)) {
         $secondary_terms = get_terms(array(
-            'taxonomy' => $ingredient_taxonomy,
+            'taxonomy' => $ingredient_taxonomy_slug, // Use dynamic slug
             'hide_empty' => true,
             'object_ids' => $secondary_product_ids,
             'orderby' => 'name',
@@ -223,6 +233,7 @@ function vv_ajax_filter_ingredients()
     // --- OUTPUT: count|||primaryOptions|||secondaryOptions ---
     echo intval($product_count) . '|||' . $primary_options_html . '|||' . $secondary_options_html;
     wp_die();
+
 }
 
 add_action('wp_ajax_vv_filter_ingredients', 'vv_ajax_filter_ingredients');
@@ -233,7 +244,9 @@ add_action('wp_ajax_nopriv_vv_filter_ingredients', 'vv_ajax_filter_ingredients')
  */
 function vv_enqueue_frontend_scripts()
 {
-    if (is_front_page() && !is_admin()) {
+    // Only load if the shortcode is present on the page
+    global $post;
+    if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'vapevida_quiz')) {
 
         wp_enqueue_script(
             'vv-quiz-frontend-script',
@@ -248,6 +261,30 @@ function vv_enqueue_frontend_scripts()
         $placeholder_primary = isset($settings['placeholder_primary']) ? $settings['placeholder_primary'] : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
         $placeholder_secondary = isset($settings['placeholder_secondary']) ? $settings['placeholder_secondary'] : __('-- Select Secondary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
 
+        // --- NEW: DYNAMIC ERROR MESSAGES ---
+        // Get error messages from settings, with a translated fallback
+        $error_type = isset($settings['error_msg_type']) && !empty($settings['error_msg_type'])
+            ? $settings['error_msg_type']
+            : __('Please select a Flavor Type.', VV_QUIZ_TEXT_DOMAIN);
+
+        $error_primary = isset($settings['error_msg_primary']) && !empty($settings['error_msg_primary'])
+            ? $settings['error_msg_primary']
+            : __('Please select a Primary Ingredient.', VV_QUIZ_TEXT_DOMAIN);
+
+        $error_secondary = isset($settings['error_msg_secondary']) && !empty($settings['error_msg_secondary'])
+            ? $settings['error_msg_secondary']
+            : __('Please select a Secondary Ingredient.', VV_QUIZ_TEXT_DOMAIN);
+
+        // ==================================================================
+        // FIX #2: Add required field booleans for JavaScript validation
+        // ==================================================================
+        $is_type_required = !empty($settings['is_type_required']);
+        $is_primary_required = !empty($settings['is_primary_required']);
+        // Secondary is only required if *both* the checkbox is ticked AND the field is visible
+        $is_secondary_required = !empty($settings['is_secondary_required']) && !empty($settings['field_status']);
+        // ==================================================================
+
+
         wp_localize_script(
             'vv-quiz-frontend-script',
             'vv_quiz_ajax',
@@ -257,6 +294,12 @@ function vv_enqueue_frontend_scripts()
                 'placeholder_secondary' => $placeholder_secondary,
                 'cta_text_default' => $cta_button_text,
                 'nonce' => wp_create_nonce('vv-quiz-nonce'),
+
+                // --- NEWLY ADDED ---
+                'is_type_required' => $is_type_required,
+                'is_primary_required' => $is_primary_required,
+                'is_secondary_required' => $is_secondary_required,
+
                 'i18n' => array(
                     'loading' => __('Searching...', VV_QUIZ_TEXT_DOMAIN),
                     'loading_options' => __('Loading...', VV_QUIZ_TEXT_DOMAIN),
@@ -266,9 +309,44 @@ function vv_enqueue_frontend_scripts()
                     'multiple_results' => __('FOUND {count} PRODUCTS', VV_QUIZ_TEXT_DOMAIN),
                     'error_loading' => __('⚠️ DATA ERROR', VV_QUIZ_TEXT_DOMAIN),
                     'error_loading_options' => __('Loading Error', VV_QUIZ_TEXT_DOMAIN),
+
+                    // --- NEW DYNAMIC ERROR STRINGS ---
+                    'error_required_type' => $error_type,
+                    'error_required_primary' => $error_primary,
+                    'error_required_secondary' => $error_secondary,
                 )
             )
         );
     }
 }
 add_action('wp_enqueue_scripts', 'vv_enqueue_frontend_scripts');
+
+
+/**
+ * NEW: Clear Caches When Plugin Settings Are Saved
+ * Automatically purges LiteSpeed, WP Rocket, and other caches when settings are updated.
+ */
+function vv_quiz_clear_caches_on_save($old_value, $new_value)
+{
+    // LiteSpeed Cache
+    if (function_exists('litespeed_purge_all')) {
+        litespeed_purge_all();
+    }
+    // WP Rocket
+    if (function_exists('rocket_clean_domain')) {
+        rocket_clean_domain();
+    }
+    // W3 Total Cache
+    if (function_exists('w3tc_flush_all')) {
+        w3tc_flush_all();
+    }
+    // WP Super Cache
+    if (function_exists('wp_cache_clear_cache')) {
+        wp_cache_clear_cache();
+    }
+    // WordPress Object Cache
+    if (function_exists('wp_cache_flush')) {
+        wp_cache_flush();
+    }
+}
+add_action('update_option_vv_quiz_settings', 'vv_quiz_clear_caches_on_save', 10, 2);

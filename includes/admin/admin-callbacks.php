@@ -24,6 +24,14 @@ function vv_quiz_main_section_callback()
     echo '<p>' . esc_html__('Here you define the labels and structure of the Quiz displayed on the Home Page.', 'vapevida-quiz') . '</p>';
 }
 
+/**
+ * NEW: Callback for the Error Messages section
+ */
+function vv_quiz_errors_section_callback()
+{
+    echo '<p>' . esc_html__('Define the custom error messages for form validation.', 'vapevida-quiz') . '</p>';
+}
+
 function vv_quiz_button_styling_section_callback()
 {
     echo '<p>' . esc_html__('Customize the colors of the Quiz form buttons (Normal state and Hover).', 'vapevida-quiz') . '</p>';
@@ -141,7 +149,8 @@ function vv_quiz_color_field_callback($args)
 
 function vv_enqueue_color_picker_assets($hook_suffix)
 {
-    if ('toplevel_page_vapevida-quiz-details' !== $hook_suffix && 'vapevida-quiz-details' !== $hook_suffix) {
+    // Ensure this hook suffix matches your admin page
+    if ('toplevel_page_vapevida-quiz-details' !== $hook_suffix) {
         return;
     }
 

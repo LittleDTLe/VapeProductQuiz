@@ -253,5 +253,40 @@ function vv_quiz_register_settings()
         'vv_quiz_main_section',
         ['field_id' => 'button_clear_cta', 'default' => __('CLEAR', 'vapevida-quiz')]
     );
+
+    // --- NEW: ERROR MESSAGES SECTION ---
+    add_settings_section(
+        'vv_quiz_errors_section',
+        __('Error Messages', 'vapevida-quiz'),
+        'vv_quiz_errors_section_callback',
+        'vapevida-quiz-details'
+    );
+
+    add_settings_field(
+        'error_msg_type',
+        __('Error: Type Required', 'vapevida-quiz'),
+        'vv_quiz_text_field_callback',
+        'vapevida-quiz-details',
+        'vv_quiz_errors_section',
+        ['field_id' => 'error_msg_type', 'default' => __('Please select a Flavor Type.', 'vapevida-quiz')]
+    );
+
+    add_settings_field(
+        'error_msg_primary',
+        __('Error: Primary Required', 'vapevida-quiz'),
+        'vv_quiz_text_field_callback',
+        'vapevida-quiz-details',
+        'vv_quiz_errors_section',
+        ['field_id' => 'error_msg_primary', 'default' => __('Please select a Primary Ingredient.', 'vapevida-quiz')]
+    );
+
+    add_settings_field(
+        'error_msg_secondary',
+        __('Error: Secondary Required', 'vapevida-quiz'),
+        'vv_quiz_text_field_callback',
+        'vapevida-quiz-details',
+        'vv_quiz_errors_section',
+        ['field_id' => 'error_msg_secondary', 'default' => __('Please select a Secondary Ingredient.', 'vapevida-quiz')]
+    );
 }
 add_action('admin_init', 'vv_quiz_register_settings');
