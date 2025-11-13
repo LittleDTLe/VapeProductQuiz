@@ -8,7 +8,7 @@ if (!defined('ABSPATH'))
 
 if (!defined('VV_QUIZ_VERSION')) {
     // IMPORTANT: Make sure this is updated every time you change the JS file!
-    define('VV_QUIZ_VERSION', '1.0.0'); // Bumping version for new feature
+    define('VV_QUIZ_VERSION', '1.0.2'); // Bumping version for new feature
 }
 if (!defined('VV_QUIZ_TEXT_DOMAIN')) {
     define('VV_QUIZ_TEXT_DOMAIN', 'vapevida-quiz');
@@ -78,13 +78,10 @@ function vv_ajax_filter_ingredients()
     $secondary_ingredient = isset($_POST['secondary_ingredient']) ? sanitize_key($_POST['secondary_ingredient']) : '';
 
     // ==================================================================
-    // FIX #1: Get ingredient taxonomy dynamically from settings
+    // FIX: Get ingredient taxonomy from POST data
     // ==================================================================
-    $settings = get_option('vv_quiz_settings');
-    $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
-
-    $ingredient_taxonomy_slug = $use_custom && isset($settings['attribute_ingredient_slug']) && !empty($settings['attribute_ingredient_slug'])
-        ? $settings['attribute_ingredient_slug']
+    $ingredient_taxonomy_slug = isset($_POST['ingredient_slug']) && !empty($_POST['ingredient_slug'])
+        ? sanitize_key($_POST['ingredient_slug'])
         : 'pa_quiz-ingredient';
     // ==================================================================
 
@@ -94,7 +91,7 @@ function vv_ajax_filter_ingredients()
     $product_count = 0;
 
     if (!$type_slug || !$type_term_slug) {
-        echo '0|||Type missing|||';
+        echo '0|||Type missing or invalid|||';
         wp_die();
         return;
     }
@@ -194,7 +191,7 @@ function vv_ajax_filter_ingredients()
     // If primary is selected, secondary options MUST be compatible with it
     if (!empty($primary_ingredient)) {
         $secondary_tax_query[] = array(
-            'taxonomy' => $ingredient_taxonomy_slug,
+            'taxonomy' => $ingredient_taxonomy_slug, // Use dynamic slug
             'field' => 'slug',
             'terms' => $primary_ingredient,
             'operator' => 'IN',
@@ -276,8 +273,18 @@ function vv_enqueue_frontend_scripts()
             : __('Please select a Secondary Ingredient.', VV_QUIZ_TEXT_DOMAIN);
 
         // ==================================================================
-        // FIX #2: Add required field booleans for JavaScript validation
+        // FIX: Add dynamic slugs and required fields for JavaScript
         // ==================================================================
+        $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
+
+        $type_taxonomy_slug = $use_custom && !empty($settings['attribute_type_slug'])
+            ? $settings['attribute_type_slug']
+            : 'pa_geuseis';
+
+        $ingredient_taxonomy_slug = $use_custom && !empty($settings['attribute_ingredient_slug'])
+            ? $settings['attribute_ingredient_slug']
+            : 'pa_quiz-ingredient';
+
         $is_type_required = !empty($settings['is_type_required']);
         $is_primary_required = !empty($settings['is_primary_required']);
         // Secondary is only required if *both* the checkbox is ticked AND the field is visible
@@ -295,7 +302,9 @@ function vv_enqueue_frontend_scripts()
                 'cta_text_default' => $cta_button_text,
                 'nonce' => wp_create_nonce('vv-quiz-nonce'),
 
-                // --- NEWLY ADDED ---
+                // --- ADDED MISSING SLUGS & REQUIRED FIELDS ---
+                'type_slug' => $type_taxonomy_slug,
+                'ingredient_slug' => $ingredient_taxonomy_slug,
                 'is_type_required' => $is_type_required,
                 'is_primary_required' => $is_primary_required,
                 'is_secondary_required' => $is_secondary_required,

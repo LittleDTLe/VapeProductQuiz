@@ -85,10 +85,10 @@ function vv_recommender_quiz_shortcode()
         }
 
         /*
-            ==================================================================
-            REMOVED: TOAST STYLING
-            ==================================================================
-            */
+                ==================================================================
+                REMOVED: TOAST STYLING
+                ==================================================================
+                */
 
         .vv-quiz-container h2,
         .vv-quiz-container p {
@@ -197,10 +197,10 @@ function vv_recommender_quiz_shortcode()
         }
 
         /*
-            ==================================================================
-            NEW: INLINE ERROR MESSAGE STYLING
-            ==================================================================
-            */
+                ==================================================================
+                NEW: INLINE ERROR MESSAGE STYLING
+                ==================================================================
+                */
         .vv-field-error-message {
             color: #D8000C;
             /* Red error color */
@@ -273,14 +273,14 @@ function vv_recommender_quiz_shortcode()
                     <label for="flavor_ingredient"
                         class="<?php echo $is_primary_required_attr ? 'vv-required' : ''; ?>"><?php echo $label_primary; ?></label>
                     <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>" id="flavor_ingredient"
-                        class="vv-quiz-select" <?php echo $is_primary_required_attr; ?>>
+                        class="vv-quiz-select" <?php echo $is_primary_required_attr; ?> disabled>
                         <option value=""><?php echo $placeholder_primary; ?></option>
                         <?php
-                        if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
-                            foreach ($ingredient_terms as $term) {
-                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                            }
-                        }
+                        // if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
+                        //     foreach ($ingredient_terms as $term) {
+                        //         echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        //     }
+                        // }
                         ?>
                     </select>
                     <!-- NEW: Inline Error Container -->
@@ -292,14 +292,15 @@ function vv_recommender_quiz_shortcode()
                         <label for="flavor_ingredient_optional"
                             class="<?php echo $is_secondary_required_attr ? 'vv-required' : ''; ?>"><?php echo $label_secondary; ?></label>
                         <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>-optional"
-                            id="flavor_ingredient_optional" class="vv-quiz-select" <?php echo $is_secondary_required_attr; ?>>
+                            id="flavor_ingredient_optional" class="vv-quiz-select" <?php echo $is_secondary_required_attr; ?>
+                            disabled>
                             <option value=""><?php echo $placeholder_secondary; ?></option>
                             <?php
-                            if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
-                                foreach ($ingredient_terms as $term) {
-                                    echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
-                                }
-                            }
+                            // if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
+                            //     foreach ($ingredient_terms as $term) {
+                            //         echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                            //     }
+                            // }
                             ?>
                         </select>
                         <!-- NEW: Inline Error Container -->
