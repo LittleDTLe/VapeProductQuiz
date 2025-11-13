@@ -26,9 +26,10 @@ function vv_recommender_quiz_shortcode()
     $placeholder_primary = isset($settings['placeholder_primary']) ? esc_attr($settings['placeholder_primary']) : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
     $placeholder_secondary = isset($settings['placeholder_secondary']) ? esc_attr($settings['placeholder_secondary']) : __('-- Select Secondary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
 
-    $is_type_required_attr = isset($settings['is_type_required']) && $settings['is_type_required'] ? 'required' : '';
-    $is_primary_required_attr = isset($settings['is_primary_required']) && $settings['is_primary_required'] ? 'required' : '';
-    $is_secondary_required_attr = isset($settings['is_secondary_required']) && $settings['is_secondary_required'] ? 'required' : '';
+    // Get required status from settings
+    $is_type_required_attr = !empty($settings['is_type_required']) ? 'required' : '';
+    $is_primary_required_attr = !empty($settings['is_primary_required']) ? 'required' : '';
+    $is_secondary_required_attr = !empty($settings['is_secondary_required']) && $show_third_field ? 'required' : '';
 
     $use_custom = isset($settings['use_custom_attributes']) ? $settings['use_custom_attributes'] : false;
     $type_taxonomy_slug = $use_custom && isset($settings['attribute_type_slug']) && !empty($settings['attribute_type_slug'])
@@ -48,6 +49,7 @@ function vv_recommender_quiz_shortcode()
         'hide_empty' => true,
     ));
 
+    // We get all terms here, the AJAX will handle the dynamic filtering
     $ingredient_terms = get_terms(array(
         'taxonomy' => $ingredient_taxonomy_slug,
         'hide_empty' => true,
@@ -66,17 +68,6 @@ function vv_recommender_quiz_shortcode()
     $clear_btn_txt_color = isset($settings['clear_btn_txt_color']) ? esc_html($settings['clear_btn_txt_color']) : '#FFFFFF';
     $clear_btn_txt_hover_color = isset($settings['clear_btn_txt_hover_color']) ? esc_html($settings['clear_btn_txt_hover_color']) : '#FFFFFF';
 
-    wp_localize_script(
-        'vv-quiz-frontend-script',
-        'vv_quiz_ajax',
-        array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'placeholder_primary' => $placeholder_primary,
-            'placeholder_secondary' => $placeholder_secondary,
-            'nonce' => wp_create_nonce('vv-quiz-nonce'),
-        )
-    );
-
     ?>
     <style>
         /* BASE STYLING (Mobile/Tablet Default) */
@@ -87,7 +78,17 @@ function vv_recommender_quiz_shortcode()
             padding: 20px;
             border-radius: 5px;
             box-sizing: border-box;
+            position: relative;
+            /* NEW: Needed for toast positioning */
+            overflow: hidden;
+            /* NEW: Prevents toast from overflowing container */
         }
+
+        /*
+            ==================================================================
+            REMOVED: TOAST STYLING
+            ==================================================================
+            */
 
         .vv-quiz-container h2,
         .vv-quiz-container p {
@@ -102,10 +103,6 @@ function vv_recommender_quiz_shortcode()
         .vv-select-col {
             margin-bottom: 15px;
         }
-
-        /* ------------------------------------------------------------- */
-        /* --- BUTTONS AND NATIVE SELECT (Original Styles Remain) --- */
-        /* ------------------------------------------------------------- */
 
         /* Button Row Container */
         .vv-button-row {
@@ -143,6 +140,13 @@ function vv_recommender_quiz_shortcode()
             ;
         }
 
+        /* Disabled Button State */
+        .vv-quiz-container .vv-cta-button:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
         /* Clear Button Style */
         .vv-quiz-container .vv-clear-button {
             flex: 1;
@@ -172,13 +176,13 @@ function vv_recommender_quiz_shortcode()
         }
 
         /* Required Field Asterisk */
-        .vv-quiz-container label[required]:after {
+        .vv-quiz-container label.vv-required:after {
             content: " *";
             color: #d9534f;
             font-weight: bold;
         }
 
-        /* Native Select (For Field 1) and General Fallback */
+        /* Native Select - REVERTED to original minimal style */
         .vv-quiz-container select {
             width: 100%;
             padding: 10px;
@@ -186,13 +190,28 @@ function vv_recommender_quiz_shortcode()
             box-sizing: border-box;
         }
 
-        /* Highlight border of invalid fields (Native Select) */
-        .vv-quiz-container select:invalid:required {
+        /* NEW: Field error highlight (This STAYS) */
+        .vv-quiz-container select.vv-field-error {
             border-color: #d9534f;
             box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
         }
 
-        /* --- DESKTOP STYLING (Remains the same) --- */
+        /*
+            ==================================================================
+            NEW: INLINE ERROR MESSAGE STYLING
+            ==================================================================
+            */
+        .vv-field-error-message {
+            color: #D8000C;
+            /* Red error color */
+            font-size: 12px;
+            font-weight: bold;
+            padding-top: 5px;
+            display: none;
+            /* Hidden by default */
+        }
+
+        /* --- DESKTOP STYLING --- */
         @media (min-width: 600px) {
             .vv-button-row {
                 justify-content: center;
@@ -221,57 +240,76 @@ function vv_recommender_quiz_shortcode()
         }
     </style>
     <div class="vv-quiz-container">
+        <!-- REMOVED: Toast Container -->
+
         <h2><?php echo $quiz_heading; ?></h2>
         <p><?php echo $quiz_subtitle; ?></p>
 
-        <form method="get" action="<?php echo esc_url($shop_url); ?>" id="vv-recommender-form">
+        <form method="get" action="<?php echo esc_url($shop_url); ?>" id="vv-recommender-form" novalidate>
 
             <input type="hidden" name="filter_applied" value="1">
 
             <div class="vv-select-row">
 
                 <div class="vv-select-col">
-                    <label for="flavor_type" <?php echo $is_type_required_attr; ?>><?php echo $label_type; ?></label>
+                    <label for="flavor_type"
+                        class="<?php echo $is_type_required_attr ? 'vv-required' : ''; ?>"><?php echo $label_type; ?></label>
                     <select name="<?php echo esc_attr($form_filter_type_name); ?>" id="flavor_type" class="vv-quiz-select"
                         <?php echo $is_type_required_attr; ?>>
                         <option value=""><?php echo $placeholder_type; ?></option>
                         <?php
-                        foreach ($flavor_type_terms as $term) {
-                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        if (!is_wp_error($flavor_type_terms) && !empty($flavor_type_terms)) {
+                            foreach ($flavor_type_terms as $term) {
+                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                            }
                         }
                         ?>
                     </select>
+                    <!-- NEW: Inline Error Container -->
+                    <div class="vv-field-error-message" id="error-for-flavor_type"></div>
                 </div>
 
                 <div class="vv-select-col">
-                    <label for="flavor_ingredient" <?php echo $is_primary_required_attr; ?>><?php echo $label_primary; ?></label>
+                    <label for="flavor_ingredient"
+                        class="<?php echo $is_primary_required_attr ? 'vv-required' : ''; ?>"><?php echo $label_primary; ?></label>
                     <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>" id="flavor_ingredient"
                         class="vv-quiz-select" <?php echo $is_primary_required_attr; ?>>
                         <option value=""><?php echo $placeholder_primary; ?></option>
                         <?php
-                        foreach ($ingredient_terms as $term) {
-                            echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
+                            foreach ($ingredient_terms as $term) {
+                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                            }
                         }
                         ?>
                     </select>
+                    <!-- NEW: Inline Error Container -->
+                    <div class="vv-field-error-message" id="error-for-flavor_ingredient"></div>
                 </div>
 
                 <?php if ($show_third_field): ?>
                     <div class="vv-select-col">
-                        <label for="flavor_ingredient_optional" <?php echo $is_secondary_required_attr; ?>><?php echo $label_secondary; ?></label>
+                        <label for="flavor_ingredient_optional"
+                            class="<?php echo $is_secondary_required_attr ? 'vv-required' : ''; ?>"><?php echo $label_secondary; ?></label>
                         <select name="<?php echo esc_attr($form_filter_ingredient_name); ?>-optional"
                             id="flavor_ingredient_optional" class="vv-quiz-select" <?php echo $is_secondary_required_attr; ?>>
                             <option value=""><?php echo $placeholder_secondary; ?></option>
                             <?php
-                            foreach ($ingredient_terms as $term) {
-                                echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                            if (!is_wp_error($ingredient_terms) && !empty($ingredient_terms)) {
+                                foreach ($ingredient_terms as $term) {
+                                    echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                                }
                             }
                             ?>
                         </select>
+                        <!-- NEW: Inline Error Container -->
+                        <div class="vv-field-error-message" id="error-for-flavor_ingredient_optional"></div>
                     </div>
                 <?php endif; ?>
 
             </div>
+
+            <!-- OLD Error Container Removed -->
 
             <div class="vv-button-row">
                 <button type="button" class="button vv-clear-button">
@@ -283,19 +321,6 @@ function vv_recommender_quiz_shortcode()
             </div>
         </form>
     </div>
-    <script>
-        // NOTE: This logic should ideally be in a separate, enqueued JS file (class-vv-dynamic.js)
-        function vvClearQuizForm() {
-            const form = document.getElementById('vv-recommender-form');
-            if (form) {
-                // Reset all select elements to their first option (empty value)
-                const selects = form.querySelectorAll('select');
-                selects.forEach(select => {
-                    select.selectedIndex = 0;
-                });
-            }
-        }
-    </script>
     <?php
     return ob_get_clean();
 }
