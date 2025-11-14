@@ -94,6 +94,10 @@ function vv_quiz_init()
     require_once VV_QUIZ_DIR . 'includes/class-vv-core.php';
     require_once VV_QUIZ_DIR . 'includes/class-vv-frontend.php';
     require_once VV_QUIZ_DIR . 'includes/class-vv-query.php';
+
+
+    require_once VV_QUIZ_DIR . 'includes/class-vv-analytics-db.php';
+    require_once VV_QUIZ_DIR . 'includes/class-vv-analytics.php';
 }
 add_action('plugins_loaded', 'vv_quiz_init', 20);
 
@@ -116,6 +120,12 @@ function vv_quiz_activate()
             array('back_link' => true)
         );
     }
+
+    // Load the DB installer and run it
+    if (!function_exists('vv_quiz_analytics_db_install')) {
+        require_once VV_QUIZ_DIR . 'includes/class-vv-analytics-db.php';
+    }
+    vv_quiz_analytics_db_install();
 
     // Flush rewrite rules
     flush_rewrite_rules();

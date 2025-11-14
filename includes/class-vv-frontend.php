@@ -79,169 +79,149 @@ function vv_recommender_quiz_shortcode()
             border-radius: 5px;
             box-sizing: border-box;
             position: relative;
-            /* NEW: Needed for toast positioning */
             overflow: hidden;
-            /* NEW: Prevents toast from overflowing container */
-        }
 
-        /*
-                ==================================================================
-                REMOVED: TOAST STYLING
-                ==================================================================
-                */
+            .vv-quiz-container h2,
+            .vv-quiz-container p {
+                text-align: center;
+            }
 
-        .vv-quiz-container h2,
-        .vv-quiz-container p {
-            text-align: center;
-        }
+            /* Mobile Stacked Layout (The default) */
+            .vv-select-row {
+                display: block;
+            }
 
-        /* Mobile Stacked Layout (The default) */
-        .vv-select-row {
-            display: block;
-        }
+            .vv-select-col {
+                margin-bottom: 15px;
+            }
 
-        .vv-select-col {
-            margin-bottom: 15px;
-        }
-
-        /* Button Row Container */
-        .vv-button-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        /* Submit Button Style */
-        .vv-quiz-container .vv-cta-button {
-            flex: 1;
-            min-width: 150px;
-            padding: 12px 20px;
-            background-color:
-                <?= $btn_bg_color; ?>
-            ;
-            color:
-                <?= $btn_txt_color ?>
-            ;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .vv-quiz-container .vv-cta-button:hover {
-            background-color:
-                <?= $btn_bg_hover_color ?>
-            ;
-            color:
-                <?= $btn_txt_hover_color ?>
-            ;
-        }
-
-        /* Disabled Button State */
-        .vv-quiz-container .vv-cta-button:disabled {
-            background-color: #cccccc;
-            color: #666666;
-            cursor: not-allowed;
-        }
-
-        /* Clear Button Style */
-        .vv-quiz-container .vv-clear-button {
-            flex: 1;
-            min-width: 150px;
-            padding: 12px 20px;
-            background-color:
-                <?= $clear_btn_bg_color; ?>
-            ;
-            color:
-                <?= $clear_btn_txt_color ?>
-            ;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .vv-quiz-container .vv-clear-button:hover {
-            background-color:
-                <?= $clear_btn_bg_hover_color ?>
-            ;
-            color:
-                <?= $clear_btn_txt_hover_color ?>
-            ;
-        }
-
-        /* Required Field Asterisk */
-        .vv-quiz-container label.vv-required:after {
-            content: " *";
-            color: #d9534f;
-            font-weight: bold;
-        }
-
-        /* Native Select - REVERTED to original minimal style */
-        .vv-quiz-container select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-
-        /* NEW: Field error highlight (This STAYS) */
-        .vv-quiz-container select.vv-field-error {
-            border-color: #d9534f;
-            box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
-        }
-
-        /*
-                ==================================================================
-                NEW: INLINE ERROR MESSAGE STYLING
-                ==================================================================
-                */
-        .vv-field-error-message {
-            color: #D8000C;
-            /* Red error color */
-            font-size: 12px;
-            font-weight: bold;
-            padding-top: 5px;
-            display: none;
-            /* Hidden by default */
-        }
-
-        /* --- DESKTOP STYLING --- */
-        @media (min-width: 600px) {
+            /* Button Row Container */
             .vv-button-row {
-                justify-content: center;
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+                flex-wrap: wrap;
             }
 
-            .vv-quiz-container .vv-cta-button,
+            /* Submit Button Style */
+            .vv-quiz-container .vv-cta-button {
+                flex: 1;
+                min-width: 150px;
+                padding: 12px 20px;
+                background-color:
+                    <?= $btn_bg_color; ?>
+                ;
+                color:
+                    <?= $btn_txt_color ?>
+                ;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .vv-quiz-container .vv-cta-button:hover {
+                background-color:
+                    <?= $btn_bg_hover_color ?>
+                ;
+                color:
+                    <?= $btn_txt_hover_color ?>
+                ;
+            }
+
+            /* Disabled Button State */
+            .vv-quiz-container .vv-cta-button:disabled {
+                background-color: #cccccc;
+                color: #666666;
+                cursor: not-allowed;
+            }
+
+            /* Clear Button Style */
             .vv-quiz-container .vv-clear-button {
-                flex: 0 1 auto;
-                min-width: 200px;
+                flex: 1;
+                min-width: 150px;
+                padding: 12px 20px;
+                background-color:
+                    <?= $clear_btn_bg_color; ?>
+                ;
+                color:
+                    <?= $clear_btn_txt_color ?>
+                ;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 600;
+                transition: all 0.3s ease;
             }
-        }
 
-        @media (min-width: 768px) {
-            .vv-quiz-container .vv-select-row {
-                display: flex !important;
-                gap: 20px;
-                align-items: flex-start;
-                margin-bottom: 20px;
+            .vv-quiz-container .vv-clear-button:hover {
+                background-color:
+                    <?= $clear_btn_bg_hover_color ?>
+                ;
+                color:
+                    <?= $clear_btn_txt_hover_color ?>
+                ;
             }
 
-            .vv-quiz-container .vv-select-col {
-                flex: 1 1 0;
-                min-width: 0;
-                margin-bottom: 0;
+            /* Required Field Asterisk */
+            .vv-quiz-container label.vv-required:after {
+                content: " *";
+                color: #d9534f;
+                font-weight: bold;
             }
-        }
+
+            .vv-quiz-container select {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                box-sizing: border-box;
+            }
+
+            .vv-quiz-container select.vv-field-error {
+                border-color: #d9534f;
+                box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+            }
+
+            .vv-field-error-message {
+                color: #D8000C;
+                font-size: 12px;
+                font-weight: bold;
+                padding-top: 5px;
+                display: none;
+            }
+
+            /* --- DESKTOP STYLING --- */
+            @media (min-width: 600px) {
+                .vv-button-row {
+                    justify-content: center;
+                }
+
+                .vv-quiz-container .vv-cta-button,
+                .vv-quiz-container .vv-clear-button {
+                    flex: 0 1 auto;
+                    min-width: 200px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .vv-quiz-container .vv-select-row {
+                    display: flex !important;
+                    gap: 20px;
+                    align-items: flex-start;
+                    margin-bottom: 20px;
+                }
+
+                .vv-quiz-container .vv-select-col {
+                    flex: 1 1 0;
+                    min-width: 0;
+                    margin-bottom: 0;
+                }
+            }
     </style>
     <div class="vv-quiz-container">
-        <!-- REMOVED: Toast Container -->
-
         <h2><?php echo $quiz_heading; ?></h2>
         <p><?php echo $quiz_subtitle; ?></p>
 
@@ -265,7 +245,6 @@ function vv_recommender_quiz_shortcode()
                         }
                         ?>
                     </select>
-                    <!-- NEW: Inline Error Container -->
                     <div class="vv-field-error-message" id="error-for-flavor_type"></div>
                 </div>
 
@@ -283,7 +262,6 @@ function vv_recommender_quiz_shortcode()
                         // }
                         ?>
                     </select>
-                    <!-- NEW: Inline Error Container -->
                     <div class="vv-field-error-message" id="error-for-flavor_ingredient"></div>
                 </div>
 
@@ -303,14 +281,11 @@ function vv_recommender_quiz_shortcode()
                             // }
                             ?>
                         </select>
-                        <!-- NEW: Inline Error Container -->
                         <div class="vv-field-error-message" id="error-for-flavor_ingredient_optional"></div>
                     </div>
                 <?php endif; ?>
 
             </div>
-
-            <!-- OLD Error Container Removed -->
 
             <div class="vv-button-row">
                 <button type="button" class="button vv-clear-button">
