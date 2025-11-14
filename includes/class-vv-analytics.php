@@ -161,9 +161,7 @@ class VV_Analytics
     /**
      * Updates the analytics table when an order is paid.
      * FINDS THE MATCHING PRODUCTS in the order, calculates their subtotal,
-     * and saves that value to the analytics table.
-     *
-     * **UPDATED:** Now correctly checks variable products by using the parent ID.
+     * and saves that value to the analytics table AND the new items table.
      *
      * @param int $order_id The ID of the completed order.
      */
@@ -184,16 +182,16 @@ class VV_Analytics
         // 2. Get the user hash we saved to the order
         $user_hash = $order->get_meta('_vv_quiz_user_hash');
         if (empty($user_hash)) {
-            // This order did not come from the quiz, so mark it processed and exit
+            // This order did not come from the quiz
             $order->add_meta_data('_vv_analytics_processed', true, true);
             $order->save_meta_data();
             return;
         }
 
         // 3. Find the *most recent* search from this user
-        $table_name = $wpdb->prefix . 'vv_quiz_analytics';
+        $table_name_analytics = $wpdb->prefix . 'vv_quiz_analytics';
         $latest_search = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM $table_name 
+            "SELECT * FROM $table_name_analytics 
             WHERE user_id_hash = %s 
             ORDER BY search_timestamp DESC 
             LIMIT 1",
@@ -201,104 +199,103 @@ class VV_Analytics
         ));
 
         if (!$latest_search) {
-            // No search found for this user, mark as processed and exit
+            // No search found for this user
             $order->add_meta_data('_vv_analytics_processed', true, true);
             $order->save_meta_data();
             return;
         }
 
-        // 4. --- LOGIC: Calculate Attributed Subtotal ---
+        // 4. --- LOGIC: Calculate Attributed Subtotal & Collect Items ---
 
-        // Get the search terms from the analytics row
         $search_type_slug = $latest_search->type_slug;
         $search_type_term = $latest_search->type_term;
         $search_ingredient_slug = $latest_search->ingredient_slug;
-        $search_primary_term = $latest_search->primary_ingredient_term;
-        $search_secondary_term = $latest_search->secondary_ingredient_term;
-
-        // Create an array of all required ingredient slugs
-        $required_ingredients = array_filter([$search_primary_term, $search_secondary_term]);
+        $required_ingredients = array_filter([$latest_search->primary_ingredient_term, $latest_search->secondary_ingredient_term]);
 
         $quiz_attributed_total = 0.00;
-        $items_matched = false;
+        $matched_items_for_db = array(); // NEW: Array to hold items for the new table
 
         // 5. Loop through every item in the order
         foreach ($order->get_items() as $item_id => $item) {
             $product = $item->get_product();
-
             if (!$product) {
                 continue;
             }
 
-            // --- FIX: Get the PARENT product ID if this is a variation ---
-            // Terms are stored on the parent product, not the variation.
+            // Get the ID to check (parent or self)
             $parent_id = $product->get_parent_id();
             $product_id_to_check = $parent_id ? $parent_id : $product->get_id();
-            // --- END FIX ---
 
-            // --- Check 1: Does the product match the "Type" (e.g., 'pa_geuseis')? ---
+            // --- Check 1: Type match ---
             $product_has_type = false;
-            if (empty($search_type_term)) {
-                $product_has_type = true; // If no type was searched, this check passes
-            } else {
-                // Use the corrected $product_id_to_check
-                if (has_term($search_type_term, $search_type_slug, $product_id_to_check)) {
-                    $product_has_type = true;
-                }
+            if (empty($search_type_term) || has_term($search_type_term, $search_type_slug, $product_id_to_check)) {
+                $product_has_type = true;
             }
 
-            // --- Check 2: Does the product match ALL required "Ingredients"? (AND logic) ---
-            $product_has_all_ingredients = true; // Assume true until proven false
+            // --- Check 2: Ingredient match (AND logic) ---
+            $product_has_all_ingredients = true;
             if (!empty($required_ingredients)) {
-                // Get all ingredient terms for this product, using the corrected $product_id_to_check
                 $product_terms = wp_get_post_terms($product_id_to_check, $search_ingredient_slug, array('fields' => 'slugs'));
-
                 if (is_wp_error($product_terms)) {
-                    $product_has_all_ingredients = false; // Error, so it's not a match
+                    $product_has_all_ingredients = false;
                 } else {
-                    // Check if *all* required terms are in the product's list
                     foreach ($required_ingredients as $required_term) {
                         if (!in_array($required_term, $product_terms)) {
-                            $product_has_all_ingredients = false; // Missing a required term
-                            break; // Stop checking this product
+                            $product_has_all_ingredients = false;
+                            break;
                         }
                     }
                 }
             }
 
-            // 6. If it matches ALL criteria, add its subtotal
-            // We must also have at least one search criterion to match against
+            // 6. If it matches ALL criteria, add it
             $has_search_criteria = !empty($search_type_term) || !empty($required_ingredients);
-
             if ($has_search_criteria && $product_has_type && $product_has_all_ingredients) {
                 // It's a match!
-                $quiz_attributed_total += $item->get_subtotal(); // Use subtotal (before discounts)
-                $items_matched = true;
+                $item_subtotal = $item->get_subtotal();
+                $quiz_attributed_total += $item_subtotal;
+
+                // NEW: Add to our item array for the new table
+                $matched_items_for_db[] = array(
+                    'search_id' => $latest_search->id,
+                    'order_id' => $order_id,
+                    'product_id' => $item->get_product_id(),
+                    'variation_id' => $item->get_variation_id(),
+                    'quantity' => $item->get_quantity(),
+                    'subtotal' => $item_subtotal
+                );
             }
         }
         // --- END LOGIC ---
 
         // 7. Only update the DB if at least one item matched
-        if ($items_matched) {
+        if (!empty($matched_items_for_db)) {
+
+            // --- Update Table 1 (Analytics) ---
             $wpdb->update(
-                $table_name,
+                $table_name_analytics,
                 array(
                     'converted' => 1,
                     'order_id' => $order_id,
-                    'order_total' => $quiz_attributed_total // Save our calculated, attributed subtotal
+                    'order_total' => $quiz_attributed_total // Save calculated subtotal
                 ),
                 array('id' => $latest_search->id), // Where
-                array(
-                    '%d', // converted
-                    '%d', // order_id
-                    '%f'  // order_total
-                ),
+                array('%d', '%d', '%f'), // Data formats
                 array('%d') // Where format
             );
+
+            // --- NEW: Insert into Table 2 (Items) ---
+            $table_name_items = $wpdb->prefix . 'vv_quiz_conversion_items';
+            foreach ($matched_items_for_db as $item_to_insert) {
+                $wpdb->insert(
+                    $table_name_items,
+                    $item_to_insert,
+                    array('%d', '%d', '%d', '%d', '%d', '%f') // Data formats
+                );
+            }
         }
 
-        // 8. Mark the order as processed (even if no items matched)
-        // This prevents re-checking this order on every status change.
+        // 8. Mark the order as processed
         $order->add_meta_data('_vv_analytics_processed', true, true);
         $order->save_meta_data();
     }
