@@ -1,9 +1,7 @@
 <?php
 /**
- * Admin Analytics Page for VapeVida Quiz.
- * Renders the submenu page and enqueues scripts.
- *
- * NOTE: The menu itself is now created in admin-menu-ui.php
+ * Admin Analytics Page for VapeVida Quiz - MODERN REDESIGN
+ * Beautiful, responsive analytics dashboard with enhanced visuals
  */
 
 if (!defined('ABSPATH'))
@@ -14,13 +12,11 @@ if (!defined('ABSPATH'))
  */
 function vv_quiz_analytics_enqueue_scripts($hook_suffix)
 {
-    // Only load on our specific analytics page
-    // Note: The hook suffix changes to match the new parent slug
     if ($hook_suffix !== 'vapevida-quiz_page_vv-quiz-analytics') {
         return;
     }
 
-    // Enqueue Chart.js from a reliable CDN
+    // Enqueue Chart.js
     wp_enqueue_script(
         'chart-js',
         'https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js',
@@ -29,21 +25,48 @@ function vv_quiz_analytics_enqueue_scripts($hook_suffix)
         true
     );
 
-    // Enqueue a custom script to initialize charts
+    // Enqueue custom script
     wp_register_script(
         'vv-quiz-analytics-charts',
-        false, // No file, will be inline
+        false,
         array('chart-js', 'jquery'),
-        defined('VV_QUIZ_VERSION') ? VV_QUIZ_VERSION : '1.0', // Added safety check
+        defined('VV_QUIZ_VERSION') ? VV_QUIZ_VERSION : '1.0',
         true
     );
     wp_enqueue_script('vv-quiz-analytics-charts');
 }
 add_action('admin_enqueue_scripts', 'vv_quiz_analytics_enqueue_scripts');
 
+/**
+ * Helper function to get a term's display name from its slug.
+ */
+function vv_quiz_get_term_name($term_slug, $taxonomy)
+{
+    if (empty($term_slug) || empty($taxonomy)) {
+        return '<em>' . __('None', 'vapevida-quiz') . '</em>';
+    }
+
+    static $term_cache = array();
+    $cache_key = $taxonomy . '_' . $term_slug;
+
+    if (isset($term_cache[$cache_key])) {
+        return $term_cache[$cache_key];
+    }
+
+    $term = get_term_by('slug', $term_slug, $taxonomy);
+
+    if ($term && !is_wp_error($term)) {
+        $term_cache[$cache_key] = esc_html($term->name);
+        return $term_cache[$cache_key];
+    }
+
+    $fallback_name = esc_html(ucwords(str_replace(array('q-', 'pa_', '-'), ' ', $term_slug)));
+    $term_cache[$cache_key] = $fallback_name . ' <em>(' . __('Deleted', 'vapevida-quiz') . ')</em>';
+    return $term_cache[$cache_key];
+}
 
 /**
- * Renders the Analytics Page HTML.
+ * Renders the Analytics Page HTML - MODERN DESIGN
  */
 function vv_quiz_render_analytics_page()
 {
@@ -51,84 +74,222 @@ function vv_quiz_render_analytics_page()
     $table_name = $wpdb->prefix . 'vv_quiz_analytics';
 
     // --- Data Fetching ---
-
-    // 1. Total Searches
     $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
 
-    // 2. Top Flavor Types
     $top_types = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, COUNT(*) as count 
+            "SELECT type_term, type_slug, COUNT(*) as count 
             FROM $table_name 
             WHERE type_term != '' 
-            GROUP BY type_term 
+            GROUP BY type_term, type_slug 
             ORDER BY count DESC 
             LIMIT %d",
             10
         )
     );
 
-    // 3. Top Primary Ingredients
     $top_primary = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT primary_ingredient_term, COUNT(*) as count 
+            "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count 
             FROM $table_name 
             WHERE primary_ingredient_term != '' 
-            GROUP BY primary_ingredient_term 
+            GROUP BY primary_ingredient_term, ingredient_slug 
             ORDER BY count DESC 
             LIMIT %d",
             10
         )
     );
 
-    // 4. Top Search Combinations
     $top_combos = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, primary_ingredient_term, secondary_ingredient_term, COUNT(*) as count 
+            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count 
             FROM $table_name 
             WHERE type_term != '' OR primary_ingredient_term != ''
-            GROUP BY type_term, primary_ingredient_term, secondary_ingredient_term 
+            GROUP BY type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term 
             ORDER BY count DESC 
             LIMIT %d",
             15
         )
     );
 
-    // --- Prepare Data for Charts (JSON) ---
-    $type_chart_labels = json_encode(wp_list_pluck($top_types, 'type_term'));
-    $type_chart_data = json_encode(wp_list_pluck($top_types, 'count'));
+    // Calculate additional metrics
+    $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE primary_ingredient_term != ''");
+    $searches_with_secondary = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE secondary_ingredient_term != ''");
+    $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE type_term != '' AND primary_ingredient_term != ''");
 
-    $primary_chart_labels = json_encode(wp_list_pluck($top_primary, 'primary_ingredient_term'));
-    $primary_chart_data = json_encode(wp_list_pluck($top_primary, 'count'));
+    // Prepare Chart Data
+    $type_chart_labels = array();
+    $type_chart_data = array();
+    if (!empty($top_types)) {
+        foreach ($top_types as $item) {
+            $type_chart_labels[] = vv_quiz_get_term_name($item->type_term, $item->type_slug);
+            $type_chart_data[] = $item->count;
+        }
+    }
+
+    $primary_chart_labels = array();
+    $primary_chart_data = array();
+    if (!empty($top_primary)) {
+        foreach ($top_primary as $item) {
+            $primary_chart_labels[] = vv_quiz_get_term_name($item->primary_ingredient_term, $item->ingredient_slug);
+            $primary_chart_data[] = $item->count;
+        }
+    }
 
     ?>
     <style>
-        .vv-analytics-wrap .postbox {
-            margin-bottom: 20px;
+        /* Modern Analytics Dashboard Styles */
+        .vv-analytics-wrap {
+            background: #f0f2f5;
+            margin: -20px -20px 0 -22px;
+            padding: 30px;
+            min-height: 100vh;
         }
 
-        .vv-analytics-wrap h2 {
-            font-size: 1.5em;
-            margin-bottom: 0.5em;
+        .vv-analytics-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }
 
-        .vv-analytics-flex {
-            display: flex;
-            flex-wrap: wrap;
+        .vv-analytics-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .vv-analytics-header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        /* Stats Cards Row */
+        .vv-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .vv-analytics-flex>div {
-            flex: 1;
-            min-width: 300px;
+        .vv-stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+            position: relative;
+            overflow: hidden;
         }
 
-        .vv-analytics-chart-container {
-            padding: 15px;
-            background: #fff;
-            border: 1px solid #ccd0d4;
-            border-radius: 4px;
-            max-height: 400px;
+        .vv-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .vv-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 0 0 0 100%;
+        }
+
+        .vv-stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .vv-stat-value {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .vv-stat-label {
+            font-size: 0.95em;
+            color: #666;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vv-stat-percentage {
+            font-size: 0.85em;
+            color: #28a745;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Charts Section */
+        .vv-charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .vv-chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .vv-chart-card h2 {
+            margin: 0 0 20px 0;
+            font-size: 1.4em;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vv-chart-card h2::before {
+            content: '📊';
+            font-size: 1.2em;
+        }
+
+        .vv-chart-container {
+            position: relative;
+            height: 320px;
+        }
+
+        /* Tables Section */
+        .vv-tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .vv-table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .vv-table-card h2 {
+            margin: 0;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
         }
 
         .vv-analytics-table {
@@ -136,102 +297,364 @@ function vv_quiz_render_analytics_page()
             border-collapse: collapse;
         }
 
-        .vv-analytics-table th,
-        .vv-analytics-table td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #eee;
+        .vv-analytics-table thead {
+            background: #f8f9fa;
         }
 
         .vv-analytics-table th {
-            background: #f9f9f9;
+            text-align: left;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e9ecef;
         }
 
-        .vv-analytics-table tr:last-child td {
+        .vv-analytics-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f3f5;
+            color: #333;
+        }
+
+        .vv-analytics-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .vv-analytics-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .vv-analytics-table tbody tr:last-child td {
             border-bottom: none;
         }
 
-        .vv-analytics-total {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #2271b1;
+        .vv-analytics-table td.vv-count-col {
+            width: 100px;
             text-align: center;
-            padding: 20px;
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .vv-analytics-table th.vv-count-col {
+            width: 100px;
+            text-align: center;
+        }
+
+        /* Combinations Table (Full Width) */
+        .vv-combinations-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .vv-combinations-card h2 {
+            margin: 0;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        /* Rank Badges */
+        .vv-rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .vv-rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .vv-rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+        }
+
+        .vv-rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+        }
+
+        .vv-rank-other {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        /* Empty State */
+        .vv-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .vv-empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .vv-empty-state-text {
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .vv-charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vv-analytics-wrap {
+                padding: 15px;
+            }
+
+            .vv-analytics-header {
+                padding: 25px;
+            }
+
+            .vv-analytics-header h1 {
+                font-size: 1.8em;
+            }
+
+            .vv-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vv-tables-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vv-stat-value {
+                font-size: 2.2em;
+            }
+
+            .vv-chart-container {
+                height: 250px;
+            }
         }
     </style>
 
     <div class="wrap vv-analytics-wrap">
-        <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
-        <p><?php esc_html_e('This page shows the most popular search terms and combinations submitted via the quiz.', 'vapevida-quiz'); ?>
-        </p>
+        <!-- Header Section -->
+        <div class="vv-analytics-header">
+            <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
+            <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
+            </p>
+        </div>
 
-        <div class="postbox">
-            <h2 class="hndle" style="padding: 10px 15px;"><?php esc_html_e('Total Quiz Submissions', 'vapevida-quiz'); ?>
-            </h2>
-            <div class="inside">
-                <div class="vv-analytics-total"><?php echo esc_html($total_searches); ?></div>
+        <!-- Stats Cards -->
+        <div class="vv-stats-grid">
+            <div class="vv-stat-card">
+                <div class="vv-stat-icon">🔍</div>
+                <div class="vv-stat-label"><?php esc_html_e('Total Searches', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value"><?php echo esc_html(number_format($total_searches)); ?></div>
+            </div>
+
+            <div class="vv-stat-card">
+                <div class="vv-stat-icon">✅</div>
+                <div class="vv-stat-label"><?php esc_html_e('Complete Searches', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value"><?php echo esc_html(number_format($complete_searches)); ?></div>
+                <?php if ($total_searches > 0): ?>
+                    <div class="vv-stat-percentage">
+                        <?php echo esc_html(round(($complete_searches / $total_searches) * 100, 1)); ?>%
+                        <?php esc_html_e('completion rate', 'vapevida-quiz'); ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="vv-stat-card">
+                <div class="vv-stat-icon">🥇</div>
+                <div class="vv-stat-label"><?php esc_html_e('With Primary Ingredient', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value"><?php echo esc_html(number_format($searches_with_primary)); ?></div>
+                <?php if ($total_searches > 0): ?>
+                    <div class="vv-stat-percentage">
+                        <?php echo esc_html(round(($searches_with_primary / $total_searches) * 100, 1)); ?>%
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="vv-stat-card">
+                <div class="vv-stat-icon">🥈</div>
+                <div class="vv-stat-label"><?php esc_html_e('With Secondary Ingredient', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value"><?php echo esc_html(number_format($searches_with_secondary)); ?></div>
+                <?php if ($total_searches > 0): ?>
+                    <div class="vv-stat-percentage">
+                        <?php echo esc_html(round(($searches_with_secondary / $total_searches) * 100, 1)); ?>%
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
-        <div class="vv-analytics-flex">
-            <div class="vv-chart-box-left">
+        <!-- Charts Section -->
+        <div class="vv-charts-grid">
+            <div class="vv-chart-card">
                 <h2><?php esc_html_e('Top Flavor Types', 'vapevida-quiz'); ?></h2>
-                <div class="vv-analytics-chart-container">
+                <div class="vv-chart-container">
                     <canvas id="vvTopTypesChart"></canvas>
                 </div>
             </div>
-            <div class="vv-chart-box-right">
+
+            <div class="vv-chart-card">
                 <h2><?php esc_html_e('Top Primary Ingredients', 'vapevida-quiz'); ?></h2>
-                <div class="vv-analytics-chart-container">
+                <div class="vv-chart-container">
                     <canvas id="vvTopPrimaryChart"></canvas>
-                    }
                 </div>
             </div>
-
-            <div class="postbox" style="margin-top: 20px;">
-                <h2 class="hndle" style="padding: 10px 15px;">
-                    <?php esc_html_e('Top Search Combinations', 'vapevida-quiz'); ?>
-                </h2>
-                <div class="inside">
-                    <table class="vv-analytics-table">
-                        <thead>
-                            <tr>
-                                <th><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
-                                <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
-                                <th><?php esc_html_e('Primary Ingredient', 'vapevida-quiz'); ?></th>
-                                <th><?php esc_html_e('Secondary Ingredient', 'vapevida-quiz'); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($top_combos)): ?>
-                                <tr>
-                                    <td colspan="4"><?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?></td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($top_combos as $combo): ?>
-                                    <tr>
-                                        <td><strong><?php echo esc_html($combo->count); ?></strong></td>
-                                        <td><?php echo esc_html($combo->type_term ? $combo->type_term : '<em>' . __('None', 'vapevida-quiz') . '</em>'); ?>
-                                        </td>
-                                        <td><?php echo esc_html($combo->primary_ingredient_term ? $combo->primary_ingredient_term : '<em>' . __('None', 'vapevida-quiz') . '</em>'); ?>
-                                        </td>
-                                        <td><?php echo esc_html($combo->secondary_ingredient_term ? $combo->secondary_ingredient_term : '<em>' . __('None', 'vapevida-quiz') . '</em>'); ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
-        <?php
-        // Add the inline script to initialize the charts
-        $chart_script = "
+
+        <!-- Data Tables Section -->
+        <div class="vv-tables-grid">
+            <!-- Top Flavor Types Table -->
+            <div class="vv-table-card">
+                <h2><?php esc_html_e('Top 10 Flavor Types', 'vapevida-quiz'); ?></h2>
+                <table class="vv-analytics-table">
+                    <thead>
+                        <tr>
+                            <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
+                            <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($top_types)): ?>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="vv-empty-state">
+                                        <div class="vv-empty-state-icon">📊</div>
+                                        <div class="vv-empty-state-text">
+                                            <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php
+                            $rank = 1;
+                            foreach ($top_types as $item):
+                                $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
+                                ?>
+                                <tr>
+                                    <td>
+                                        <span class="vv-rank-badge <?php echo $rank_class; ?>"><?php echo $rank; ?></span>
+                                        <?php echo vv_quiz_get_term_name($item->type_term, $item->type_slug); ?>
+                                    </td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->count)); ?></td>
+                                </tr>
+                                <?php
+                                $rank++;
+                            endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Top Primary Ingredients Table -->
+            <div class="vv-table-card">
+                <h2><?php esc_html_e('Top 10 Primary Ingredients', 'vapevida-quiz'); ?></h2>
+                <table class="vv-analytics-table">
+                    <thead>
+                        <tr>
+                            <th><?php esc_html_e('Ingredient', 'vapevida-quiz'); ?></th>
+                            <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($top_primary)): ?>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="vv-empty-state">
+                                        <div class="vv-empty-state-icon">🥇</div>
+                                        <div class="vv-empty-state-text">
+                                            <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php
+                            $rank = 1;
+                            foreach ($top_primary as $item):
+                                $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
+                                ?>
+                                <tr>
+                                    <td>
+                                        <span class="vv-rank-badge <?php echo $rank_class; ?>"><?php echo $rank; ?></span>
+                                        <?php echo vv_quiz_get_term_name($item->primary_ingredient_term, $item->ingredient_slug); ?>
+                                    </td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->count)); ?></td>
+                                </tr>
+                                <?php
+                                $rank++;
+                            endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Combinations Table (Full Width) -->
+        <div class="vv-combinations-card">
+            <h2><?php esc_html_e('Top Search Combinations', 'vapevida-quiz'); ?></h2>
+            <table class="vv-analytics-table">
+                <thead>
+                    <tr>
+                        <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                        <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
+                        <th><?php esc_html_e('Primary Ingredient', 'vapevida-quiz'); ?></th>
+                        <th><?php esc_html_e('Secondary Ingredient', 'vapevida-quiz'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($top_combos)): ?>
+                        <tr>
+                            <td colspan="4">
+                                <div class="vv-empty-state">
+                                    <div class="vv-empty-state-icon">🔗</div>
+                                    <div class="vv-empty-state-text">
+                                        <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($top_combos as $combo): ?>
+                            <tr>
+                                <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
+                                <td><?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?></td>
+                                <td><?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
+                                </td>
+                                <td><?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <?php
+    // Enhanced Chart Script with Modern Styling
+    $chart_script = "
     jQuery(document).ready(function($) {
         
-        function createBarChart(ctx, labels, data, chartLabel) {
+        function createModernChart(ctx, labels, data, chartLabel, gradientColors) {
+            var gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, gradientColors[0]);
+            gradient.addColorStop(1, gradientColors[1]);
+
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -239,9 +662,11 @@ function vv_quiz_render_analytics_page()
                     datasets: [{
                         label: chartLabel,
                         data: data,
-                        backgroundColor: 'rgba(34, 113, 177, 0.6)',
-                        borderColor: 'rgba(34, 113, 177, 1)',
-                        borderWidth: 1
+                        backgroundColor: gradient,
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false,
                     }]
                 },
                 options: {
@@ -250,15 +675,54 @@ function vv_quiz_render_analytics_page()
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            cornerRadius: 8,
+                            displayColors: false
                         }
                     },
                     scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                },
+                                color: '#666'
+                            }
+                        },
                         y: {
                             beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
                             ticks: {
-                                precision: 0 
+                                precision: 0,
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                },
+                                color: '#666',
+                                padding: 10
                             }
                         }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuart'
                     }
                 }
             });
@@ -267,25 +731,27 @@ function vv_quiz_render_analytics_page()
         // Top Types Chart
         var ctxTypes = document.getElementById('vvTopTypesChart');
         if (ctxTypes) {
-            createBarChart(
+            createModernChart(
                 ctxTypes.getContext('2d'),
-                {$type_chart_labels},
-                {$type_chart_data},
-                '" . esc_js(__('Searches', 'vapevida-quiz')) . "'
+                " . json_encode($type_chart_labels) . ",
+                " . json_encode($type_chart_data) . ",
+                '" . esc_js(__('Searches', 'vapevida-quiz')) . "',
+                ['rgba(102, 126, 234, 0.8)', 'rgba(118, 75, 162, 0.8)']
             );
         }
 
         // Top Primary Ingredients Chart
         var ctxPrimary = document.getElementById('vvTopPrimaryChart');
         if (ctxPrimary) {
-            createBarChart(
+            createModernChart(
                 ctxPrimary.getContext('2d'),
-                {$primary_chart_labels},
-                {$primary_chart_data},
-                '" . esc_js(__('Searches', 'vapevida-quiz')) . "'
+                " . json_encode($primary_chart_labels) . ",
+                " . json_encode($primary_chart_data) . ",
+                '" . esc_js(__('Searches', 'vapevida-quiz')) . "',
+                ['rgba(102, 126, 234, 0.8)', 'rgba(118, 75, 162, 0.8)']
             );
         }
     });
     ";
-        wp_add_inline_script('vv-quiz-analytics-charts', $chart_script);
+    wp_add_inline_script('vv-quiz-analytics-charts', $chart_script);
 }

@@ -180,7 +180,7 @@ jQuery(document).ready(function ($) {
      */
     function showError(field, message) {
         field.addClass('vv-field-error');
-        const errorDiv = $('#error-' + field.attr('id'));
+        const errorDiv = $('#error-for-' + field.attr('id'));
         errorDiv.text(message).fadeIn(200);
 
         // Set a timer to hide this specific error
