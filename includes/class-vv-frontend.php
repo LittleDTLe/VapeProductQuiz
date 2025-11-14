@@ -79,16 +79,8 @@ function vv_recommender_quiz_shortcode()
             border-radius: 5px;
             box-sizing: border-box;
             position: relative;
-            /* NEW: Needed for toast positioning */
             overflow: hidden;
-            /* NEW: Prevents toast from overflowing container */
         }
-
-        /*
-                ==================================================================
-                REMOVED: TOAST STYLING
-                ==================================================================
-                */
 
         .vv-quiz-container h2,
         .vv-quiz-container p {
@@ -182,7 +174,6 @@ function vv_recommender_quiz_shortcode()
             font-weight: bold;
         }
 
-        /* Native Select - REVERTED to original minimal style */
         .vv-quiz-container select {
             width: 100%;
             padding: 10px;
@@ -190,25 +181,17 @@ function vv_recommender_quiz_shortcode()
             box-sizing: border-box;
         }
 
-        /* NEW: Field error highlight (This STAYS) */
         .vv-quiz-container select.vv-field-error {
             border-color: #d9534f;
             box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
         }
 
-        /*
-                ==================================================================
-                NEW: INLINE ERROR MESSAGE STYLING
-                ==================================================================
-                */
         .vv-field-error-message {
             color: #D8000C;
-            /* Red error color */
             font-size: 12px;
             font-weight: bold;
             padding-top: 5px;
             display: none;
-            /* Hidden by default */
         }
 
         /* --- DESKTOP STYLING --- */
@@ -240,8 +223,6 @@ function vv_recommender_quiz_shortcode()
         }
     </style>
     <div class="vv-quiz-container">
-        <!-- REMOVED: Toast Container -->
-
         <h2><?php echo $quiz_heading; ?></h2>
         <p><?php echo $quiz_subtitle; ?></p>
 
@@ -265,7 +246,6 @@ function vv_recommender_quiz_shortcode()
                         }
                         ?>
                     </select>
-                    <!-- NEW: Inline Error Container -->
                     <div class="vv-field-error-message" id="error-for-flavor_type"></div>
                 </div>
 
@@ -283,7 +263,6 @@ function vv_recommender_quiz_shortcode()
                         // }
                         ?>
                     </select>
-                    <!-- NEW: Inline Error Container -->
                     <div class="vv-field-error-message" id="error-for-flavor_ingredient"></div>
                 </div>
 
@@ -303,14 +282,11 @@ function vv_recommender_quiz_shortcode()
                             // }
                             ?>
                         </select>
-                        <!-- NEW: Inline Error Container -->
                         <div class="vv-field-error-message" id="error-for-flavor_ingredient_optional"></div>
                     </div>
                 <?php endif; ?>
 
             </div>
-
-            <!-- OLD Error Container Removed -->
 
             <div class="vv-button-row">
                 <button type="button" class="button vv-clear-button">

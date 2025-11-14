@@ -1,8 +1,8 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 0.9.9
+**Plugin Version:** 1.0.0
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Stepped Form Logic.
+**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Stepped Form Logic.
 
 **Author:** Panagiotis Drougas
 
@@ -18,6 +18,16 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ## 🛠️ Key Features (Currently Implemented)
 
+- **Analytics Dashboard:** A dedicated admin page (`VapeVida Quiz -> Analytics`) that visualizes user behavior. Features include:
+  - Key metric cards for **Total Revenue**, **Total Sales**, **Conversion Rate**, and **Total Searches**.
+  - Bar charts for "Top Popular Types" and "Top Popular Ingredients" to show what users search for most.
+  - Top 10 tables for Types and Ingredients, showing _only_ converting items, sorted by the highest revenue.
+  - Side-by-side tables comparing "Top Converting" (most profitable) search combinations vs. "Top Popular" (most searched) combinations.
+- **Sales & Revenue Tracking:** Automatically links quiz usage to sales.
+  - Logs a conversion when a user buys a product that matches their _last quiz search_.
+  - Accurately tracks the **subtotal** of _only the matched items_, not the entire cart.
+  - Handles variable products by checking the parent product for attribute terms.
+  - Tracks sales anonymously using a persistent `user_id_hash`.
 - **Dynamic Cascading Filters:** Dropdowns update dynamically based on the prior selection, ensuring customers are never led to a 'zero results' page.
 - **Real-Time Result Preview:** The CTA button displays the number of matching products immediately after filter selection, enhancing user experience.
 - **Full Localization Support:** The plugin is fully prepared for translation using `.pot`, `.po`, and `.mo` files, supporting locales like `el_GR` and generic `el`.
@@ -30,14 +40,15 @@ This tool ensures maintainability by allowing store managers to control all aspe
 - **Auto-Populated Options:** Dropdown fields are populated automatically from your WooCommerce Global Attribute Terms.
 - **Dynamic Clear Button:** A Reset Button is included to easily clear selections and URL filters.
 - **Custom Error Messages:** Add custom error messages using jQuery intercepting the form submission.
-- **Updated languages/ Files:** Update languages/ files to include additions made after introduction of localisation DATE: 13 / 11 / 2025.
+- **Updated languages/ Files:** Update languages/ files to include additions made after introduction of localisation.
 - **Stepped Form Logic:** Add Step Logic to the form select tags.
 
 ---
 
 ## Currently Working On
 
-- [ ] **Analytics & Tracking:** Create a Hook (before rediraction), to track user behavior and overall usage.
+- [x] **Analytics Page Redesign:** Update the design of **Analytics** Admin page for the plugin.
+- [x] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 
 ---
 
@@ -47,7 +58,6 @@ This section outlines planned features that would require further development (p
 
 ### To Implement Features (Planned for Next Releases)
 
-- [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ### Feature Ideas (Refactoring Required)
@@ -59,9 +69,10 @@ To implement the below features / ideas, there would need to be a complete refac
 
 ---
 
-### Feature Notes:
+### Search in Select | Notes:
 
-Attempted to add Search Functionality to the select dropdowns for ingredients using **Select2**, but had difficulty in styling the dropdowns to look like the default ones. Will need to revisit this feature after some expiramentation.
+- Attempted to add Search Functionality to the select dropdowns for ingredients using **Select2**, but had difficulty in styling the dropdowns to look like the default ones. Will need to revisit this feature after some expiramentation.
+- New implementation of this feature will be made using the **Choices.js** library.
 
 ---
 
@@ -71,6 +82,7 @@ Attempted to add Search Functionality to the select dropdowns for ingredients us
 
 1.  Place all plugin files (`vapevida-quiz.php`, `includes/`, etc.) into a folder named `vapevida-quiz` within your WordPress site's plugins directory (`wp-content/plugins/`).
 2.  In your WordPress Dashboard, navigate to **Plugins** and **Activate** the "VapeVida Flavorshot Recommender Quiz".
+3.  **If updating:** If you are updating to version 1.0.0 (with analytics), **Deactivate** and **Reactivate** the plugin once to force the new analytics database columns to be added.
 
 ### 1.2 Required Data Mapping (Crucial)
 
@@ -85,13 +97,16 @@ The plugin requires two specific **Global Attributes** to be active and populate
 
 ## 2. Admin Configuration and Management
 
-### 2.1 Accessing the Settings
+### 2.1 Accessing the Admin Pages
 
-Navigate to the main sidebar and click on the **VapeVida Quiz** menu item.
+The plugin creates a top-level **VapeVida Quiz** menu in the admin sidebar. This menu contains two sub-pages:
 
-### 2.2 Form Structure and Control
+- **Settings:** This is where you configure the quiz's appearance, text, and filtering behavior.
+- **Analytics:** A dashboard displaying user search data and sales conversions.
 
-Όλες οι δυναμικές ρυθμίσεις και οι προσαρμογές του κειμένου γίνονται μέσω των παρακάτω ενοτήτων στη σελίδα **VapeVida Quiz** (Admin).
+### 2.2 Settings Page: Form Structure and Control
+
+Όλες οι δυναμικές ρυθμίσεις και οι προσαρμογές του κειμένου γίνονται μέσω των παρακάτω ενοτήτων στη σελίδα **VapeVida Quiz -> Settings**.
 
 | Ομάδα Ρυθμίσεων                            | Ενεργά Πεδία / Παράμετροι                                                           | Σκοπός και Αποτέλεσμα                                                                                                                        |
 | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -103,6 +118,28 @@ Navigate to the main sidebar and click on the **VapeVida Quiz** menu item.
 | **Κεφαλίδες Φόρμας**                       | **Τίτλος Quiz (H2)**, **Υπότιτλος Quiz (P)**                                        | Ελέγχει τα κύρια μηνύματα marketing της φόρμας.                                                                                              |
 | **Συμπεριφορά & Χρώματα**                  | **Ενεργοποίηση 3ου Πεδίου**, **Κείμενο Κουμπιού (CTA)**, **Χρώμα Background/Hover** | Ελέγχει τη συνολική δομή (εάν εμφανίζεται το 3ο πεδίο) και το πλήρες branding των κουμπιών.                                                  |
 
+### 2.3 Analytics Dashboard
+
+The **Analytics** page (`VapeVida Quiz -> Analytics`) provides a comprehensive overview of how your customers are using the quiz and what it's selling.
+
+#### Key Metric Cards
+
+- **Total Revenue from Quiz:** The total revenue generated _only_ from products that matched a user's quiz search.
+- **Total Sales from Quiz:** The total number of individual converted searches.
+- **Conversion Rate:** The percentage of searches that led to a sale.
+- **Total Searches:** The total number of times the quiz filters were applied.
+- **Complete Searches:** Number of searches where at least the Type and Primary Ingredient were selected.
+
+#### Visualizations
+
+- **Top Popular Charts:** Bar charts showing the most _popular_ (most searched) Flavor Types and Primary Ingredients, giving you insight into what customers are looking for.
+
+#### Data Tables
+
+- **Top 10 by Revenue:** Tables for "Flavor Types" and "Primary Ingredients" that show _only_ items with sales, sorted by the highest revenue first.
+- **Top Converting Combinations:** A list of the most profitable search combinations (e.g., "Sweets + Vanilla"), showing only searches that led to a sale and sorted by revenue.
+- **Top Popular Combinations:** A list of the most _frequently_ searched combinations, allowing you to compare popularity vs. profitability.
+
 ---
 
 ## 3. Maintenance Guide: Adding New Flavors
@@ -111,10 +148,7 @@ The system automatically manages the options list. Follow these steps to introdu
 
 1.  **Access Attributes:** Navigate to **Προϊόντα → Χαρακτηριστικά**.
 2.  **Add New Term:** Find the Attribute **Συστατικό (Quiz)** (`pa_quiz-ingredient`). Click **"Ρύθμιση όρων"** (Configure Terms) and add the new flavor name (e.g., 'Kiwi') and its slug (e.g., 'kiwi').
-3.  **Link to Product:** Open the product you are selling (the Kiwi e-liquid). In the **Attributes** tab, ensure you assign the new 'Kiwi' term under the **Συστατικό (Quiz)** attribute.
-4.  **Auto-Update:** The new 'Kiwi' option will now automatically appear in the Quiz dropdowns on your homepage because it is associated with a product.
-
----
+3.  **Link to Product:** Open the product you are selling (the Kiwi e-liquid). In the **Attributes** tab, ensure you assign the new '
 
 ## 4. Troubleshooting Localization
 

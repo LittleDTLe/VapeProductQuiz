@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: VapeVida Flavorshot Recommender Quiz 0.9.5\n"
 "Report-Msgid-Bugs-To: https://github.com/LittleDTLe/VapeProductQuiz/issues\n"
 "POT-Creation-Date: 2025-11-12 00:00+0000\n"
-"PO-Revision-Date: 2025-11-13 12:21+0200\n"
+"PO-Revision-Date: 2025-11-14 13:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Greek (Greece)\n"
 "Language: el_GR\n"
@@ -16,23 +16,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.8\n"
 "X-Loco-Version: 2.8.0; wp-6.8.3; php-8.3.23\n"
+
 #: includes/admin/admin-callbacks.php:11
 msgid "Select which quiz fields should be required."
 msgstr "Επιλέξτε ποια πεδία του quiz πρέπει να είναι υποχρεωτικά."
 
 #: includes/admin/admin-callbacks.php:24
-msgid ""
-"Here you define the labels and structure of the Quiz displayed on the Home "
-"Page."
-msgstr ""
-"Εδώ ορίζετε τις ετικέτες και τη δομή του Quiz που εμφανίζεται στην Αρχική "
-"Σελίδα."
+msgid "Here you define the labels and structure of the Quiz displayed on the Home Page."
+msgstr "Εδώ ορίζετε τις ετικέτες και τη δομή του Quiz που εμφανίζεται στην Αρχική Σελίδα."
 
 #: includes/admin/admin-callbacks.php:34
 msgid "Customize the colors of the Quiz form buttons (Normal state and Hover)."
-msgstr ""
-"Προσαρμόστε τα χρώματα των κουμπιών της φόρμας Quiz (Κανονική κατάσταση και "
-"Hover)."
+msgstr "Προσαρμόστε τα χρώματα των κουμπιών της φόρμας Quiz (Κανονική κατάσταση και Hover)."
 
 #: includes/admin/admin-callbacks.php:41
 msgid "Define the custom error messages for form validation."
@@ -43,12 +38,8 @@ msgid "Use custom Global Attributes"
 msgstr "Χρήση Προσαρμοσμένων Attributes"
 
 #: includes/admin/admin-callbacks.php:50
-msgid ""
-"Enable this option to select different attributes from the default ones "
-"(pa_geuseis and pa_quiz-ingredient)."
-msgstr ""
-"Ενεργοποιήστε αυτήν την επιλογή για να επιλέξετε διαφορετικά attributes από "
-"τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient)."
+msgid "Enable this option to select different attributes from the default ones (pa_geuseis and pa_quiz-ingredient)."
+msgstr "Ενεργοποιήστε αυτήν την επιλογή για να επιλέξετε διαφορετικά attributes από τα προεπιλεγμένα (pa_geuseis και pa_quiz-ingredient)."
 
 #: includes/admin/admin-callbacks.php:61
 msgid "Enable 3rd Field (Secondary Ingredient)."
@@ -99,10 +90,8 @@ msgid "VapeVida Quiz"
 msgstr "VapeVida Quiz"
 
 #: includes/admin/admin-rendering.php:197
-msgid ""
-"Usage instructions and technical information for managing the custom plugin."
-msgstr ""
-"Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του custom plugin."
+msgid "Usage instructions and technical information for managing the custom plugin."
+msgstr "Οδηγίες χρήσης και τεχνικές πληροφορίες για τη διαχείριση του custom plugin."
 
 #: includes/admin/admin-rendering.php:210
 #: includes/admin/admin-rendering.php:355
@@ -159,21 +148,13 @@ msgstr "Τα απαραίτητα Global Attributes για το Quiz είναι:
 msgid "Flavor Type:"
 msgstr "Τύπος Γεύσης:"
 
-#: includes/admin/admin-rendering.php:288
-msgid "Ingredient:"
-msgstr "Συστατικό:"
-
 #: includes/admin/admin-rendering.php:294
 msgid "Filter Technical Logic"
 msgstr "Τεχνική Λογική Φίλτρου"
 
 #: includes/admin/admin-rendering.php:296
-msgid ""
-"The Query Logic code ensures that filtering is done with absolute "
-"accuracy (AND Logic) between all selected fields."
-msgstr ""
-"Ο κώδικας Query Logic εξασφαλίζει ότι το φιλτράρισμα γίνεται με απόλυτη "
-"ακρίβεια (AND Logic) ανάμεσα σε όλα τα επιλεγμένα πεδία."
+msgid "The Query Logic code ensures that filtering is done with absolute accuracy (AND Logic) between all selected fields."
+msgstr "Ο κώδικας Query Logic εξασφαλίζει ότι το φιλτράρισμα γίνεται με απόλυτη ακρίβεια (AND Logic) ανάμεσα σε όλα τα επιλεγμένα πεδία."
 
 #: includes/admin/admin-rendering.php:300
 msgid "Single Select"
@@ -188,12 +169,8 @@ msgid "Combined AND Logic"
 msgstr "Συνδυασμένη AND Λογική"
 
 #: includes/admin/admin-rendering.php:304
-msgid ""
-"The system checks if the product has the "Flavor Type" AND both selected "
-""Ingredients" simultaneously."
-msgstr ""
-"Το σύστημα ελέγχει αν το προϊόν έχει το "Τύπο Γεύσης" ΚΑΙ τα δύο "
-"επιλεγμένα "Συστατικά" ταυτόχρονα."
+msgid "The system checks if the product has the \"Flavor Type\" AND both selected \"Ingredients\" simultaneously."
+msgstr "Το σύστημα ελέγχει αν το προϊόν έχει το \"Τύπο Γεύσης\" ΚΑΙ τα δύο επιλεγμένα \"Συστατικά\" ταυτόχρονα."
 
 #: includes/admin/admin-rendering.php:318
 msgid "Usage Instructions & Maintenance"
@@ -213,9 +190,7 @@ msgstr "Κωδικός Εμφάνισης (Shortcode):"
 
 #: includes/admin/admin-rendering.php:332
 msgid "Use the following code to display the form on any page (e.g. Homepage):"
-msgstr ""
-"Χρησιμοποιήστε τον παρακάτω κωδικό για να εμφανίσετε τη φόρμα σε οποιαδήποτε "
-"σελίδα (π.χ. Αρχική):"
+msgstr "Χρησιμοποιήστε τον παρακάτω κωδικό για να εμφανίσετε τη φόρμα σε οποιαδήποτε σελίδα (π.χ. Αρχική):"
 
 #: includes/admin/admin-rendering.php:346
 msgid "Copy"
@@ -224,12 +199,8 @@ msgstr "Αντιγραφή"
 #. %s: Section name in bold
 #: includes/admin/admin-rendering.php:354
 #, php-format
-msgid ""
-"All texts (Titles, Labels, CTA) and Quiz structure are configured from the "
-"%s section above."
-msgstr ""
-"Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από "
-"την ενότητα %s παραπάνω."
+msgid "All texts (Titles, Labels, CTA) and Quiz structure are configured from the %s section above."
+msgstr "Όλα τα κείμενα (Τίτλοι, Ετικέτες, CTA) και η δομή του Quiz ρυθμίζονται από την ενότητα %s παραπάνω."
 
 #: includes/admin/admin-rendering.php:361
 msgid "Titles (H2/P):"
@@ -245,30 +216,23 @@ msgstr "Υποχρεωτικά Πεδία:"
 
 #: includes/admin/admin-rendering.php:366
 msgid "Control which fields must be filled for form submission."
-msgstr ""
-"Ελέγξτε ποια πεδία πρέπει να είναι συμπληρωμένα για την υποβολή της φόρμας."
+msgstr "Ελέγξτε ποια πεδία πρέπει να είναι συμπληρωμένα για την υποβολή της φόρμας."
 
 #: includes/admin/admin-rendering.php:369
 msgid "Enable 3rd Field:"
 msgstr "Ενεργοποίηση 3ου Πεδίου:"
 
 #: includes/admin/admin-rendering.php:370
-msgid ""
-"Choose if the third field (Secondary Ingredient) is displayed in the form."
-msgstr ""
-"Επιλέξτε εάν το τρίτο πεδίο (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα."
+msgid "Choose if the third field (Secondary Ingredient) is displayed in the form."
+msgstr "Επιλέξτε εάν το τρίτο πεδίο (Δευτερεύον Συστατικό) εμφανίζεται στη φόρμα."
 
 #: includes/admin/admin-rendering.php:373
 msgid "Real-Time Updates:"
 msgstr "Ενημερώσεις σε Πραγματικό Χρόνο:"
 
 #: includes/admin/admin-rendering.php:374
-msgid ""
-"The dropdowns cascade dynamically, ensuring subsequent choices are always "
-"valid and have a corresponding product result."
-msgstr ""
-"Οι αναπτυσσόμενες λίστες φιλτράρονται δυναμικά, εξασφαλίζοντας ότι οι "
-"επόμενες επιλογές είναι πάντα έγκυρες και έχουν αντίστοιχο προϊόν."
+msgid "The dropdowns cascade dynamically, ensuring subsequent choices are always valid and have a corresponding product result."
+msgstr "Οι αναπτυσσόμενες λίστες φιλτράρονται δυναμικά, εξασφαλίζοντας ότι οι επόμενες επιλογές είναι πάντα έγκυρες και έχουν αντίστοιχο προϊόν."
 
 #: includes/admin/admin-rendering.php:380
 msgid "Flavor Management Guide"
@@ -283,26 +247,16 @@ msgid "Localization Troubleshooting"
 msgstr "Επίλυση Προβλημάτων Μετάφρασης"
 
 #: includes/admin/admin-rendering.php:395
-msgid ""
-"If translations fail (e.g., Greek strings remain English), the server may "
-"be looking for a different locale code than the one provided."
-msgstr ""
-"Αν οι μεταφράσεις αποτύχουν (π.χ. τα Ελληνικά παραμένουν Αγγλικά), ο "
-"διακομιστής μπορεί να αναζητά διαφορετικό κωδικό τοπικών ρυθμίσεων (locale "
-"code)."
+msgid "If translations fail (e.g., Greek strings remain English), the server may be looking for a different locale code than the one provided."
+msgstr "Αν οι μεταφράσεις αποτύχουν (π.χ. τα Ελληνικά παραμένουν Αγγλικά), ο διακομιστής μπορεί να αναζητά διαφορετικό κωδικό τοπικών ρυθμίσεων (locale code)."
 
 #: includes/admin/admin-rendering.php:400
 msgid "Solution:"
 msgstr "Λύση:"
 
 #: includes/admin/admin-rendering.php:401
-msgid ""
-"You must ensure both the generic and region-specific compiled files are "
-"present in the <code>/languages</code> folder:"
-msgstr ""
-"Πρέπει να βεβαιωθείτε ότι υπάρχουν τόσο το γενικό όσο και το "
-"συγκεκριμένο-ανά-περιοχή αρχείο μεταγλώττισης στον φάκελο "
-"<code>/languages</code>:"
+msgid "You must ensure both the generic and region-specific compiled files are present in the <code>/languages</code> folder:"
+msgstr "Πρέπει να βεβαιωθείτε ότι υπάρχουν τόσο το γενικό όσο και το συγκεκριμένο-ανά-περιοχή αρχείο μεταγλώττισης στον φάκελο <code>/languages</code>:"
 
 #: includes/admin/admin-rendering.php:403
 msgid "Generic Greek Locale"
@@ -317,12 +271,8 @@ msgid "Step 1: Access the Correct Folder"
 msgstr "Βήμα 1: Εύρεση του Σωστού Φακέλου"
 
 #: includes/admin/admin-rendering.php:414
-msgid ""
-"Navigate to: Products → Attributes. The two Attributes that populate the "
-"Quiz are:"
-msgstr ""
-"Πηγαίνετε: Προϊόντα → Χαρακτηριστικά. Τα δύο Attributes που γεμίζουν το "
-"Quiz είναι:"
+msgid "Navigate to: Products → Attributes. The two Attributes that populate the Quiz are:"
+msgstr "Πηγαίνετε: Προϊόντα → Χαρακτηριστικά. Τα δύο Attributes που γεμίζουν το Quiz είναι:"
 
 #: includes/admin/admin-rendering.php:418
 msgid "Ingredient (e.g. Strawberry, Cream):"
@@ -333,10 +283,8 @@ msgid "Step 2: Add New Term"
 msgstr "Βήμα 2: Προσθήκη Νέου Όρου"
 
 #: includes/admin/admin-rendering.php:426
-msgid ""
-"Click on "Configure Terms" next to the Attribute Ingredient (Quiz)."
-msgstr ""
-"Κάντε κλικ στο "Ρύθμιση όρων" δίπλα στο Attribute Συστατικό (Quiz)."
+msgid "Click on \"Configure Terms\" next to the Attribute Ingredient (Quiz)."
+msgstr "Κάντε κλικ στο \"Ρύθμιση όρων\" δίπλα στο Attribute Συστατικό (Quiz)."
 
 #: includes/admin/admin-rendering.php:429
 msgid "Name:"
@@ -344,45 +292,31 @@ msgstr "Ονομασία:"
 
 #: includes/admin/admin-rendering.php:430
 msgid "Write the full name (e.g. 'Kiwi') and a clean slug (e.g. 'kiwi')."
-msgstr ""
-"Γράψτε την πλήρη ονομασία (π.χ. 'Ακτινίδιο') και ένα καθαρό slug (π.χ. "
-"'actinidio')."
+msgstr "Γράψτε την πλήρη ονομασία (π.χ. 'Ακτινίδιο') και ένα καθαρό slug (π.χ. 'actinidio')."
 
 #: includes/admin/admin-rendering.php:433
 msgid "Localization Note:"
 msgstr "Σημείωση Μετάφρασης:"
 
 #: includes/admin/admin-rendering.php:434
-msgid ""
-"Ensure all new terms are correctly translated if you are using multiple "
-"languages."
-msgstr ""
-"Βεβαιωθείτε ότι όλοι οι νέοι όροι έχουν μεταφραστεί σωστά εάν "
-"χρησιμοποιείτε πολλαπλές γλώσσες."
+msgid "Ensure all new terms are correctly translated if you are using multiple languages."
+msgstr "Βεβαιωθείτε ότι όλοι οι νέοι όροι έχουν μεταφραστεί σωστά εάν χρησιμοποιείτε πολλαπλές γλώσσες."
 
 #: includes/admin/admin-rendering.php:441
 msgid "Step 3: Connect to Product & Check"
 msgstr "Βήμα 3: Σύνδεση με Προϊόν & Έλεγχος"
 
 #: includes/admin/admin-rendering.php:444
-msgid ""
-"For the new term to appear in the Quiz, it must be assigned to at least one "
-"published product."
-msgstr ""
-"Για να εμφανιστεί ο νέος όρος στο Quiz, πρέπει να είναι αντιστοιχισμένος σε "
-"τουλάχιστον ένα δημοσιευμένο προϊόν."
+msgid "For the new term to appear in the Quiz, it must be assigned to at least one published product."
+msgstr "Για να εμφανιστεί ο νέος όρος στο Quiz, πρέπει να είναι αντιστοιχισμένος σε τουλάχιστον ένα δημοσιευμένο προϊόν."
 
 #: includes/admin/admin-rendering.php:448
 msgid "Very Important:"
 msgstr "Πολύ Σημαντικό:"
 
 #: includes/admin/admin-rendering.php:449
-msgid ""
-"If a term does not have products, the Quiz ignores it (to avoid leading "
-"to empty results)."
-msgstr ""
-"Αν ένας όρος δεν έχει προϊόντα, το Quiz τον αγνοεί (για να μην οδηγεί σε "
-"κενά αποτελέσματα)."
+msgid "If a term does not have products, the Quiz ignores it (to avoid leading to empty results)."
+msgstr "Αν ένας όρος δεν έχει προϊόντα, το Quiz τον αγνοεί (για να μην οδηγεί σε κενά αποτελέσματα)."
 
 #: includes/admin/admin-settings-api.php:22
 msgid "Required Fields Settings"
@@ -597,12 +531,8 @@ msgid "Loading Error"
 msgstr "Σφάλμα Φόρτωσης"
 
 #: includes/class-vv-frontend.php:120
-msgid ""
-"[Configuration Error]: Please configure the Global Attributes in the Quiz "
-"Info page."
-msgstr ""
-"[Σφάλμα Ρύθμισης]: Παρακαλώ ρυθμίστε τα Global Attributes στη σελίδα Πληροφοριών "
-"Quiz."
+msgid "[Configuration Error]: Please configure the Global Attributes in the Quiz Info page."
+msgstr "[Σφάλμα Ρύθμισης]: Παρακαλώ ρυθμίστε τα Global Attributes στη σελίδα Πληροφοριών Quiz."
 
 #. Name of the plugin
 #: vapevida-quiz.php:4
@@ -611,9 +541,7 @@ msgstr "VapeVida Flavorshot Recommender Quiz"
 
 #. Description of the plugin
 #: vapevida-quiz.php:6
-msgid ""
-"Simple Product Finder Quiz with settings for quiz customization. Auto-"
-"populate the quiz with Global Attribute Terms with connected products."
+msgid "Simple Product Finder Quiz with settings for quiz customization. Auto-populate the quiz with Global Attribute Terms with connected products."
 msgstr "Κουίζ Εύρεσης Προϊόντων με σελίδα ρυθμίσεων. "
 
 #. Author of the plugin
@@ -658,3 +586,118 @@ msgstr "Τεκμηρίωση"
 #: vapevida-quiz.php:120
 msgid "Support"
 msgstr "Υποστήριξη"
+
+#: includes/admin/admin-analytics-page.php:60
+#: includes/admin/admin-analytics-page.php:326
+#: includes/admin/admin-analytics-page.php:364
+msgid "None"
+msgstr "Κανένα"
+
+#: includes/admin/admin-analytics-page.php:79
+msgid "Deleted"
+msgstr "Διαγράφηκε"
+
+#: includes/admin/admin-analytics-page.php:315
+msgid "VapeVida Quiz Analytics"
+msgstr "Αναλυτικά Στοιχεία VapeVida Quiz"
+
+#: includes/admin/admin-analytics-page.php:316
+msgid "Comprehensive insights into customer preferences and quiz interactions"
+msgstr "Αναλυτικές πληροφορίες για τις προτιμήσεις των πελατών και τις αλληλεπιδράσεις με το quiz"
+
+#: includes/admin/admin-analytics-page.php:323
+msgid "Total Searches"
+msgstr "Σύνολο Αναζητήσεων"
+
+#: includes/admin/admin-analytics-page.php:329
+msgid "Total Revenue from Quiz"
+msgstr "Συνολικά Έσοδα από το Quiz"
+
+#: includes/admin/admin-analytics-page.php:333
+#, php-format
+msgid "%s total sales"
+msgstr "%s σύνολο πωλήσεων"
+
+#: includes/admin/admin-analytics-page.php:337
+msgid "Conversion Rate"
+msgstr "Ποσοστό Μετατροπής"
+
+#: includes/admin/admin-analytics-page.php:341
+#, php-format
+msgid "%s sales from %s searches"
+msgstr "%s πωλήσεις από %s αναζητήσεις"
+
+#: includes/admin/admin-analytics-page.php:346
+msgid "Complete Searches"
+msgstr "Ολοκληρωμένες Αναζητήσεις"
+
+#: includes/admin/admin-analytics-page.php:350
+msgid "completion rate"
+msgstr "ποσοστό ολοκλήρωσης"
+
+#: includes/admin/admin-analytics-page.php:355
+msgid "With Primary Ingredient"
+msgstr "Με Βασικό Συστατικό"
+
+#: includes/admin/admin-analytics-page.php:363
+msgid "With Secondary Ingredient"
+msgstr "Με Δευτερεύον Συστατικό"
+
+#: includes/admin/admin-analytics-page.php:375
+msgid "Top Flavor Types (by Popularity)"
+msgstr "Κορυφαίοι Τύποι Γεύσης (κατά Δημοτικότητα)"
+
+#: includes/admin/admin-analytics-page.php:381
+msgid "Top Primary Ingredients (by Popularity)"
+msgstr "Κορυφαία Βασικά Συστατικά (κατά Δημοτικότητα)"
+
+#: includes/admin/admin-analytics-page.php:390
+msgid "Top 10 Flavor Types (by Revenue)"
+msgstr "Κορυφαίοι 10 Τύποι Γεύσης (κατά Έσοδα)"
+
+#: includes/admin/admin-analytics-page.php:395
+msgid "Sales"
+msgstr "Πωλήσεις"
+
+#: includes/admin/admin-analytics-page.php:396
+msgid "Revenue"
+msgstr "Έσοδα"
+
+#: includes/admin/admin-analytics-page.php:404
+#: includes/admin/admin-analytics-page.php:437
+msgid "No search data with sales yet."
+msgstr "Δεν υπάρχουν ακόμη δεδομένα αναζήτησης με πωλήσεις."
+
+#: includes/admin/admin-analytics-page.php:423
+msgid "Top 10 Primary Ingredients (by Revenue)"
+msgstr "Κορυφαία 10 Βασικά Συστατικά (κατά Έσοδα)"
+
+
+#: includes/admin/admin-analytics-page.php:456
+msgid "Top Converting Combinations (by Revenue)"
+msgstr "Κορυφαίοι Συνδυασμοί σε Πωλήσεις (κατά Έσοδα)"
+
+#: includes/admin/admin-analytics-page.php:462
+#: includes/admin/admin-analytics-page.php:496
+msgid "Combination"
+msgstr "Συνδυασμός"
+
+#: includes/admin/admin-analytics-page.php:470
+msgid "No converting searches yet."
+msgstr "Δεν υπάρχουν ακόμη αναζητήσεις που οδήγησαν σε πώληση."
+
+#: includes/admin/admin-analytics-page.php:490
+msgid "Top Popular Combinations (by Searches)"
+msgstr "Κορυφαίοι Συνδυασμοί (κατά Αναζητήσεις)"
+
+#: includes/admin/admin-analytics-page.php:494
+#: includes/admin/admin-analytics-page.php:605
+#: includes/admin/admin-analytics-page.php:619
+msgid "Searches"
+msgstr "Αναζητήσεις"
+
+#: includes/admin/admin-analytics-page.php:504
+#: includes/admin/admin-analytics-page.php:534
+msgid "No search data yet."
+msgstr "Δεν υπάρχουν ακόμη δεδομένα αναζήτησης."
+
