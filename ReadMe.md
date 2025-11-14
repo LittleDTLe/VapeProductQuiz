@@ -142,3 +142,20 @@ The system automatically manages the options list. Follow these steps to introdu
 1.  **Access Attributes:** Navigate to **Προϊόντα → Χαρακτηριστικά**.
 2.  **Add New Term:** Find the Attribute **Συστατικό (Quiz)** (`pa_quiz-ingredient`). Click **"Ρύθμιση όρων"** (Configure Terms) and add the new flavor name (e.g., 'Kiwi') and its slug (e.g., 'kiwi').
 3.  **Link to Product:** Open the product you are selling (the Kiwi e-liquid). In the **Attributes** tab, ensure you assign the new '
+
+## 4. Troubleshooting Localization
+
+If your translations (like Greek) stop working after an update, ensure you have both the generic and region-specific `.mo` files in your `/languages` folder:
+
+- `vapevida-quiz-el.mo` (Generic Greek)
+- `vapevida-quiz-el_GR.mo` (Greek, Greece)
+
+---
+
+## 5. Frontend Usage
+
+To display the fully configured quiz form on your homepage or any other page, use the shortcode:
+
+```markdown
+[vapevida_quiz]
+```
