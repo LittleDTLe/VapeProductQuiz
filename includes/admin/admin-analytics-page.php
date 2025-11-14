@@ -4,6 +4,7 @@
  * Beautiful, responsive analytics dashboard with enhanced visuals
  *
  * NEW: Added Date Range Filtering and CVR % Columns
+ * NEW: Added Date Range label to table/chart titles
  */
 
 if (!defined('ABSPATH'))
@@ -76,7 +77,7 @@ function vv_quiz_render_analytics_page()
     $analytics_table = $wpdb->prefix . 'vv_quiz_analytics';
     $items_table = $wpdb->prefix . 'vv_quiz_conversion_items';
 
-    // --- NEW: Date Range Filtering Logic ---
+    // --- Date Range Filtering Logic ---
     $selected_range = isset($_GET['range']) ? sanitize_key($_GET['range']) : 'all_time';
     $date_filter_sql = '';
     $date_filter_sql_where = ''; // Version that starts with WHERE
@@ -100,12 +101,29 @@ function vv_quiz_render_analytics_page()
             $date_filter_sql_where = $wpdb->prepare(" WHERE search_timestamp >= %s ", $start_date);
         }
     }
-    // --- END: Date Range Logic ---
 
-    // --- Data Fetching (NOW INCLUDES SALES VALUE & DATE FILTER) ---
+    // --- Date Range Display Text ---
+    $date_range_label = '';
+    switch ($selected_range) {
+        case '7_days':
+            $date_range_label = __('Last 7 Days', 'vapevida-quiz');
+            break;
+        case '30_days':
+            $date_range_label = __('Last 30 Days', 'vapevida-quiz');
+            break;
+        case 'this_month':
+            $date_range_label = __('This Month', 'vapevida-quiz');
+            break;
+        case 'all_time':
+        default:
+            $date_range_label = __('All Time', 'vapevida-quiz');
+            break;
+    }
+    // --- END ---
+
+
+    // --- Data Fetching ---
     $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table $date_filter_sql_where");
-
-    // --- UPDATED: Fetch Sales Count and Sales VALUE (with date filter) ---
     $total_sales_count = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE converted = 1 $date_filter_sql");
     $total_sales_value = $wpdb->get_var("SELECT SUM(order_total) FROM $analytics_table WHERE converted = 1 $date_filter_sql");
     $conversion_rate = ($total_searches > 0) ? round(($total_sales_count / $total_searches) * 100, 1) : 0;
@@ -114,7 +132,7 @@ function vv_quiz_render_analytics_page()
         $total_sales_value = 0;
     }
 
-    // 1a. Top Types by POPULARITY (for charts)
+    // 1a. Top Types by POPULARITY
     $top_types_by_popularity = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT type_term, type_slug, COUNT(*) as count
@@ -127,7 +145,7 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // 1b. Top Types by SALES VALUE (for table)
+    // 1b. Top Types by SALES VALUE
     $top_types_by_sales = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT type_term, type_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
@@ -140,7 +158,7 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // 2a. Top Primary by POPULARITY (for charts)
+    // 2a. Top Primary by POPULARITY
     $top_primary_by_popularity = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count
@@ -153,7 +171,7 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // 2b. Top Primary by SALES VALUE (for table)
+    // 2b. Top Primary by SALES VALUE
     $top_primary_by_sales = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
@@ -206,8 +224,7 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // --- NEW: 4. Top Sold PRODUCTS (with date filter) ---
-    // We must join with the analytics table to get the date
+    // 4. Top Sold PRODUCTS
     $top_sold_products = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT 
@@ -230,7 +247,6 @@ function vv_quiz_render_analytics_page()
             10
         )
     );
-    // --- END NEW ---
 
     // Calculate additional metrics
     $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE primary_ingredient_term != '' $date_filter_sql");
@@ -275,7 +291,6 @@ function vv_quiz_render_analytics_page()
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }
 
-        /* --- UPDATED: Date Filter Form --- */
         .vv-analytics-header-flex {
             display: flex;
             justify-content: space-between;
@@ -328,8 +343,6 @@ function vv_quiz_render_analytics_page()
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- END UPDATED --- */
-
         .vv-analytics-header h1 {
             margin: 0;
             font-size: 2.5em;
@@ -342,6 +355,24 @@ function vv_quiz_render_analytics_page()
             font-size: 1.1em;
             opacity: 0.95;
         }
+
+        /* --- NEW: Date Range Subtitle Style --- */
+        .vv-analytics-header p.vv-date-subtitle {
+            margin: 10px 0 0 0;
+            font-size: 0.9em;
+            font-style: italic;
+            opacity: 0.8;
+            color: #fff;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
+        }
+
+        .vv-analytics-header p.vv-date-subtitle strong {
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        /* --- END NEW --- */
 
         /* Stats Cards Row */
         .vv-stats-grid {
@@ -474,6 +505,15 @@ function vv_quiz_render_analytics_page()
             font-weight: 600;
             border-bottom: 2px solid #667eea;
         }
+
+        /* --- NEW: Date range span in title --- */
+        .vv-table-card h2 .vv-table-date-range {
+            font-size: 0.8em;
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* --- END NEW --- */
 
         .vv-analytics-table {
             width: 100%;
@@ -609,6 +649,14 @@ function vv_quiz_render_analytics_page()
                 align-items: flex-start;
             }
 
+            /* --- NEW: Date Subtitle on Mobile --- */
+            .vv-analytics-header p.vv-date-subtitle {
+                margin-top: 15px;
+                font-size: 1em;
+            }
+
+            /* --- END NEW --- */
+
             .vv-analytics-header {
                 padding: 25px;
             }
@@ -641,10 +689,10 @@ function vv_quiz_render_analytics_page()
                 <div>
                     <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
                     <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
-                    </p>
                 </div>
                 <form method="get" class="vv-date-filter-form">
                     <input type="hidden" name="page" value="vv-quiz-analytics">
+                    <label for="vv-date-range"><?php esc_html_e('Date Range:', 'vapevida-quiz'); ?></label>
                     <select name="range" id="vv-date-range">
                         <option value="all_time" <?php selected($selected_range, 'all_time'); ?>>
                             <?php esc_html_e('All Time', 'vapevida-quiz'); ?>
@@ -728,6 +776,7 @@ function vv_quiz_render_analytics_page()
         <div class="vv-charts-grid">
             <div class="vv-chart-card">
                 <h2><?php esc_html_e('Top Flavor Types (by Popularity)', 'vapevida-quiz'); ?></h2>
+                <p><?php echo esc_html($date_range_label); ?></p>
                 <div class="vv-chart-container">
                     <canvas id="vvTopTypesChart"></canvas>
                 </div>
@@ -735,6 +784,7 @@ function vv_quiz_render_analytics_page()
 
             <div class="vv-chart-card">
                 <h2><?php esc_html_e('Top Primary Ingredients (by Popularity)', 'vapevida-quiz'); ?></h2>
+                <p><?php echo esc_html($date_range_label); ?></p>
                 <div class="vv-chart-container">
                     <canvas id="vvTopPrimaryChart"></canvas>
                 </div>
@@ -743,7 +793,9 @@ function vv_quiz_render_analytics_page()
 
         <div class="vv-tables-grid">
             <div class="vv-table-card">
-                <h2><?php esc_html_e('Top 10 Flavor Types (by Revenue)', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top 10 Flavor Types (by Revenue)', 'vapevida-quiz'); ?>
+                    <p><?php echo esc_html($date_range_label); ?></p>
+                </h2>
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
@@ -788,7 +840,9 @@ function vv_quiz_render_analytics_page()
             </div>
 
             <div class="vv-table-card">
-                <h2><?php esc_html_e('Top 10 Primary Ingredients (by Revenue)', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top 10 Primary Ingredients (by Revenue)', 'vapevida-quiz'); ?>
+                    <p><?php echo esc_html($date_range_label); ?></p>
+                </h2>
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
@@ -837,6 +891,7 @@ function vv_quiz_render_analytics_page()
             <div class="vv-table-card vv-table-card-full">
                 <h2 style="border-bottom-color: #ffc107;">
                     <?php esc_html_e('Top 10 Products Sold by Quiz (by Revenue)', 'vapevida-quiz'); ?>
+                    <p><?php echo esc_html($date_range_label); ?></p>
                 </h2>
                 <table class="vv-analytics-table">
                     <thead>
@@ -890,6 +945,7 @@ function vv_quiz_render_analytics_page()
             <div class="vv-table-card">
                 <h2 style="border-bottom-color: #28a745;">
                     <?php esc_html_e('Top Converting Combinations (by Revenue)', 'vapevida-quiz'); ?>
+                    <p><?php echo esc_html($date_range_label); ?></p>
                 </h2>
                 <table class="vv-analytics-table">
                     <thead>
@@ -942,6 +998,7 @@ function vv_quiz_render_analytics_page()
             <div class="vv-table-card">
                 <h2 style="border-bottom-color: #667eea;">
                     <?php esc_html_e('Top Popular Combinations (by Searches)', 'vapevida-quiz'); ?>
+                    <p><?php echo esc_html($date_range_label); ?></p>
                 </h2>
                 <table class="vv-analytics-table">
                     <thead>
