@@ -47,6 +47,7 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ## Currently Working On
 
+- [x] **Analytics Page Redesign:** Update the design of **Analytics** Admin page for the plugin.
 - [x] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 
 ---
