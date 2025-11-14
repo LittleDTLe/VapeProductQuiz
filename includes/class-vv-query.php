@@ -56,17 +56,6 @@ function vv_custom_three_filter_query($query)
     $secondary_ingredient = isset($_GET[$secondary_ingredient_key]) ? sanitize_text_field($_GET[$secondary_ingredient_key]) : '';
     // --- END DYNAMIC SETTINGS LOGIC ---
 
-    // Track the search submission
-    if (class_exists('VV_Analytics')) {
-        VV_Analytics::track_search(
-            $type_slug,
-            $type_term,
-            $ingredient_slug,
-            $primary_ingredient,
-            $secondary_ingredient
-        );
-    }
-
     $filters_applied = false;
 
     // --- Collect ALL terms that need to be queried ---

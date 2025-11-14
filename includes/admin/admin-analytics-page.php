@@ -73,64 +73,124 @@ function vv_quiz_render_analytics_page()
     global $wpdb;
     $table_name = $wpdb->prefix . 'vv_quiz_analytics';
 
-    // --- Data Fetching ---
+    // --- Data Fetching (NOW INCLUDES SALES VALUE) ---
     $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
 
-    $top_types = $wpdb->get_results(
+    // --- UPDATED: Fetch Sales Count and Sales VALUE ---
+    $total_sales_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE converted = 1");
+    $total_sales_value = $wpdb->get_var("SELECT SUM(order_total) FROM $table_name WHERE converted = 1");
+    $conversion_rate = ($total_searches > 0) ? round(($total_sales_count / $total_searches) * 100, 1) : 0;
+
+    // Set to 0 if null (no sales yet)
+    if (is_null($total_sales_value)) {
+        $total_sales_value = 0;
+    }
+    // --- END UPDATED ---
+
+    // --- UPDATED: SEPARATE QUERIES FOR CHARTS (POPULARITY) AND TABLES (SALES VALUE) ---
+
+    // 1a. Top Types by POPULARITY (for charts)
+    $top_types_by_popularity = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, type_slug, COUNT(*) as count 
+            "SELECT type_term, type_slug, COUNT(*) as count
             FROM $table_name 
             WHERE type_term != '' 
             GROUP BY type_term, type_slug 
-            ORDER BY count DESC 
+            ORDER BY count DESC
             LIMIT %d",
             10
         )
     );
 
-    $top_primary = $wpdb->get_results(
+    // 1b. Top Types by SALES VALUE (for table)
+    $top_types_by_sales = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count 
+            "SELECT type_term, type_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
+            FROM $table_name 
+            WHERE type_term != '' AND converted > 0
+            GROUP BY type_term, type_slug 
+            ORDER BY sales_value DESC, sales_count DESC
+            LIMIT %d",
+            10
+        )
+    );
+
+    // 2a. Top Primary by POPULARITY (for charts)
+    $top_primary_by_popularity = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count
             FROM $table_name 
             WHERE primary_ingredient_term != '' 
             GROUP BY primary_ingredient_term, ingredient_slug 
-            ORDER BY count DESC 
+            ORDER BY count DESC
             LIMIT %d",
             10
         )
     );
 
-    $top_combos = $wpdb->get_results(
+    // 2b. Top Primary by SALES VALUE (for table)
+    $top_primary_by_sales = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count 
+            "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
             FROM $table_name 
-            WHERE type_term != '' OR primary_ingredient_term != ''
+            WHERE primary_ingredient_term != '' AND converted > 0
+            GROUP BY primary_ingredient_term, ingredient_slug 
+            ORDER BY sales_value DESC, sales_count DESC
+            LIMIT %d",
+            10
+        )
+    );
+
+    // 3a. Top CONVERTING by VALUE (Sales > 0, sorted by Sales Value)
+    $top_converting_combos = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
+            FROM $table_name 
+            WHERE converted > 0
             GROUP BY type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term 
-            ORDER BY count DESC 
+            ORDER BY sales_value DESC, sales_count DESC
             LIMIT %d",
             15
         )
     );
+
+    // 3b. Top POPULAR (All searches, sorted by Count)
+    $top_popular_combos = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
+            FROM $table_name 
+            WHERE type_term != '' OR primary_ingredient_term != ''
+            GROUP BY type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term 
+            ORDER BY count DESC, sales_value DESC
+            LIMIT %d",
+            15
+        )
+    );
+    // --- END UPDATED QUERIES ---
+
 
     // Calculate additional metrics
     $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE primary_ingredient_term != ''");
     $searches_with_secondary = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE secondary_ingredient_term != ''");
     $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE type_term != '' AND primary_ingredient_term != ''");
 
-    // Prepare Chart Data
+    // --- Prepare Chart Data ---
+
+    // Types Chart
     $type_chart_labels = array();
     $type_chart_data = array();
-    if (!empty($top_types)) {
-        foreach ($top_types as $item) {
+    if (!empty($top_types_by_popularity)) {
+        foreach ($top_types_by_popularity as $item) {
             $type_chart_labels[] = vv_quiz_get_term_name($item->type_term, $item->type_slug);
             $type_chart_data[] = $item->count;
         }
     }
 
+    // Ingredients Chart
     $primary_chart_labels = array();
     $primary_chart_data = array();
-    if (!empty($top_primary)) {
-        foreach ($top_primary as $item) {
+    if (!empty($top_primary_by_popularity)) {
+        foreach ($top_primary_by_popularity as $item) {
             $primary_chart_labels[] = vv_quiz_get_term_name($item->primary_ingredient_term, $item->ingredient_slug);
             $primary_chart_data[] = $item->count;
         }
@@ -217,6 +277,11 @@ function vv_quiz_render_analytics_page()
             line-height: 1;
         }
 
+        /* Make value smaller if it's a price */
+        .vv-stat-value.vv-stat-price {
+            font-size: 2.2em;
+        }
+
         .vv-stat-label {
             font-size: 0.95em;
             color: #666;
@@ -236,6 +301,7 @@ function vv_quiz_render_analytics_page()
         .vv-charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            /* Reverted */
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -338,26 +404,18 @@ function vv_quiz_render_analytics_page()
             font-size: 1.1em;
         }
 
-        .vv-analytics-table th.vv-count-col {
+        .vv-analytics-table td.vv-revenue-col {
             width: 100px;
             text-align: center;
+            font-weight: 700;
+            color: #28a745;
+            font-size: 1.1em;
         }
 
-        /* Combinations Table (Full Width) */
-        .vv-combinations-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-
-        .vv-combinations-card h2 {
-            margin: 0;
-            padding: 20px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 1.4em;
-            font-weight: 600;
+        .vv-analytics-table th.vv-count-col,
+        .vv-analytics-table th.vv-revenue-col {
+            width: 100px;
+            text-align: center;
         }
 
         /* Rank Badges */
@@ -447,19 +505,36 @@ function vv_quiz_render_analytics_page()
     </style>
 
     <div class="wrap vv-analytics-wrap">
-        <!-- Header Section -->
         <div class="vv-analytics-header">
             <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
             <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
             </p>
         </div>
 
-        <!-- Stats Cards -->
         <div class="vv-stats-grid">
             <div class="vv-stat-card">
                 <div class="vv-stat-icon">🔍</div>
                 <div class="vv-stat-label"><?php esc_html_e('Total Searches', 'vapevida-quiz'); ?></div>
                 <div class="vv-stat-value"><?php echo esc_html(number_format($total_searches)); ?></div>
+            </div>
+
+            <div class="vv-stat-card" style="border-left-color: #28a745;">
+                <div class="vv-stat-icon">💰</div>
+                <div class="vv-stat-label"><?php esc_html_e('Total Revenue from Quiz', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value vv-stat-price" style="color: #28a745;"><?php echo wc_price($total_sales_value); ?>
+                </div>
+                <div class="vv-stat-percentage" style="color: #555;">
+                    <?php printf(esc_html__('%s total sales', 'vapevida-quiz'), esc_html(number_format($total_sales_count))); ?>
+                </div>
+            </div>
+
+            <div class="vv-stat-card" style="border-left-color: #17a2b8;">
+                <div class="vv-stat-icon">📈</div>
+                <div class="vv-stat-label"><?php esc_html_e('Conversion Rate', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-value" style="color: #17a2b8;"><?php echo esc_html($conversion_rate); ?>%</div>
+                <div class="vv-stat-percentage" style="color: #555;">
+                    <?php printf(esc_html__('%s sales from %s searches', 'vapevida-quiz'), esc_html(number_format($total_sales_count)), esc_html(number_format($total_searches))); ?>
+                </div>
             </div>
 
             <div class="vv-stat-card">
@@ -497,43 +572,41 @@ function vv_quiz_render_analytics_page()
             </div>
         </div>
 
-        <!-- Charts Section -->
         <div class="vv-charts-grid">
             <div class="vv-chart-card">
-                <h2><?php esc_html_e('Top Flavor Types', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top Flavor Types (by Popularity)', 'vapevida-quiz'); ?></h2>
                 <div class="vv-chart-container">
                     <canvas id="vvTopTypesChart"></canvas>
                 </div>
             </div>
 
             <div class="vv-chart-card">
-                <h2><?php esc_html_e('Top Primary Ingredients', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top Primary Ingredients (by Popularity)', 'vapevida-quiz'); ?></h2>
                 <div class="vv-chart-container">
                     <canvas id="vvTopPrimaryChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Data Tables Section -->
         <div class="vv-tables-grid">
-            <!-- Top Flavor Types Table -->
             <div class="vv-table-card">
-                <h2><?php esc_html_e('Top 10 Flavor Types', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top 10 Flavor Types (by Revenue)', 'vapevida-quiz'); ?></h2>
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
                             <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
-                            <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                            <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
+                            <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($top_types)): ?>
+                        <?php if (empty($top_types_by_sales)): ?>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="3">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">📊</div>
                                         <div class="vv-empty-state-text">
-                                            <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                            <?php esc_html_e('No search data with sales yet.', 'vapevida-quiz'); ?>
                                         </div>
                                     </div>
                                 </td>
@@ -541,7 +614,7 @@ function vv_quiz_render_analytics_page()
                         <?php else: ?>
                             <?php
                             $rank = 1;
-                            foreach ($top_types as $item):
+                            foreach ($top_types_by_sales as $item):
                                 $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
                                 ?>
                                 <tr>
@@ -549,7 +622,8 @@ function vv_quiz_render_analytics_page()
                                         <span class="vv-rank-badge <?php echo $rank_class; ?>"><?php echo $rank; ?></span>
                                         <?php echo vv_quiz_get_term_name($item->type_term, $item->type_slug); ?>
                                     </td>
-                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->count)); ?></td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->sales_count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($item->sales_value); ?></td>
                                 </tr>
                                 <?php
                                 $rank++;
@@ -559,24 +633,24 @@ function vv_quiz_render_analytics_page()
                 </table>
             </div>
 
-            <!-- Top Primary Ingredients Table -->
             <div class="vv-table-card">
-                <h2><?php esc_html_e('Top 10 Primary Ingredients', 'vapevida-quiz'); ?></h2>
+                <h2><?php esc_html_e('Top 10 Primary Ingredients (by Revenue)', 'vapevida-quiz'); ?></h2>
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
                             <th><?php esc_html_e('Ingredient', 'vapevida-quiz'); ?></th>
-                            <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                            <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
+                            <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($top_primary)): ?>
+                        <?php if (empty($top_primary_by_sales)): ?>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="3">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">🥇</div>
                                         <div class="vv-empty-state-text">
-                                            <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                            <?php esc_html_e('No search data with sales yet.', 'vapevida-quiz'); ?>
                                         </div>
                                     </div>
                                 </td>
@@ -584,7 +658,7 @@ function vv_quiz_render_analytics_page()
                         <?php else: ?>
                             <?php
                             $rank = 1;
-                            foreach ($top_primary as $item):
+                            foreach ($top_primary_by_sales as $item):
                                 $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
                                 ?>
                                 <tr>
@@ -592,7 +666,8 @@ function vv_quiz_render_analytics_page()
                                         <span class="vv-rank-badge <?php echo $rank_class; ?>"><?php echo $rank; ?></span>
                                         <?php echo vv_quiz_get_term_name($item->primary_ingredient_term, $item->ingredient_slug); ?>
                                     </td>
-                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->count)); ?></td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($item->sales_count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($item->sales_value); ?></td>
                                 </tr>
                                 <?php
                                 $rank++;
@@ -603,46 +678,94 @@ function vv_quiz_render_analytics_page()
             </div>
         </div>
 
-        <!-- Combinations Table (Full Width) -->
-        <div class="vv-combinations-card">
-            <h2><?php esc_html_e('Top Search Combinations', 'vapevida-quiz'); ?></h2>
-            <table class="vv-analytics-table">
-                <thead>
-                    <tr>
-                        <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
-                        <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
-                        <th><?php esc_html_e('Primary Ingredient', 'vapevida-quiz'); ?></th>
-                        <th><?php esc_html_e('Secondary Ingredient', 'vapevida-quiz'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($top_combos)): ?>
+        <div class="vv-tables-grid">
+
+            <div class="vv-table-card">
+                <h2 style="border-bottom-color: #28a745;">
+                    <?php esc_html_e('Top Converting Combinations (by Revenue)', 'vapevida-quiz'); ?></h2>
+                <table class="vv-analytics-table">
+                    <thead>
                         <tr>
-                            <td colspan="4">
-                                <div class="vv-empty-state">
-                                    <div class="vv-empty-state-icon">🔗</div>
-                                    <div class="vv-empty-state-text">
-                                        <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
-                                    </div>
-                                </div>
-                            </td>
+                            <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
+                            <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
+                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($top_combos as $combo): ?>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($top_converting_combos)): ?>
                             <tr>
-                                <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
-                                <td><?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?></td>
-                                <td><?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
-                                </td>
-                                <td><?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
+                                <td colspan="3">
+                                    <div class="vv-empty-state">
+                                        <div class="vv-empty-state-icon">💰</div>
+                                        <div class="vv-empty-state-text">
+                                            <?php esc_html_e('No converting searches yet.', 'vapevida-quiz'); ?>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+                        <?php else: ?>
+                            <?php foreach ($top_converting_combos as $combo): ?>
+                                <tr>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->sales_count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
+                                    <td>
+                                        <?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?> +
+                                        <?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
+                                        <?php if (!empty($combo->secondary_ingredient_term)): ?>
+                                            +
+                                            <?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
 
+            <div class="vv-table-card">
+                <h2 style="border-bottom-color: #667eea;">
+                    <?php esc_html_e('Top Popular Combinations (by Searches)', 'vapevida-quiz'); ?></h2>
+                <table class="vv-analytics-table">
+                    <thead>
+                        <tr>
+                            <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
+                            <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
+                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($top_popular_combos)): ?>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="vv-empty-state">
+                                        <div class="vv-empty-state-icon">🔗</div>
+                                        <div class="vv-empty-state-text">
+                                            <?php esc_html_e('No search data yet.', 'vapevida-quiz'); ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($top_popular_combos as $combo): ?>
+                                <tr>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
+                                    <td>
+                                        <?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?> +
+                                        <?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
+                                        <?php if (!empty($combo->secondary_ingredient_term)): ?>
+                                            +
+                                            <?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <?php
@@ -727,7 +850,7 @@ function vv_quiz_render_analytics_page()
                 }
             });
         }
-
+        
         // Top Types Chart
         var ctxTypes = document.getElementById('vvTopTypesChart');
         if (ctxTypes) {
