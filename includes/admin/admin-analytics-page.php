@@ -72,7 +72,7 @@ function vv_quiz_render_analytics_page()
 {
     global $wpdb;
     $analytics_table = $wpdb->prefix . 'vv_quiz_analytics';
-    $items_table = $wpdb->prefix . 'vv_quiz_conversion_items'; // NEW
+    $items_table = $wpdb->prefix . 'vv_quiz_conversion_items';
 
     // --- Data Fetching ---
     $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table");
@@ -136,33 +136,47 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // 3a. Top CONVERTING by VALUE (Sales > 0, sorted by Sales Value)
+    // 3a. Top CONVERTING by VALUE (Normalized)
     $top_converting_combos = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
+            "SELECT 
+                type_term, type_slug, 
+                LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1,
+                GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2,
+                ingredient_slug, 
+                COUNT(*) as count, 
+                SUM(converted) as sales_count, 
+                SUM(order_total) as sales_value
             FROM $analytics_table 
             WHERE converted > 0
-            GROUP BY type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term 
+            GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug
             ORDER BY sales_value DESC, sales_count DESC
             LIMIT %d",
             15
         )
     );
 
-    // 3b. Top POPULAR (All searches, sorted by Count)
+    // 3b. Top POPULAR (Normalized)
     $top_popular_combos = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
+            "SELECT 
+                type_term, type_slug, 
+                LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1,
+                GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2,
+                ingredient_slug, 
+                COUNT(*) as count, 
+                SUM(converted) as sales_count, 
+                SUM(order_total) as sales_value
             FROM $analytics_table 
             WHERE type_term != '' OR primary_ingredient_term != ''
-            GROUP BY type_term, type_slug, primary_ingredient_term, ingredient_slug, secondary_ingredient_term 
+            GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug 
             ORDER BY count DESC, sales_value DESC
             LIMIT %d",
             15
         )
     );
 
-    // --- NEW: 4. Top Sold PRODUCTS ---
+    // 4. Top Sold PRODUCTS
     $top_sold_products = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT 
@@ -182,12 +196,11 @@ function vv_quiz_render_analytics_page()
             10
         )
     );
-    // --- END NEW ---
 
     // Calculate additional metrics
     $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE primary_ingredient_term != ''");
     $searches_with_secondary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE secondary_ingredient_term != ''");
-    $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE type_term != '' AND primary_ingredient_term != '' AND secondary_ingredient_term != ''");
+    $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE type_term != '' AND primary_ingredient_term != ''");
 
     // Prepare Chart Data
     $type_chart_labels = array();
@@ -351,7 +364,6 @@ function vv_quiz_render_analytics_page()
             margin-bottom: 30px;
         }
 
-        /* NEW: Full width table card */
         .vv-table-card-full {
             grid-column: 1 / -1;
         }
@@ -554,7 +566,7 @@ function vv_quiz_render_analytics_page()
 
             <div class="vv-stat-card">
                 <div class="vv-stat-icon">✅</div>
-                <div class="vv-stat-label"><?php esc_html_e('Multi-Step Searches', 'vapevida-quiz'); ?></div>
+                <div class="vv-stat-label"><?php esc_html_e('Complete Searches', 'vapevida-quiz'); ?></div>
                 <div class="vv-stat-value"><?php echo esc_html(number_format($complete_searches)); ?></div>
                 <?php if ($total_searches > 0): ?>
                     <div class="vv-stat-percentage">
@@ -775,12 +787,20 @@ function vv_quiz_render_analytics_page()
                                     <td class="vv-count-col"><?php echo esc_html(number_format($combo->sales_count)); ?></td>
                                     <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
                                     <td>
-                                        <?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?> +
-                                        <?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
-                                        <?php if (!empty($combo->secondary_ingredient_term)): ?>
-                                            +
-                                            <?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
-                                        <?php endif; ?>
+                                        <?php
+                                        // --- UPDATED: Smart implode logic ---
+                                        $parts = [];
+                                        if (!empty($combo->type_term)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->type_term, $combo->type_slug);
+                                        }
+                                        if (!empty($combo->ing1)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->ing1, $combo->ingredient_slug);
+                                        }
+                                        if (!empty($combo->ing2)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->ing2, $combo->ingredient_slug);
+                                        }
+                                        echo implode(' + ', $parts);
+                                        ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -819,12 +839,20 @@ function vv_quiz_render_analytics_page()
                                     <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
                                     <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
                                     <td>
-                                        <?php echo vv_quiz_get_term_name($combo->type_term, $combo->type_slug); ?> +
-                                        <?php echo vv_quiz_get_term_name($combo->primary_ingredient_term, $combo->ingredient_slug); ?>
-                                        <?php if (!empty($combo->secondary_ingredient_term)): ?>
-                                            +
-                                            <?php echo vv_quiz_get_term_name($combo->secondary_ingredient_term, $combo->ingredient_slug); ?>
-                                        <?php endif; ?>
+                                        <?php
+                                        // --- UPDATED: Smart implode logic ---
+                                        $parts = [];
+                                        if (!empty($combo->type_term)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->type_term, $combo->type_slug);
+                                        }
+                                        if (!empty($combo->ing1)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->ing1, $combo->ingredient_slug);
+                                        }
+                                        if (!empty($combo->ing2)) {
+                                            $parts[] = vv_quiz_get_term_name($combo->ing2, $combo->ingredient_slug);
+                                        }
+                                        echo implode(' + ', $parts);
+                                        ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

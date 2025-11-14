@@ -2,7 +2,7 @@
 
 **Plugin Version:** 1.0.0
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, **Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking,** Stepped Form Logic.
+**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic.
 
 **Author:** Panagiotis Drougas
 
@@ -30,6 +30,7 @@ This tool ensures maintainability by allowing store managers to control all aspe
   - Handles variable products by checking the parent product for attribute terms.
   - Tracks sales anonymously using a persistent `user_id_hash`.
   - Saves matched items, quantities, and subtotals to a dedicated `wp_vv_quiz_conversion_items` database table.
+- **Search Combination Normalization:** Ensures that search combinations are tracked accurately regardless of the order ingredients are selected. For example, `(Type: X, Ing1: Apple, Ing2: Banana)` and `(Type: X, Ing1: Banana, Ing2: Apple)` are now logged and grouped as the same identical search, providing cleaner and more accurate analytics.
 - **Dynamic Cascading Filters:** Dropdowns update dynamically based on the prior selection, ensuring customers are never led to a 'zero results' page.
 - **Real-Time Result Preview:** The CTA button displays the number of matching products immediately after filter selection, enhancing user experience.
 - **Full Localization Support:** The plugin is fully prepared for translation using `.pot`, `.po`, and `.mo` files, supporting locales like `el_GR` and generic `el`.
@@ -47,7 +48,7 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ---
 
-## Currently Working On
+## Working On
 
 - [x] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 
@@ -121,9 +122,8 @@ The **Analytics** page (`VapeVida Quiz -> Analytics`) provides a comprehensive o
 - **Total Revenue from Quiz:** The total revenue generated _only_ from products that matched a user's quiz search.
 - **Total Sales from Quiz:** The total number of individual converted searches.
 - **Conversion Rate:** The percentage of searches that led to a sale.
-
-* **Total Searches:** The total number of times the quiz filters were applied.
-* **Complete Searches:** Number of searches where at least the Type and Primary Ingredient were selected (a key engagement metric).
+- **Total Searches:** The total number of times the quiz filters were applied.
+- **Complete Searches:** Number of searches where at least the Type and Primary Ingredient were selected (a key engagement metric).
 
 #### Visualizations
 

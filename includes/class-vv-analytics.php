@@ -130,13 +130,25 @@ class VV_Analytics
         $primary_ingredient = isset($_GET[$ingredient_key]) ? sanitize_text_field($_GET[$ingredient_key]) : '';
         $secondary_ingredient = isset($_GET[$secondary_ingredient_key]) ? sanitize_text_field($_GET[$secondary_ingredient_key]) : '';
 
-        // Call the tracking function
+        // --- NEW: Normalize ingredient order ---
+        // Put all selected ingredients into an array and filter out empty strings
+        $ingredients = array_filter([$primary_ingredient, $secondary_ingredient]);
+
+        // Sort the array alphabetically
+        sort($ingredients);
+
+        // Re-assign to normalized variables
+        $normalized_primary = isset($ingredients[0]) ? $ingredients[0] : '';
+        $normalized_secondary = isset($ingredients[1]) ? $ingredients[1] : '';
+        // --- END: Normalize ---
+
+        // Call the tracking function with normalized (sorted) data
         self::track_search(
             $type_slug,
             $type_term,
             $ingredient_slug,
-            $primary_ingredient,
-            $secondary_ingredient
+            $normalized_primary,
+            $normalized_secondary
         );
     }
 
