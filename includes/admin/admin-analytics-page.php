@@ -2,6 +2,8 @@
 /**
  * Admin Analytics Page for VapeVida Quiz - MODERN REDESIGN
  * Beautiful, responsive analytics dashboard with enhanced visuals
+ *
+ * NEW: Added Date Range Filtering and CVR % Columns
  */
 
 if (!defined('ABSPATH'))
@@ -74,10 +76,38 @@ function vv_quiz_render_analytics_page()
     $analytics_table = $wpdb->prefix . 'vv_quiz_analytics';
     $items_table = $wpdb->prefix . 'vv_quiz_conversion_items';
 
-    // --- Data Fetching ---
-    $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table");
-    $total_sales_count = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE converted = 1");
-    $total_sales_value = $wpdb->get_var("SELECT SUM(order_total) FROM $analytics_table WHERE converted = 1");
+    // --- NEW: Date Range Filtering Logic ---
+    $selected_range = isset($_GET['range']) ? sanitize_key($_GET['range']) : 'all_time';
+    $date_filter_sql = '';
+    $date_filter_sql_where = ''; // Version that starts with WHERE
+
+    if ($selected_range !== 'all_time') {
+        $start_date = '';
+        switch ($selected_range) {
+            case '7_days':
+                $start_date = date('Y-m-d H:i:s', strtotime('-7 days'));
+                break;
+            case '30_days':
+                $start_date = date('Y-m-d H:i:s', strtotime('-30 days'));
+                break;
+            case 'this_month':
+                $start_date = date('Y-m-01 00:00:00');
+                break;
+        }
+
+        if ($start_date) {
+            $date_filter_sql = $wpdb->prepare(" AND search_timestamp >= %s ", $start_date);
+            $date_filter_sql_where = $wpdb->prepare(" WHERE search_timestamp >= %s ", $start_date);
+        }
+    }
+    // --- END: Date Range Logic ---
+
+    // --- Data Fetching (NOW INCLUDES SALES VALUE & DATE FILTER) ---
+    $total_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table $date_filter_sql_where");
+
+    // --- UPDATED: Fetch Sales Count and Sales VALUE (with date filter) ---
+    $total_sales_count = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE converted = 1 $date_filter_sql");
+    $total_sales_value = $wpdb->get_var("SELECT SUM(order_total) FROM $analytics_table WHERE converted = 1 $date_filter_sql");
     $conversion_rate = ($total_searches > 0) ? round(($total_sales_count / $total_searches) * 100, 1) : 0;
 
     if (is_null($total_sales_value)) {
@@ -89,7 +119,7 @@ function vv_quiz_render_analytics_page()
         $wpdb->prepare(
             "SELECT type_term, type_slug, COUNT(*) as count
             FROM $analytics_table 
-            WHERE type_term != '' 
+            WHERE type_term != '' $date_filter_sql
             GROUP BY type_term, type_slug 
             ORDER BY count DESC
             LIMIT %d",
@@ -102,7 +132,7 @@ function vv_quiz_render_analytics_page()
         $wpdb->prepare(
             "SELECT type_term, type_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
             FROM $analytics_table 
-            WHERE type_term != '' AND converted > 0
+            WHERE type_term != '' AND converted > 0 $date_filter_sql
             GROUP BY type_term, type_slug 
             ORDER BY sales_value DESC, sales_count DESC
             LIMIT %d",
@@ -115,7 +145,7 @@ function vv_quiz_render_analytics_page()
         $wpdb->prepare(
             "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count
             FROM $analytics_table 
-            WHERE primary_ingredient_term != '' 
+            WHERE primary_ingredient_term != '' $date_filter_sql
             GROUP BY primary_ingredient_term, ingredient_slug 
             ORDER BY count DESC
             LIMIT %d",
@@ -128,7 +158,7 @@ function vv_quiz_render_analytics_page()
         $wpdb->prepare(
             "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value
             FROM $analytics_table 
-            WHERE primary_ingredient_term != '' AND converted > 0
+            WHERE primary_ingredient_term != '' AND converted > 0 $date_filter_sql
             GROUP BY primary_ingredient_term, ingredient_slug 
             ORDER BY sales_value DESC, sales_count DESC
             LIMIT %d",
@@ -148,7 +178,7 @@ function vv_quiz_render_analytics_page()
                 SUM(converted) as sales_count, 
                 SUM(order_total) as sales_value
             FROM $analytics_table 
-            WHERE converted > 0
+            WHERE converted > 0 $date_filter_sql
             GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug
             ORDER BY sales_value DESC, sales_count DESC
             LIMIT %d",
@@ -168,7 +198,7 @@ function vv_quiz_render_analytics_page()
                 SUM(converted) as sales_count, 
                 SUM(order_total) as sales_value
             FROM $analytics_table 
-            WHERE type_term != '' OR primary_ingredient_term != ''
+            WHERE (type_term != '' OR primary_ingredient_term != '') $date_filter_sql
             GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug 
             ORDER BY count DESC, sales_value DESC
             LIMIT %d",
@@ -176,7 +206,8 @@ function vv_quiz_render_analytics_page()
         )
     );
 
-    // 4. Top Sold PRODUCTS
+    // --- NEW: 4. Top Sold PRODUCTS (with date filter) ---
+    // We must join with the analytics table to get the date
     $top_sold_products = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT 
@@ -187,7 +218,10 @@ function vv_quiz_render_analytics_page()
             FROM 
                 $items_table as i
             LEFT JOIN 
+                $analytics_table as a ON i.search_id = a.id
+            LEFT JOIN 
                 {$wpdb->posts} as p ON i.product_id = p.ID
+            WHERE 1=1 $date_filter_sql 
             GROUP BY 
                 i.product_id
             ORDER BY 
@@ -196,11 +230,12 @@ function vv_quiz_render_analytics_page()
             10
         )
     );
+    // --- END NEW ---
 
     // Calculate additional metrics
-    $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE primary_ingredient_term != ''");
-    $searches_with_secondary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE secondary_ingredient_term != ''");
-    $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE type_term != '' AND primary_ingredient_term != ''");
+    $searches_with_primary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE primary_ingredient_term != '' $date_filter_sql");
+    $searches_with_secondary = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE secondary_ingredient_term != '' $date_filter_sql");
+    $complete_searches = $wpdb->get_var("SELECT COUNT(*) FROM $analytics_table WHERE type_term != '' AND primary_ingredient_term != '' $date_filter_sql");
 
     // Prepare Chart Data
     $type_chart_labels = array();
@@ -239,6 +274,40 @@ function vv_quiz_render_analytics_page()
             margin-bottom: 30px;
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }
+
+        /* --- NEW: Date Filter Form --- */
+        .vv-analytics-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .vv-date-filter-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .vv-date-filter-form label {
+            font-weight: 600;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .vv-date-filter-form select {
+            min-width: 150px;
+        }
+
+        .vv-date-filter-form .button {
+            background: #fff;
+            color: #667eea;
+            border: none;
+            font-weight: 600;
+        }
+
+        /* --- END NEW --- */
 
         .vv-analytics-header h1 {
             margin: 0;
@@ -439,11 +508,23 @@ function vv_quiz_render_analytics_page()
             font-size: 1.1em;
         }
 
+        /* --- NEW: CVR Column Style --- */
+        .vv-analytics-table td.vv-cvr-col {
+            width: 100px;
+            text-align: center;
+            font-weight: 700;
+            color: #17a2b8;
+            font-size: 1.1em;
+        }
+
         .vv-analytics-table th.vv-count-col,
-        .vv-analytics-table th.vv-revenue-col {
+        .vv-analytics-table th.vv-revenue-col,
+        .vv-analytics-table th.vv-cvr-col {
             width: 100px;
             text-align: center;
         }
+
+        /* --- END NEW --- */
 
         /* Rank Badges */
         .vv-rank-badge {
@@ -505,6 +586,11 @@ function vv_quiz_render_analytics_page()
                 padding: 15px;
             }
 
+            .vv-analytics-header-flex {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             .vv-analytics-header {
                 padding: 25px;
             }
@@ -533,9 +619,32 @@ function vv_quiz_render_analytics_page()
 
     <div class="wrap vv-analytics-wrap">
         <div class="vv-analytics-header">
-            <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
-            <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
-            </p>
+            <div class="vv-analytics-header-flex">
+                <div>
+                    <h1><?php esc_html_e('VapeVida Quiz Analytics', 'vapevida-quiz'); ?></h1>
+                    <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
+                    </p>
+                </div>
+                <form method="get" class="vv-date-filter-form">
+                    <input type="hidden" name="page" value="vv-quiz-analytics">
+                    <label for="vv-date-range"><?php esc_html_e('Date Range:', 'vapevida-quiz'); ?></label>
+                    <select name="range" id="vv-date-range">
+                        <option value="all_time" <?php selected($selected_range, 'all_time'); ?>>
+                            <?php esc_html_e('All Time', 'vapevida-quiz'); ?>
+                        </option>
+                        <option value="30_days" <?php selected($selected_range, '30_days'); ?>>
+                            <?php esc_html_e('Last 30 Days', 'vapevida-quiz'); ?>
+                        </option>
+                        <option value="7_days" <?php selected($selected_range, '7_days'); ?>>
+                            <?php esc_html_e('Last 7 Days', 'vapevida-quiz'); ?>
+                        </option>
+                        <option value="this_month" <?php selected($selected_range, 'this_month'); ?>>
+                            <?php esc_html_e('This Month', 'vapevida-quiz'); ?>
+                        </option>
+                    </select>
+                    <button type="submit" class="button"><?php esc_html_e('Filter', 'vapevida-quiz'); ?></button>
+                </form>
+            </div>
         </div>
 
         <div class="vv-stats-grid">
@@ -629,7 +738,7 @@ function vv_quiz_render_analytics_page()
                     <tbody>
                         <?php if (empty($top_types_by_sales)): ?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">📊</div>
                                         <div class="vv-empty-state-text">
@@ -643,6 +752,7 @@ function vv_quiz_render_analytics_page()
                             $rank = 1;
                             foreach ($top_types_by_sales as $item):
                                 $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
+                                $cvr = ($item->count > 0) ? round(($item->sales_count / $item->count) * 100, 1) : 0;
                                 ?>
                                 <tr>
                                     <td>
@@ -673,7 +783,7 @@ function vv_quiz_render_analytics_page()
                     <tbody>
                         <?php if (empty($top_primary_by_sales)): ?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">🥇</div>
                                         <div class="vv-empty-state-text">
@@ -687,6 +797,7 @@ function vv_quiz_render_analytics_page()
                             $rank = 1;
                             foreach ($top_primary_by_sales as $item):
                                 $rank_class = $rank <= 3 ? "vv-rank-$rank" : "vv-rank-other";
+                                $cvr = ($item->count > 0) ? round(($item->sales_count / $item->count) * 100, 1) : 0;
                                 ?>
                                 <tr>
                                     <td>
@@ -755,6 +866,8 @@ function vv_quiz_render_analytics_page()
                 </table>
             </div>
         </div>
+
+
         <div class="vv-tables-grid">
 
             <div class="vv-table-card">
@@ -764,15 +877,15 @@ function vv_quiz_render_analytics_page()
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
+                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
                             <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
                             <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
-                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($top_converting_combos)): ?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">💰</div>
                                         <div class="vv-empty-state-text">
@@ -783,12 +896,10 @@ function vv_quiz_render_analytics_page()
                             </tr>
                         <?php else: ?>
                             <?php foreach ($top_converting_combos as $combo): ?>
+                                <?php $cvr = ($combo->count > 0) ? round(($combo->sales_count / $combo->count) * 100, 1) : 0; ?>
                                 <tr>
-                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->sales_count)); ?></td>
-                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
                                     <td>
                                         <?php
-                                        // --- UPDATED: Smart implode logic ---
                                         $parts = [];
                                         if (!empty($combo->type_term)) {
                                             $parts[] = vv_quiz_get_term_name($combo->type_term, $combo->type_slug);
@@ -802,6 +913,8 @@ function vv_quiz_render_analytics_page()
                                         echo implode(' + ', $parts);
                                         ?>
                                     </td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->sales_count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -816,15 +929,16 @@ function vv_quiz_render_analytics_page()
                 <table class="vv-analytics-table">
                     <thead>
                         <tr>
+                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
                             <th class="vv-count-col"><?php esc_html_e('Searches', 'vapevida-quiz'); ?></th>
                             <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
-                            <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
+                            <th class="vv-cvr-col"><?php esc_html_e('CVR', 'vapevida-quiz'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($top_popular_combos)): ?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="vv-empty-state">
                                         <div class="vv-empty-state-icon">🔗</div>
                                         <div class="vv-empty-state-text">
@@ -835,12 +949,10 @@ function vv_quiz_render_analytics_page()
                             </tr>
                         <?php else: ?>
                             <?php foreach ($top_popular_combos as $combo): ?>
+                                <?php $cvr = ($combo->count > 0) ? round(($combo->sales_count / $combo->count) * 100, 1) : 0; ?>
                                 <tr>
-                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
-                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
                                     <td>
                                         <?php
-                                        // --- UPDATED: Smart implode logic ---
                                         $parts = [];
                                         if (!empty($combo->type_term)) {
                                             $parts[] = vv_quiz_get_term_name($combo->type_term, $combo->type_slug);
@@ -854,6 +966,9 @@ function vv_quiz_render_analytics_page()
                                         echo implode(' + ', $parts);
                                         ?>
                                     </td>
+                                    <td class="vv-count-col"><?php echo esc_html(number_format($combo->count)); ?></td>
+                                    <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
+                                    <td class="vv-cvr-col"><?php echo esc_html($cvr); ?>%</td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
