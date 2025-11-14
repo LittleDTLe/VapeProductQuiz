@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: VapeVida Flavorshot Recommender Quiz\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 10:52+0000\n"
-"PO-Revision-Date: 2025-11-13 10:52+0000\n"
+"PO-Revision-Date: 2025-11-14 13:19+0000\n"
 "Last-Translator: Panagiotis Drougas\n"
 "Language-Team: \n"
 "Language: \n"
@@ -15,6 +15,7 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.8.0; wp-6.8.3; php-8.3.23\n"
 "X-Domain: vapevida-quiz"
+
 #: includes/admin/admin-callbacks.php:11
 msgid "Select which quiz fields should be required."
 msgstr ""
@@ -622,4 +623,121 @@ msgstr ""
 
 #: vapevida-quiz.php:120
 msgid "Support"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:60
+#: includes/admin/admin-analytics-page.php:326
+#: includes/admin/admin-analytics-page.php:364
+msgid "None"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:79
+msgid "Deleted"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:315
+msgid "VapeVida Quiz Analytics"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:316
+msgid "Comprehensive insights into customer preferences and quiz interactions"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:323
+msgid "Total Searches"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:329
+msgid "Total Revenue from Quiz"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:333
+#, php-format
+msgid "%s total sales"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:337
+msgid "Conversion Rate"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:341
+#, php-format
+msgid "%s sales from %s searches"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:346
+msgid "Complete Searches"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:350
+msgid "completion rate"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:355
+msgid "With Primary Ingredient"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:363
+msgid "With Secondary Ingredient"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:375
+msgid "Top Flavor Types (by Popularity)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:381
+msgid "Top Primary Ingredients (by Popularity)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:390
+msgid "Top 10 Flavor Types (by Revenue)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:395
+msgid "Sales"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:396
+msgid "Revenue"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:404
+#: includes/admin/admin-analytics-page.php:437
+msgid "No search data with sales yet."
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:423
+msgid "Top 10 Primary Ingredients (by Revenue)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:428
+msgid "Ingredient"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:456
+msgid "Top Converting Combinations (by Revenue)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:462
+#: includes/admin/admin-analytics-page.php:496
+msgid "Combination"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:470
+msgid "No converting searches yet."
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:490
+msgid "Top Popular Combinations (by Searches)"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:494
+#: includes/admin/admin-analytics-page.php:605
+#: includes/admin/admin-analytics-page.php:619
+msgid "Searches"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:504
+#: includes/admin/admin-analytics-page.php:534
+msgid "No search data yet."
 msgstr ""
