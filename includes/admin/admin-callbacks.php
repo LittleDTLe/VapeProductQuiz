@@ -149,8 +149,11 @@ function vv_quiz_color_field_callback($args)
 
 function vv_enqueue_color_picker_assets($hook_suffix)
 {
-    // Ensure this hook suffix matches your admin page
-    if ('toplevel_page_vapevida-quiz-details' !== $hook_suffix) {
+    // Get the hook for our new main settings page
+    $settings_hook = 'toplevel_page_vv-quiz-main';
+
+    // Check if we are on the correct page
+    if ($settings_hook !== $hook_suffix) {
         return;
     }
 

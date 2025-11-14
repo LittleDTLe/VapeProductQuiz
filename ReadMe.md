@@ -45,13 +45,18 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ---
 
+## Currently Working On
+
+- [x] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
+
+---
+
 ## 💡 Future Development & Features
 
 This section outlines planned features that would require further development (potentially a premium version).
 
 ### To Implement Features (Planned for Next Releases)
 
-- [ ] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ### Feature Ideas (Refactoring Required)
