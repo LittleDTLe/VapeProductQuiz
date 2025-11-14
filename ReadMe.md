@@ -68,9 +68,10 @@ To implement the below features / ideas, there would need to be a complete refac
 
 ---
 
-### Feature Notes:
+### Search in Select | Notes:
 
-Attempted to add Search Functionality to the select dropdowns for ingredients using **Select2**, but had difficulty in styling the dropdowns to look like the default ones. Will need to revisit this feature after some expiramentation.
+- Attempted to add Search Functionality to the select dropdowns for ingredients using **Select2**, but had difficulty in styling the dropdowns to look like the default ones. Will need to revisit this feature after some expiramentation.
+- New implementation of this feature will be made using the **Choices.js** library.
 
 ---
 
