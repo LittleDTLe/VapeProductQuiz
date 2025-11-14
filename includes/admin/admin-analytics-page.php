@@ -275,7 +275,7 @@ function vv_quiz_render_analytics_page()
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }
 
-        /* --- NEW: Date Filter Form --- */
+        /* --- UPDATED: Date Filter Form --- */
         .vv-analytics-header-flex {
             display: flex;
             justify-content: space-between;
@@ -298,16 +298,37 @@ function vv_quiz_render_analytics_page()
 
         .vv-date-filter-form select {
             min-width: 150px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .vv-date-filter-form select option {
+            background: #fff;
+            color: #333;
         }
 
         .vv-date-filter-form .button {
             background: #fff;
             color: #667eea;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        /* --- END NEW --- */
+        .vv-date-filter-form .button:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- END UPDATED --- */
 
         .vv-analytics-header h1 {
             margin: 0;
@@ -508,7 +529,6 @@ function vv_quiz_render_analytics_page()
             font-size: 1.1em;
         }
 
-        /* --- NEW: CVR Column Style --- */
         .vv-analytics-table td.vv-cvr-col {
             width: 100px;
             text-align: center;
@@ -523,8 +543,6 @@ function vv_quiz_render_analytics_page()
             width: 100px;
             text-align: center;
         }
-
-        /* --- END NEW --- */
 
         /* Rank Badges */
         .vv-rank-badge {
@@ -627,7 +645,6 @@ function vv_quiz_render_analytics_page()
                 </div>
                 <form method="get" class="vv-date-filter-form">
                     <input type="hidden" name="page" value="vv-quiz-analytics">
-                    <label for="vv-date-range"><?php esc_html_e('Date Range:', 'vapevida-quiz'); ?></label>
                     <select name="range" id="vv-date-range">
                         <option value="all_time" <?php selected($selected_range, 'all_time'); ?>>
                             <?php esc_html_e('All Time', 'vapevida-quiz'); ?>
