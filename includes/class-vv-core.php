@@ -60,13 +60,13 @@ add_action('init', 'vv_create_recommender_attributes');
 
 /**
  * AJAX Handler - Smart Cascading with Real-Time Product Count
- * * Returns: count|||primaryOptions|||secondaryOptions
+ * * Returns: JSON object: { success: true, data: { count: 0, primaryOptions: [], secondaryOptions: [] } }
  */
 function vv_ajax_filter_ingredients()
 {
     // Security check
     if (!isset($_POST['security']) || !check_ajax_referer('vv-quiz-nonce', 'security', false)) {
-        echo '0|||Nonce verification failed|||';
+        wp_send_json_error(array('message' => 'Nonce verification failed'), 403);
         wp_die();
     }
 
@@ -85,14 +85,14 @@ function vv_ajax_filter_ingredients()
     // ==================================================================
 
 
-    $primary_options_html = '';
-    $secondary_options_html = '';
+    // --- MODIFICATION: Initialize arrays for JSON response ---
+    $primary_options = array();
+    $secondary_options = array();
     $product_count = 0;
 
     if (!$type_slug || !$type_term_slug) {
-        echo '0|||Type missing or invalid|||';
+        wp_send_json_error(array('message' => 'Type missing or invalid'), 400);
         wp_die();
-        return;
     }
 
     // --- 1. GET PRODUCT COUNT (BASED ON ALL 3 FILTERS) ---
@@ -169,7 +169,11 @@ function vv_ajax_filter_ingredients()
         if (!is_wp_error($primary_terms) && is_array($primary_terms)) {
             foreach ($primary_terms as $term) {
                 if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name)) {
-                    $primary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                    // --- MODIFICATION: Add to array instead of HTML string ---
+                    $primary_options[] = array(
+                        'value' => $term->slug,
+                        'text' => $term->name
+                    );
                 }
             }
         }
@@ -220,15 +224,25 @@ function vv_ajax_filter_ingredients()
             foreach ($secondary_terms as $term) {
                 // Exclude the primary ingredient from secondary options
                 if ($term instanceof WP_Term && !empty($term->slug) && !empty($term->name) && $term->slug !== $primary_ingredient) {
-                    $secondary_options_html .= '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                    // --- MODIFICATION: Add to array instead of HTML string ---
+                    $secondary_options[] = array(
+                        'value' => $term->slug,
+                        'text' => $term->name
+                    );
                 }
             }
         }
     }
 
-    // --- OUTPUT: count|||primaryOptions|||secondaryOptions ---
-    echo intval($product_count) . '|||' . $primary_options_html . '|||' . $secondary_options_html;
-    wp_die();
+    // --- FIX: Send a proper SUCCESS JSON response ---
+    // This wraps the array in { "success": true, "data": { ... } }
+    wp_send_json_success(array(
+        'count' => intval($product_count),
+        'primaryOptions' => $primary_options,
+        'secondaryOptions' => $secondary_options
+    ));
+
+    wp_die(); // This is good practice after wp_send_json_success
 
 }
 

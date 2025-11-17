@@ -529,39 +529,35 @@ msgstr ""
 msgid "Please select a Secondary Ingredient."
 msgstr ""
 
-#: includes/class-vv-core.php:40
-msgid "Flavor Type"
-msgstr ""
-
 #: includes/class-vv-core.php:51
 msgid "Ingredient (Quiz)"
 msgstr ""
 
-#: includes/class-vv-core.php:310
+#: includes/class-vv-assets.php:158
 msgid "Searching..."
 msgstr ""
 
-#: includes/class-vv-core.php:311
+#: includes/class-vv-assets.php:159
 msgid "Loading..."
 msgstr ""
 
-#: includes/class-vv-core.php:313
+#: includes/class-vv-assets.php:161
 msgid "🛑 0 RESULTS"
 msgstr ""
 
-#: includes/class-vv-core.php:314
+#: includes/class-vv-assets.php:162
 msgid "FIND 1 PRODUCT"
 msgstr ""
 
-#: includes/class-vv-core.php:315
+#: includes/class-vv-assets.php:163
 msgid "FOUND {count} PRODUCTS"
 msgstr ""
 
-#: includes/class-vv-core.php:316
+#: includes/class-vv-assets.php:164
 msgid "⚠️ DATA ERROR"
 msgstr ""
 
-#: includes/class-vv-core.php:317
+#: includes/class-vv-assets.php:165
 msgid "Loading Error"
 msgstr ""
 
@@ -596,6 +592,10 @@ msgstr ""
 #. URI of the plugin
 #: vapevida-quiz.php:5
 msgid "https://github.com/LittleDTLe/VapeProductQuiz"
+msgstr ""
+
+#: vapevida-quiz.php:65
+msgid "VapeVida Quiz"
 msgstr ""
 
 #: vapevida-quiz.php:65
@@ -635,7 +635,7 @@ msgid "Deleted"
 msgstr ""
 
 #: includes/admin/admin-analytics-page.php:103
-#: includes/admin/admin-analytics-view.php:606
+#: includes/admin/admin-analytics-view.php:291
 msgid "Searches"
 msgstr ""
 
@@ -727,27 +727,28 @@ msgid "Top 10 Flavor Types (by Revenue)"
 msgstr ""
 
 #: includes/admin/admin-analytics-view.php:119
-#: includes/admin/admin-analytics-view.php:485
-#: includes/admin/admin-analytics-view.php:522
+#: includes/admin/admin-analytics-view.php:164
+#: includes/admin/admin-analytics-view.php:237
 msgid "Sales"
 msgstr ""
 
 #: includes/admin/admin-analytics-view.php:120
-#: includes/admin/admin-analytics-view.php:486
-#: includes/admin/admin-analytics-view.php:523
+#: includes/admin/admin-analytics-view.php:165
+#: includes/admin/admin-analytics-view.php:195
+#: includes/admin/admin-analytics-view.php:238
+#: includes/admin/admin-analytics-view.php:273
 msgid "Revenue"
 msgstr ""
 
 #: includes/admin/admin-analytics-view.php:121
-#: includes/admin/admin-analytics-view.php:411
-#: includes/admin/admin-analytics-view.php:448
-#: includes/admin/admin-analytics-view.php:487
-#: includes/admin/admin-analytics-view.php:524
+#: includes/admin/admin-analytics-view.php:166
+#: includes/admin/admin-analytics-view.php:239
+#: includes/admin/admin-analytics-view.php:274
 msgid "CVR"
 msgstr ""
 
 #: includes/admin/admin-analytics-view.php:129
-#: includes/admin/admin-analytics-view.php:445
+#: includes/admin/admin-analytics-view.php:174
 msgid "No search data with sales yet."
 msgstr ""
 
@@ -767,7 +768,8 @@ msgstr ""
 msgid "Qty Sold"
 msgstr ""
 
-#: includes/admin/admin-analytics-view.php:201
+Type
+: includes/admin/admin-analytics-view.php:201
 msgid "No product sales have been tracked from the quiz yet."
 msgstr ""
 
@@ -780,7 +782,7 @@ msgid "Top Converting Combinations (by Revenue)"
 msgstr ""
 
 #: includes/admin/admin-analytics-view.php:236
-#: includes/admin/admin-analytics-view.php:271
+#: includes/admin/admin-analytics-view.php:272
 msgid "Combination"
 msgstr ""
 
@@ -794,4 +796,8 @@ msgstr ""
 
 #: includes/admin/admin-analytics-view.php:280
 msgid "No search data yet."
+msgstr ""
+
+#: includes/class-vv-assets.php:171
+msgid "No results found"
 msgstr ""
