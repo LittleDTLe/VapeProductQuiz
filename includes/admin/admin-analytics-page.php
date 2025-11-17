@@ -173,5 +173,5 @@ function vv_quiz_render_analytics_page()
 
     // --- 3. Load the View ---
     // The $data and $date_range_label variables will be available in the view.
-    require_once VV_QUIZ_DIR . 'includes/admin/admin-analytics-view.php';
+    require_once VV_QUIZ_DIR . 'includes/views/admin/admin-analytics-view.php';
 }
