@@ -51,6 +51,7 @@ This tool ensures maintainability by allowing store managers to control all aspe
 ## Working On
 
 - [x] **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
+- [x] **Localisation Files:** Updating Localisation Files to include new strings, added from Analytics Feature.
 
 ---
 
