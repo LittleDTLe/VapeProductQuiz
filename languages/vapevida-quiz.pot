@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: VapeVida Flavorshot Recommender Quiz\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 10:52+0000\n"
-"PO-Revision-Date: 2025-11-14 13:19+0000\n"
+"PO-Revision-Date: 2025-11-17 13:19+0000\n"
 "Last-Translator: Panagiotis Drougas\n"
 "Language-Team: \n"
 "Language: \n"
@@ -53,6 +53,7 @@ msgid "Type"
 msgstr ""
 
 #: includes/admin/admin-callbacks.php:95
+#: includes/admin/admin-analytics-view.php:446
 msgid "Ingredient"
 msgstr ""
 
@@ -149,7 +150,8 @@ msgstr ""
 #: includes/admin/admin-rendering.php:286
 #: includes/admin/admin-rendering.php:299
 #: includes/admin/admin-rendering.php:417
-msgid "Flavor Type:"
+#: includes/admin/admin-analytics-view.php:409
+msgid "Flavor Type"
 msgstr ""
 
 #: includes/admin/admin-rendering.php:288
@@ -180,8 +182,8 @@ msgstr ""
 
 #: includes/admin/admin-rendering.php:304
 msgid ""
-"The system checks if the product has the "Flavor Type" AND both selected "
-""Ingredients" simultaneously."
+"The system checks if the product has the \"Flavor Type\" AND both selected "
+"\"Ingredients\" simultaneously."
 msgstr ""
 
 #: includes/admin/admin-rendering.php:318
@@ -310,8 +312,7 @@ msgid "Step 2: Add New Term"
 msgstr ""
 
 #: includes/admin/admin-rendering.php:426
-msgid ""
-"Click on "Configure Terms" next to the Attribute Ingredient (Quiz)."
+msgid "Click on \"Configure Terms\" next to the Attribute Ingredient (Quiz)."
 msgstr ""
 
 #: includes/admin/admin-rendering.php:429
@@ -625,119 +626,172 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:60
-#: includes/admin/admin-analytics-page.php:326
-#: includes/admin/admin-analytics-page.php:364
+#: includes/admin/class-vv-analytics-data.php:191
 msgid "None"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:79
+#: includes/admin/class-vv-analytics-data.php:209
 msgid "Deleted"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:315
+#: includes/admin/admin-analytics-page.php:103
+#: includes/admin/admin-analytics-view.php:606
+msgid "Searches"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:137
+#: includes/admin/admin-analytics-view.php:34
+#: includes/admin/admin-analytics-view.php:38
+msgid "All Time"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:140
+#: includes/admin/admin-analytics-view.php:35
+msgid "Last 30 Days"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:143
+#: includes/admin/admin-analytics-view.php:36
+msgid "Last 7 Days"
+msgstr ""
+
+#: includes/admin/admin-analytics-page.php:146
+#: includes/admin/admin-analytics-view.php:37
+msgid "This Month"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:25
 msgid "VapeVida Quiz Analytics"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:316
+#: includes/admin/admin-analytics-view.php:26
 msgid "Comprehensive insights into customer preferences and quiz interactions"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:323
+#: includes/admin/admin-analytics-view.php:32
+msgid "Date Range:"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:39
+msgid "Filter"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:47
 msgid "Total Searches"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:329
+#: includes/admin/admin-analytics-view.php:53
 msgid "Total Revenue from Quiz"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:333
+#: includes/admin/admin-analytics-view.php:57
 #, php-format
 msgid "%s total sales"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:337
+#: includes/admin/admin-analytics-view.php:61
 msgid "Conversion Rate"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:341
+#: includes/admin/admin-analytics-view.php:65
 #, php-format
 msgid "%s sales from %s searches"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:346
+#: includes/admin/admin-analytics-view.php:70
 msgid "Complete Searches"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:350
+#: includes/admin/admin-analytics-view.php:74
 msgid "completion rate"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:355
+#: includes/admin/admin-analytics-view.php:79
 msgid "With Primary Ingredient"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:363
+#: includes/admin/admin-analytics-view.php:87
 msgid "With Secondary Ingredient"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:375
+#: includes/admin/admin-analytics-view.php:99
 msgid "Top Flavor Types (by Popularity)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:381
+#: includes/admin/admin-analytics-view.php:105
 msgid "Top Primary Ingredients (by Popularity)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:390
+#: includes/admin/admin-analytics-view.php:114
 msgid "Top 10 Flavor Types (by Revenue)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:395
+#: includes/admin/admin-analytics-view.php:119
+#: includes/admin/admin-analytics-view.php:485
+#: includes/admin/admin-analytics-view.php:522
 msgid "Sales"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:396
+#: includes/admin/admin-analytics-view.php:120
+#: includes/admin/admin-analytics-view.php:486
+#: includes/admin/admin-analytics-view.php:523
 msgid "Revenue"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:404
-#: includes/admin/admin-analytics-page.php:437
+#: includes/admin/admin-analytics-view.php:121
+#: includes/admin/admin-analytics-view.php:411
+#: includes/admin/admin-analytics-view.php:448
+#: includes/admin/admin-analytics-view.php:487
+#: includes/admin/admin-analytics-view.php:524
+msgid "CVR"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:129
+#: includes/admin/admin-analytics-view.php:445
 msgid "No search data with sales yet."
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:423
+#: includes/admin/admin-analytics-view.php:159
 msgid "Top 10 Primary Ingredients (by Revenue)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:428
-msgid "Ingredient"
+#: includes/admin/admin-analytics-view.php:188
+msgid "Top 10 Products Sold by Quiz (by Revenue)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:456
+#: includes/admin/admin-analytics-view.php:193
+msgid "Product"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:194
+msgid "Qty Sold"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:201
+msgid "No product sales have been tracked from the quiz yet."
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:214
+msgid "Product Deleted"
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php:231
 msgid "Top Converting Combinations (by Revenue)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:462
-#: includes/admin/admin-analytics-page.php:496
+#: includes/admin/admin-analytics-view.php:236
+#: includes/admin/admin-analytics-view.php:271
 msgid "Combination"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:470
+#: includes/admin/admin-analytics-view.php:245
 msgid "No converting searches yet."
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:490
+#: includes/admin/admin-analytics-view.php:269
 msgid "Top Popular Combinations (by Searches)"
 msgstr ""
 
-#: includes/admin/admin-analytics-page.php:494
-#: includes/admin/admin-analytics-page.php:605
-#: includes/admin/admin-analytics-page.php:619
-msgid "Searches"
-msgstr ""
-
-#: includes/admin/admin-analytics-page.php:504
-#: includes/admin/admin-analytics-page.php:534
+#: includes/admin/admin-analytics-view.php:280
 msgid "No search data yet."
 msgstr ""
