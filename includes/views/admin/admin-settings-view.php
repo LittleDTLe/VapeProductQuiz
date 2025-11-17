@@ -1,6 +1,7 @@
 <?php
 /**
  * Admin Rendering Logic - FULLY LOCALIZED
+ * This is now a VIEW file. All CSS and JS are in /assets/
  */
 
 if (!defined('ABSPATH'))
@@ -20,7 +21,7 @@ function vv_render_details_page()
     $chosen_ingredient_slug = isset($settings['attribute_ingredient_slug']) ? esc_html($settings['attribute_ingredient_slug']) : 'pa_quiz-ingredient (' . __('Default', 'vapevida-quiz') . ')';
 
     $all_headers = array('Version' => 'Version', 'Author' => 'Author', 'VersionNotes' => 'VersionNotes', 'Features' => 'Features');
-    $plugin_file_path = dirname(__FILE__, 3) . '/vapevida-quiz.php';
+    $plugin_file_path = dirname(__FILE__, 4) . '/vapevida-quiz.php';
     $plugin_data_raw = get_file_data($plugin_file_path, $all_headers, 'plugin');
 
     $plugin_version = isset($plugin_data_raw['Version']) ? esc_html($plugin_data_raw['Version']) : 'N/A';
@@ -29,162 +30,6 @@ function vv_render_details_page()
     $features_list = array_map('trim', array_filter(explode(',', isset($plugin_data_raw['Features']) ? $plugin_data_raw['Features'] : '')));
 
     ?>
-    <style>
-        #vv-admin-top-flex {
-            display: flex;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        #vv-main-content-wrapper {
-            flex: 2;
-            min-width: 0;
-        }
-
-        #vv-sidebar-metadata {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        #vv-guide-section {
-            margin-top: 30px;
-        }
-
-        .vv-custom-attributes-toggle {
-            background: #fff;
-            padding: 15px;
-            border: 1px solid #ccd0d4;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .vv-custom-attributes-fields {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .vv-custom-attributes-fields.hidden {
-            display: none;
-        }
-
-        .vv-attribute-field-row {
-            margin-bottom: 15px;
-        }
-
-        .vv-attribute-field-row:last-child {
-            margin-bottom: 0;
-        }
-
-        @media screen and (max-width: 1024px) {
-            #vv-admin-top-flex {
-                gap: 20px;
-            }
-
-            #vv-sidebar-metadata {
-                min-width: 250px;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            #vv-admin-top-flex {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            #vv-main-content-wrapper,
-            #vv-sidebar-metadata {
-                flex: 1;
-                min-width: 100%;
-            }
-
-            #vv-guide-section {
-                margin-top: 20px;
-            }
-
-            #vv-main-instructions .inside>div {
-                padding: 12px !important;
-            }
-
-            #vv-main-instructions ul {
-                padding-left: 15px !important;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .wrap h1 {
-                font-size: 1.5em;
-            }
-
-            .about-text {
-                font-size: 0.9em;
-            }
-
-            #vv-admin-top-flex {
-                gap: 15px;
-            }
-
-            #vv-settings-form .inside,
-            #vv-sidebar-metadata .inside,
-            #vv-main-instructions .inside {
-                padding: 10px;
-            }
-
-            .regular-text {
-                max-width: 100%;
-            }
-        }
-    </style>
-    <script>
-        function vvCopyShortcode(button) {
-            const shortcode = '[vapevida_quiz]';
-
-            navigator.clipboard.writeText(shortcode).then(function () {
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<span class="dashicons dashicons-yes"></span><?php echo esc_js(__('Copied!', 'vapevida-quiz')); ?>';
-                button.classList.add('copied');
-
-                setTimeout(function () {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(function (err) {
-                console.error('Failed to copy: ', err);
-                alert('<?php echo esc_js(__('Copy failed. Please copy manually.', 'vapevida-quiz')); ?>');
-            });
-        }
-
-        function vvToggleCustomAttributes(checkbox) {
-            const allDefaultInfos = document.querySelectorAll('.vv-default-info');
-            const allSelectWrappers = document.querySelectorAll('.vv-attribute-select-wrapper');
-
-            if (checkbox.checked) {
-                allDefaultInfos.forEach(function (info) {
-                    info.style.display = 'none';
-                });
-                allSelectWrappers.forEach(function (wrapper) {
-                    wrapper.style.display = 'block';
-                });
-            } else {
-                allDefaultInfos.forEach(function (info) {
-                    info.style.display = 'block';
-                });
-                allSelectWrappers.forEach(function (wrapper) {
-                    wrapper.style.display = 'none';
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const useCustomCheckbox = document.getElementById('use_custom_attributes');
-            if (useCustomCheckbox) {
-                vvToggleCustomAttributes(useCustomCheckbox);
-            }
-        });
-    </script>
-
     <div class="wrap">
         <h1><?php _e('VapeVida Flavorshot Recommender Quiz', 'vapevida-quiz'); ?></h1>
         <p class="about-text">
@@ -305,7 +150,6 @@ function vv_render_details_page()
             </div>
 
         </div>
-        <!-- Continuation of admin-rendering.php -->
         <div id="vv-guide-section" style="margin-top: 30px;">
             <div id="vv-main-instructions" class="postbox">
                 <h2 class="hndle">
@@ -333,8 +177,8 @@ function vv_render_details_page()
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                                    <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                                </code>
+                                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                                        </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"

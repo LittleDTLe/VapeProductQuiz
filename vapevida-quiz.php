@@ -95,9 +95,12 @@ function vv_quiz_init()
     require_once VV_QUIZ_DIR . 'includes/class-vv-frontend.php';
     require_once VV_QUIZ_DIR . 'includes/class-vv-query.php';
 
+    require_once VV_QUIZ_DIR . 'includes/class-vv-assets.php';
 
     require_once VV_QUIZ_DIR . 'includes/class-vv-analytics-db.php';
     require_once VV_QUIZ_DIR . 'includes/class-vv-analytics.php';
+
+    new VV_Assets();
 }
 add_action('plugins_loaded', 'vv_quiz_init', 20);
 
