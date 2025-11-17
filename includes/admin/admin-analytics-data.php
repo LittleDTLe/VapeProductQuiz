@@ -59,7 +59,7 @@ class VV_Analytics_Data
 
         $this->searches_with_primary = (int) $wpdb->get_var("SELECT COUNT(*) FROM $this->analytics_table WHERE primary_ingredient_term != '' $date_filter_sql");
         $this->searches_with_secondary = (int) $wpdb->get_var("SELECT COUNT(*) FROM $this->analytics_table WHERE secondary_ingredient_term != '' $date_filter_sql");
-        $this->complete_searches = (int) $wpdb->get_var("SELECT COUNT(*) FROM $this->analytics_table WHERE type_term != '' AND primary_ingredient_term != '' $date_filter_sql");
+        $this->complete_searches = (int) $wpdb->get_var("SELECT COUNT(*) FROM $this->analytics_table WHERE type_term != '' AND primary_ingredient_term != '' AND secondary_ingredient_term != '' $date_filter_sql");
     }
 
     /**

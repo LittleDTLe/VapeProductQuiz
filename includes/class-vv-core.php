@@ -246,7 +246,7 @@ function vv_enqueue_frontend_scripts()
 
         wp_enqueue_script(
             'vv-quiz-frontend-script',
-            VV_QUIZ_URL . 'assets/vv-quiz-dynamic.js',
+            VV_QUIZ_URL . 'assets/js/vv-quiz-dynamic.js',
             array('jquery'),
             VV_QUIZ_VERSION, // Using constant for strong versioning/cache busting
             true

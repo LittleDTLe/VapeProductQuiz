@@ -48,6 +48,18 @@ if (!defined('ABSPATH'))
             <div class="vv-stat-value"><?php echo esc_html(number_format($data->total_searches)); ?></div>
         </div>
 
+        <div class="vv-stat-card">
+            <div class="vv-stat-icon">✅</div>
+            <div class="vv-stat-label"><?php esc_html_e('Multi-Step Searches', 'vapevida-quiz'); ?></div>
+            <div class="vv-stat-value"><?php echo esc_html(number_format($data->complete_searches)); ?></div>
+            <?php if ($data->total_searches > 0): ?>
+                <div class="vv-stat-percentage">
+                    <?php echo esc_html(round(($data->complete_searches / $data->total_searches) * 100, 1)); ?>%
+                    <?php esc_html_e('completion rate', 'vapevida-quiz'); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <div class="vv-stat-card" style="border-left-color: #28a745;">
             <div class="vv-stat-icon">💰</div>
             <div class="vv-stat-label"><?php esc_html_e('Total Revenue from Quiz', 'vapevida-quiz'); ?></div>
@@ -68,19 +80,8 @@ if (!defined('ABSPATH'))
             </div>
         </div>
 
-        <div class="vv-stat-card">
-            <div class="vv-stat-icon">✅</div>
-            <div class="vv-stat-label"><?php esc_html_e('Complete Searches', 'vapevida-quiz'); ?></div>
-            <div class="vv-stat-value"><?php echo esc_html(number_format($data->complete_searches)); ?></div>
-            <?php if ($data->total_searches > 0): ?>
-                <div class="vv-stat-percentage">
-                    <?php echo esc_html(round(($data->complete_searches / $data->total_searches) * 100, 1)); ?>%
-                    <?php esc_html_e('completion rate', 'vapevida-quiz'); ?>
-                </div>
-            <?php endif; ?>
-        </div>
 
-        <div class="vv-stat-card">
+        <!-- <div class="vv-stat-card">
             <div class="vv-stat-icon">🥇</div>
             <div class="vv-stat-label"><?php esc_html_e('With Primary Ingredient', 'vapevida-quiz'); ?></div>
             <div class="vv-stat-value"><?php echo esc_html(number_format($data->searches_with_primary)); ?></div>
@@ -100,7 +101,7 @@ if (!defined('ABSPATH'))
                     <?php echo esc_html(round(($data->searches_with_secondary / $data->total_searches) * 100, 1)); ?>%
                 </div>
             <?php endif; ?>
-        </div>
+        </div> -->
     </div>
 
     <div class="vv-charts-grid">
