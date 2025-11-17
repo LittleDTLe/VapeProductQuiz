@@ -126,44 +126,53 @@
 }
 
 /*
- * --- CORRECTED: TOM-SELECT STYLING OVERRIDES (v6) ---
- * This version ONLY applies your original layout styles, letting the
- * theme and TomSelect handle the visual appearance (border, background, etc.)
+ * --- TOM-SELECT STYLING OVERRIDES  ---
  */
 
 /* 1. Hide the original <select> */
-.vv-quiz-container .ts-wrapper + select {
+#vv-recommender-form .ts-wrapper + select {
 	display: none !important;
 	visibility: hidden !important;
 }
 
 /* 2. The main control box */
-.vv-quiz-container .ts-control {
-	/* Replicate .vv-quiz-container select */
+#vv-recommender-form .ts-control {
 	width: 100%;
-	padding: 10px;
+	padding: 12px;
 	margin-top: 5px;
 	box-sizing: border-box;
-	/*
-     * We have REMOVED the forced border, border-radius, shadow,
-     * and background rules to allow your theme's styles to apply.
-     */
+	min-height: 42px;
+
+	border: 1px solid #d0d0d0;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.85);
+	box-shadow: none;
+	transition: border-color 0.2s, box-shadow 0.2s;
+
+	font-size: 16px;
 }
 
-/* 3. The dropdown menu */
-.vv-quiz-container .ts-dropdown {
-	border-radius: 0;
-	/* We let the theme handle the border */
+#vv-recommender-form .ts-wrapper.focus .ts-control {
+	border-color: #80a0ff;
+	box-shadow: 0 0 0 3px rgba(50, 100, 255, 0.2);
 }
 
-/* 4. The highlighted option */
-.vv-quiz-container .ts-dropdown .option.active {
-	background-color: #e21e51; /* Your theme's red color */
+/* 4. The dropdown menu */
+#vv-recommender-form .ts-dropdown {
+	border-radius: 4px;
+	border: 1px solid #d0d0d0;
+	margin-top: 4px;
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* 5. The highlighted option */
+#vv-recommender-form .ts-dropdown .option.active {
+	background-color: #e21e51;
 	color: #fff;
 }
 
-/* 5. The ERROR STATE */
-.vv-quiz-container .ts-control.vv-field-error {
+/* 6. The ERROR STATE */
+#vv-recommender-form .ts-control.vv-field-error {
 	/* Replicate .vv-quiz-container select.vv-field-error */
 	border-color: #d9534f !important;
 	box-shadow: 0 0 5px rgba(217, 83, 79, 0.5) !important;

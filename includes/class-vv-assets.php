@@ -80,7 +80,7 @@ class VV_Assets
         global $post;
         if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'vapevida_quiz')) {
 
-            // --- NEW: Enqueue Tom Select CSS ---
+            // --- Enqueue Tom Select CSS ---
             wp_enqueue_style(
                 'tom-select-css',
                 'https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.default.min.css',
@@ -96,7 +96,7 @@ class VV_Assets
                 VV_QUIZ_VERSION
             );
 
-            // --- NEW: Enqueue Tom Select JS ---
+            // --- Enqueue Tom Select JS ---
             wp_enqueue_script(
                 'tom-select-js',
                 'https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js',
@@ -117,6 +117,10 @@ class VV_Assets
             // Localize script with data (MOVED FROM class-vv-core.php)
             $settings = get_option('vv_quiz_settings');
             $cta_button_text = isset($settings['button_cta']) ? $settings['button_cta'] : __('FIND YOUR LIQUID', VV_QUIZ_TEXT_DOMAIN);
+
+            // --- NEW: Define placeholder for Type field ---
+            $placeholder_type = isset($settings['placeholder_type']) ? $settings['placeholder_type'] : __('-- Select Profile --', VV_QUIZ_TEXT_DOMAIN);
+
             $placeholder_primary = isset($settings['placeholder_primary']) ? $settings['placeholder_primary'] : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
             $placeholder_secondary = isset($settings['placeholder_secondary']) ? $settings['placeholder_secondary'] : __('-- Select Secondary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
 
@@ -147,6 +151,10 @@ class VV_Assets
                 'vv_quiz_ajax',
                 array(
                     'ajax_url' => admin_url('admin-ajax.php'),
+
+                    // --- NEW: Pass the Type placeholder to JS ---
+                    'placeholder_type' => $placeholder_type,
+
                     'placeholder_primary' => $placeholder_primary,
                     'placeholder_secondary' => $placeholder_secondary,
                     'cta_text_default' => $cta_button_text,
@@ -168,6 +176,8 @@ class VV_Assets
                         'error_required_type' => $error_type,
                         'error_required_primary' => $error_primary,
                         'error_required_secondary' => $error_secondary,
+                        'search_no_results' => __('No results found', VV_QUIZ_TEXT_DOMAIN),
+                        'search_loading' => __('Loading...', VV_QUIZ_TEXT_DOMAIN),
                     )
                 )
             );

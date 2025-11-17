@@ -17,6 +17,21 @@ jQuery(document).ready(function ($) {
     // Store TomSelect instances
     let tsType, tsPrimary, tsSecondary;
 
+    // --- NEW: Create a shared config for TomSelect ---
+    const tomSelectSettings = {
+        allowEmptyOption: true,
+        // Add translated strings for the search UI
+        render: {
+            no_results: function(data, escape) {
+                return '<div class="no-results">' + escape(i18n.search_no_results || 'No results found') + '</div>';
+            },
+            loading: function(data, escape) {
+                return '<div class="loading">' + escape(i18n.search_loading || 'Loading...') + '</div>';
+            }
+        }
+    };
+
+
     /**
      * Main function to update ingredient dropdowns AND result count
      * @param {boolean} shouldUpdatePrimary - Reload the primary dropdown?
@@ -269,8 +284,6 @@ jQuery(document).ready(function ($) {
 
     // --- EVENT LISTENERS ---
 
-    // --- NEW: Create specific handlers for each dropdown ---
-
     function onTypeChange(value) {
         clearErrors();
         // Update BOTH primary and secondary
@@ -322,25 +335,23 @@ jQuery(document).ready(function ($) {
     // --- INITIALIZATION ---
     
     // Initialize TomSelect for each field
-    // We get the placeholder text from the original <option>
-    const typePlaceholder = $(typeSelect).find('option[value=""]').text();
     
     tsType = new TomSelect(typeSelect, {
-        placeholder: typePlaceholder,
-        allowEmptyOption: true,
-        onChange: onTypeChange // <-- Use specific handler
+        ...tomSelectSettings, // <-- Use shared settings
+        placeholder: settings.placeholder_type, // <-- USE SETTINGS VARIABLE
+        onChange: onTypeChange 
     });
     
     tsPrimary = new TomSelect(primaryIngredientSelect, {
+        ...tomSelectSettings, // <-- Use shared settings
         placeholder: settings.placeholder_primary,
-        allowEmptyOption: true,
-        onChange: onPrimaryChange // <-- Use specific handler
+        onChange: onPrimaryChange
     });
 
     tsSecondary = new TomSelect(secondaryIngredientSelect, {
+        ...tomSelectSettings, // <-- Use shared settings
         placeholder: settings.placeholder_secondary,
-        allowEmptyOption: true,
-        onChange: onSecondaryChange // <-- Use specific handler
+        onChange: onSecondaryChange
     });
 
     // Run initial reset to lock fields
