@@ -13,6 +13,36 @@
 if (!defined('ABSPATH'))
     exit;
 
+
+if (isset($_GET['vv_export_analytics']) && $_GET['vv_export_analytics'] == 'true') {
+    // Start output buffering IMMEDIATELY
+    ob_start();
+
+    // Check if user has permission
+    if (!current_user_can('manage_options')) {
+        wp_die(__('You do not have permission to export this data.', 'vapevida-quiz'));
+    }
+
+    // Manually require the analytics data class
+    if (!class_exists('VV_Analytics_Data')) {
+
+        // --- THIS IS THE FIX ---
+        // The file is in 'includes/', not 'includes/admin/'.
+        if (defined('VV_QUIZ_DIR')) {
+            // Try the main constant first (best way)
+            require_once(VV_QUIZ_DIR . 'includes/admin/admin-analytics-data.php');
+        } else {
+            // Fallback path now goes UP one directory
+            require_once(plugin_dir_path(__FILE__) . '../class-vv-analytics-data.php');
+        }
+    }
+
+    // Call the export function
+    VV_Analytics_Data::export_all_to_csv();
+
+    // Stop the page from rendering
+    exit;
+}
 /**
  * Enqueues Chart.js, custom CSS, and custom JS for the analytics page.
  * Also localizes (passes) data from PHP to our chart JS.
