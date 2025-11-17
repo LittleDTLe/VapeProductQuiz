@@ -1,8 +1,8 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 1.0.0
+**Plugin Version:** 1.0.3
 
-**Version Notes:** Modularization of Plugin, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic.
+**Version Notes:** Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic.
 
 **Author:** Panagiotis Drougas
 
