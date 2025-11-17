@@ -230,4 +230,126 @@ class VV_Analytics_Data
         $term_cache[$cache_key] = $fallback_name . ' <em>(' . __('Deleted', 'vapevida-quiz') . ')</em>';
         return $term_cache[$cache_key];
     }
+
+    /**
+     * NEW: Handles the CSV export generation.
+     */
+    public static function export_all_to_csv()
+    {
+
+        // 1. Get the same date filters your dashboard uses
+        $selected_range = isset($_GET['range']) ? sanitize_key($_GET['range']) : 'all_time';
+        $date_filter_sql = '';
+        $date_filter_sql_where = '';
+
+        if ($selected_range !== 'all_time') {
+            global $wpdb;
+            $start_date = '';
+            switch ($selected_range) {
+                case '7_days':
+                    $start_date = date('Y-m-d H:i:s', strtotime('-7 days'));
+                    break;
+                case '30_days':
+                    $start_date = date('Y-m-d H:i:s', strtotime('-30 days'));
+                    break;
+                case 'this_month':
+                    $start_date = date('Y-m-01 00:00:00');
+                    break;
+            }
+            if ($start_date) {
+                $date_filter_sql = $wpdb->prepare(" AND search_timestamp >= %s ", $start_date);
+                $date_filter_sql_where = $wpdb->prepare(" WHERE search_timestamp >= %s ", $start_date);
+            }
+        }
+
+        // 2. Get all the same data your dashboard gets
+        $data = new VV_Analytics_Data($date_filter_sql, $date_filter_sql_where);
+
+        // --- NEW: Clear the output buffer ---
+        // This deletes any stray whitespace or errors "caught" by ob_start()
+        ob_clean();
+
+        // 3. Set file headers
+        $filename = "vv-analytics-export-" . $selected_range . "-" . date('Y-m-d') . ".csv";
+        header('Content-Type: text/csv; charset=utf-8'); // Added charset=utf-8
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $output = fopen('php://output', 'w');
+
+        // --- NEW: Add BOM for Excel compatibility ---
+        // This helps Excel open UTF-8 files correctly
+        fputs($output, "\xEF\xBB\xBF");
+
+        // --- Table 1: Top Popular Combinations ---
+        fputcsv($output, [__('Top Popular Combinations (by Searches)', 'vapevida-quiz')]);
+        fputcsv($output, [
+            __('Combination', 'vapevida-quiz'),
+            __('Searches', 'vapevida-quiz'),
+            __('Revenue', 'vapevida-quiz'),
+            __('CVR', 'vapevida-quiz')
+        ]);
+        if (!empty($data->top_popular_combinations_by_searches)) {
+            foreach ($data->top_popular_combinations_by_searches as $item) {
+                fputcsv($output, [
+                    $item->combination_text,
+                    $item->count,
+                    $item->revenue,
+                    $item->cvr . '%'
+                ]);
+            }
+        } else {
+            fputcsv($output, [__('No search data yet.', 'vapevida-quiz')]);
+        }
+
+        fputcsv($output, []);
+        fputcsv($output, []);
+
+        // --- Table 2: Top Converting Combinations ---
+        fputcsv($output, [__('Top Converting Combinations (by Revenue)', 'vapevida-quiz')]);
+        fputcsv($output, [
+            __('Combination', 'vapevida-quiz'),
+            __('Sales', 'vapevida-quiz'),
+            __('Revenue', 'vapevida-quiz'),
+            __('CVR', 'vapevida-quiz')
+        ]);
+        if (!empty($data->top_converting_combinations_by_revenue)) {
+            foreach ($data->top_converting_combinations_by_revenue as $item) {
+                fputcsv($output, [
+                    $item->combination_text,
+                    $item->sales,
+                    $item->revenue,
+                    $item->cvr . '%'
+                ]);
+            }
+        } else {
+            fputcsv($output, [__('No converting searches yet.', 'vapevida-quiz')]);
+        }
+
+        fputcsv($output, []);
+        fputcsv($output, []);
+
+        // --- Table 3: Top Products Sold ---
+        fputcsv($output, [__('Top 10 Products Sold by Quiz (by Revenue)', 'vapevida-quiz')]);
+        fputcsv($output, [
+            __('Product', 'vapevida-quiz'),
+            __('Qty Sold', 'vapevida-quiz'),
+            __('Revenue', 'vapevida-quiz')
+        ]);
+        if (!empty($data->top_products_by_revenue)) {
+            foreach ($data->top_products_by_revenue as $item) {
+                $product_name = $item->product_id ? get_the_title($item->product_id) : __('Product Deleted', 'vapevida-quiz');
+                fputcsv($output, [
+                    $product_name,
+                    $item->total_qty,
+                    $item->total_revenue
+                ]);
+            }
+        } else {
+            fputcsv($output, [__('No product sales have been tracked from the quiz yet.', 'vapevida-quiz')]);
+        }
+
+        fclose($output);
+    } // End of new function
 }

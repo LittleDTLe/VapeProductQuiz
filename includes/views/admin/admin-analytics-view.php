@@ -19,24 +19,36 @@ if (!defined('ABSPATH'))
                 <p><?php esc_html_e('Comprehensive insights into customer preferences and quiz interactions', 'vapevida-quiz'); ?>
                 </p>
             </div>
-            <form method="get" class="vv-date-filter-form">
-                <input type="hidden" name="page" value="vv-quiz-analytics">
-                <label for="vv-date-range"><?php esc_html_e('Date Range:', 'vapevida-quiz'); ?></label>
-                <select name="range" id="vv-date-range">
+            <form method="get" style="display: inline-block; margin-right: 10px; vertical-align: middle;">
+                <input type="hidden" name="page" value="vv-quiz-analytics" />
+
+                <label for="vv-analytics-range"><?php _e('Date Range:', 'vapevida-quiz'); ?></label>
+                <select name="range" id="vv-analytics-range">
                     <option value="all_time" <?php selected($selected_range, 'all_time'); ?>>
-                        <?php esc_html_e('All Time', 'vapevida-quiz'); ?>
-                    </option>
+                        <?php _e('All Time', 'vapevida-quiz'); ?></option>
                     <option value="30_days" <?php selected($selected_range, '30_days'); ?>>
-                        <?php esc_html_e('Last 30 Days', 'vapevida-quiz'); ?>
-                    </option>
+                        <?php _e('Last 30 Days', 'vapevida-quiz'); ?></option>
                     <option value="7_days" <?php selected($selected_range, '7_days'); ?>>
-                        <?php esc_html_e('Last 7 Days', 'vapevida-quiz'); ?>
-                    </option>
+                        <?php _e('Last 7 Days', 'vapevida-quiz'); ?></option>
                     <option value="this_month" <?php selected($selected_range, 'this_month'); ?>>
-                        <?php esc_html_e('This Month', 'vapevida-quiz'); ?>
-                    </option>
+                        <?php _e('This Month', 'vapevida-quiz'); ?></option>
                 </select>
-                <button type="submit" class="button"><?php esc_html_e('Filter', 'vapevida-quiz'); ?></button>
+
+                <button type="submit" class="button button-primary">
+                    <?php _e('Filter', 'vapevida-quiz'); ?>
+                </button>
+            </form>
+
+            <form method="get" style="display: inline-block; vertical-align: middle;">
+                <input type="hidden" name="page" value="vv-quiz-analytics" />
+
+                <input type="hidden" name="range" value="<?php echo esc_attr($selected_range); ?>" />
+
+                <input type="hidden" name="vv_export_analytics" value="true" />
+
+                <button type="submit" class="button">
+                    <?php _e('Export to CSV', 'vapevida-quiz'); ?>
+                </button>
             </form>
         </div>
     </div>
