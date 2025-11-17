@@ -147,24 +147,4 @@ function vv_quiz_color_field_callback($args)
             data-default-color="' . esc_attr($default_value) . '" />';
 }
 
-function vv_enqueue_color_picker_assets($hook_suffix)
-{
-    // Get the hook for our new main settings page
-    $settings_hook = 'toplevel_page_vv-quiz-main';
-
-    // Check if we are on the correct page
-    if ($settings_hook !== $hook_suffix) {
-        return;
-    }
-
-    wp_enqueue_style('wp-color-picker');
-    wp_enqueue_script('wp-color-picker');
-
-    wp_add_inline_script(
-        'wp-color-picker',
-        "jQuery(document).ready(function($) {
-            $('.vv-color-picker').wpColorPicker();
-        });"
-    );
-}
-add_action('admin_enqueue_scripts', 'vv_enqueue_color_picker_assets');
+// All asset enqueuing has been moved to includes/class-vv-assets.php

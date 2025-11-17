@@ -1,0 +1,106 @@
+#vv-admin-top-flex {
+	display: flex;
+	gap: 30px;
+	margin-top: 20px;
+}
+
+#vv-main-content-wrapper {
+	flex: 2;
+	min-width: 0;
+}
+
+#vv-sidebar-metadata {
+	flex: 1;
+	min-width: 300px;
+}
+
+#vv-guide-section {
+	margin-top: 30px;
+}
+
+.vv-custom-attributes-toggle {
+	background: #fff;
+	padding: 15px;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.vv-custom-attributes-fields {
+	margin-top: 15px;
+	padding: 15px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.vv-custom-attributes-fields.hidden {
+	display: none;
+}
+
+.vv-attribute-field-row {
+	margin-bottom: 15px;
+}
+
+.vv-attribute-field-row:last-child {
+	margin-bottom: 0;
+}
+
+@media screen and (max-width: 1024px) {
+	#vv-admin-top-flex {
+		gap: 20px;
+	}
+
+	#vv-sidebar-metadata {
+		min-width: 250px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#vv-admin-top-flex {
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	#vv-main-content-wrapper,
+	#vv-sidebar-metadata {
+		flex: 1;
+		min-width: 100%;
+	}
+
+	#vv-guide-section {
+		margin-top: 20px;
+	}
+
+	#vv-main-instructions .inside > div {
+		padding: 12px !important;
+	}
+
+	#vv-main-instructions ul {
+		padding-left: 15px !important;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.wrap h1 {
+		font-size: 1.5em;
+	}
+
+	.about-text {
+		font-size: 0.9em;
+	}
+
+	#vv-admin-top-flex {
+		gap: 15px;
+	}
+
+	#vv-settings-form .inside,
+	#vv-sidebar-metadata .inside,
+	#vv-main-instructions .inside {
+		padding: 10px;
+	}
+
+	.regular-text {
+		max-width: 100%;
+	}
+}
