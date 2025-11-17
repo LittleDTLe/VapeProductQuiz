@@ -22,6 +22,8 @@
 
 .vv-select-col {
 	margin-bottom: 15px;
+	/* This ensures dropdowns render correctly */
+	position: relative;
 }
 
 /* Button Row Container */
@@ -74,6 +76,7 @@
 	font-weight: bold;
 }
 
+/* This is your original <select> style, which we are replicating */
 .vv-quiz-container select {
 	width: 100%;
 	padding: 10px;
@@ -120,4 +123,67 @@
 		min-width: 0;
 		margin-bottom: 0;
 	}
+}
+
+/*
+ * --- CORRECTED: TOM-SELECT STYLING OVERRIDES (v4) ---
+ * This version correctly styles the container *without* breaking the content.
+ */
+
+/* 1. Hide the original <select> */
+.vv-quiz-container .ts-wrapper + select {
+	display: none !important;
+	visibility: hidden !important;
+}
+
+/* 2. The main control box */
+.vv-quiz-container .ts-control {
+	/* Replicate .vv-quiz-container select */
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	box-sizing: border-box;
+
+	/* Force visual style */
+	border: 1px solid #767676 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: #fff;
+
+	/* Layout */
+	display: flex;
+	align-items: center;
+	min-height: 42px; /* (10px padding * 2) + line-height */
+}
+
+/* 3. The control box when focused */
+.vv-quiz-container .ts-wrapper.focus .ts-control {
+	box-shadow: none !important;
+	border-color: #767676 !important;
+}
+
+/*
+ * 4. --- THIS IS THE FIX ---
+ * We REMOVED the rules for ".ts-control input" and ".ts-control > div".
+ * We let the default tom-select.default.min.css handle the
+ * text styling, which makes the selected item populate correctly.
+ */
+
+/* 5. The dropdown menu */
+.vv-quiz-container .ts-dropdown {
+	border: 1px solid #aaa;
+	border-radius: 0;
+}
+
+/* 6. The highlighted option */
+.vv-quiz-container .ts-dropdown .option.active {
+	background-color: #e21e51; /* Your theme's red color */
+	color: #fff;
+}
+
+/* 7. The ERROR STATE */
+.vv-quiz-container .ts-control.vv-field-error {
+	/* Replicate .vv-quiz-container select.vv-field-error */
+	border-color: #d9534f !important;
+	box-shadow: 0 0 5px rgba(217, 83, 79, 0.5) !important;
 }

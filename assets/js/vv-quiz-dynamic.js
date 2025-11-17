@@ -1,8 +1,10 @@
 jQuery(document).ready(function ($) {
     const form = $("#vv-recommender-form");
-    const typeSelect = $("#flavor_type");
-    const primaryIngredientSelect = $("#flavor_ingredient");
-    const secondaryIngredientSelect = $("#flavor_ingredient_optional");
+    
+    const typeSelect = "#flavor_type";
+    const primaryIngredientSelect = "#flavor_ingredient";
+    const secondaryIngredientSelect = "#flavor_ingredient_optional";
+    
     const ctaButton = $(".vv-cta-button");
 
     // Get localized data from vv_quiz_ajax
@@ -12,114 +14,129 @@ jQuery(document).ready(function ($) {
     // Timer for hiding error messages
     let errorTimer;
 
+    // Store TomSelect instances
+    let tsType, tsPrimary, tsSecondary;
+
     /**
      * Main function to update ingredient dropdowns AND result count
-     * Now considers ALL selected filters
+     * @param {boolean} shouldUpdatePrimary - Reload the primary dropdown?
+     * @param {boolean} shouldUpdateSecondary - Reload the secondary dropdown?
      */
-    function updateIngredientsAndCount() {
-        const selectedType = typeSelect.val();
-        const selectedPrimary = primaryIngredientSelect.val();
-        const selectedSecondary = secondaryIngredientSelect.val();
+    function updateIngredientsAndCount(shouldUpdatePrimary, shouldUpdateSecondary) {
+        const selectedType = tsType.getValue();
+        const selectedPrimary = tsPrimary.getValue();
+        const selectedSecondary = tsSecondary.getValue();
 
         // --- SET LOADING STATE ---
         ctaButton.prop("disabled", true);
         ctaButton.text(i18n.loading || "Searching...");
 
+        // Lock fields during update
+        if (shouldUpdatePrimary) tsPrimary.disable();
+        if (shouldUpdateSecondary) tsSecondary.disable();
+
+
         // --- RESET LOGIC (No Type selected) ---
         if (!selectedType) {
             const defaultCtaText = settings.cta_text_default || i18n.cta_default;
             ctaButton.text(defaultCtaText);
-            
-            // Check required fields to enable/disable button
-            validateForm(true); // Run silent validation
+            validateForm(true); 
 
             // Reset and LOCK both ingredient dropdowns
-            primaryIngredientSelect.html('<option value="">' + settings.placeholder_primary + "</option>");
-            primaryIngredientSelect.prop("disabled", true);
+            tsPrimary.clearOptions();
+            tsPrimary.clear();
+            tsPrimary.disable();
             
-            secondaryIngredientSelect.html('<option value="">' + settings.placeholder_secondary + "</option>");
-            secondaryIngredientSelect.prop("disabled", true);
+            tsSecondary.clearOptions();
+            tsSecondary.clear();
+            tsSecondary.disable();
             
             return;
         }
 
-        // --- AJAX REQUEST WITH ALL FILTERS ---
+        // --- AJAX REQUEST WITH ALL FILTERS (NOW EXPECTS JSON) ---
         $.ajax({
             url: settings.ajax_url,
             type: "POST",
+            dataType: "json", // Expect a JSON response
             data: {
                 action: "vv_filter_ingredients",
                 security: settings.nonce,
-                type_slug: settings.type_slug, // Now passed from localized data
+                type_slug: settings.type_slug,
                 type_term_slug: selectedType,
                 primary_ingredient: selectedPrimary || '',
                 secondary_ingredient: selectedSecondary || '',
-                ingredient_slug: settings.ingredient_slug // Now passed from localized data
+                ingredient_slug: settings.ingredient_slug
             },
             success: function (response) {
-                // Parse the response: count|||primaryOptions|||secondaryOptions
-                const parts = response.split('|||');
-                
-                // Handle potential errors from server
-                if (parts.length < 3) {
-                    console.error("AJAX response error: Unexpected format.", response);
-                    ctaButton.text(i18n.error_loading || "⚠️ DATA ERROR");
-                    ctaButton.prop("disabled", true);
-                    primaryIngredientSelect.prop("disabled", true);
-                    secondaryIngredientSelect.prop("disabled", true);
+                console.log("VapeVida Quiz AJAX Response:", response);
+
+                if (!response.success || typeof response.data === 'undefined') {
+                    handleAjaxError();
                     return;
                 }
-
-                const count = parseInt(parts[0]) || 0;
-                const primaryOptions = parts[1] || '';
-                const secondaryOptions = parts[2] || '';
+                
+                const data = response.data;
+                const count = data.count || 0;
 
                 // --- UPDATE RESULT PREVIEW (CTA BUTTON) ---
                 updateButtonText(count);
 
                 // --- UPDATE PRIMARY INGREDIENT DROPDOWN ---
-                updateDropdown(
-                    primaryIngredientSelect,
-                    primaryOptions,
-                    settings.placeholder_primary,
-                    selectedPrimary
-                );
+                if (shouldUpdatePrimary) {
+                    updateDropdown(
+                        tsPrimary,
+                        data.primaryOptions || [],
+                        selectedPrimary
+                    );
+                }
 
                 // --- UPDATE SECONDARY INGREDIENT DROPDOWN ---
-                updateDropdown(
-                    secondaryIngredientSelect,
-                    secondaryOptions,
-                    settings.placeholder_secondary,
-                    selectedSecondary
-                );
+                if (shouldUpdateSecondary) {
+                    updateDropdown(
+                        tsSecondary,
+                        data.secondaryOptions || [],
+                        selectedSecondary
+                    );
+                }
 
-                // --- NEW LOCKING LOGIC ---
-                // After dropdowns are populated, re-apply locks based on state.
-                
+                // --- LOCKING LOGIC (RUNS EVERY TIME) ---
                 // 1. Primary select is now populated and enabled (by updateDropdown).
                 
                 // 2. Check Secondary select:
-                // If a Primary Ingredient IS selected, enable Secondary (if it has options).
                 if (selectedPrimary) {
-                    if(secondaryOptions.length > 0) {
-                         secondaryIngredientSelect.prop("disabled", false);
+                    // Only enable if it just got new options
+                    if (shouldUpdateSecondary) {
+                        if (data.secondaryOptions && data.secondaryOptions.length > 0) {
+                            tsSecondary.enable();
+                        } else {
+                            tsSecondary.disable();
+                        }
                     } else {
-                        // No compatible secondary options, keep it locked
-                         secondaryIngredientSelect.prop("disabled", true);
+                        // Otherwise, just ensure it's enabled
+                        tsSecondary.enable();
                     }
                 } else {
-                    // If no Primary Ingredient is selected, LOCK Secondary.
-                    secondaryIngredientSelect.prop("disabled", true);
+                    tsSecondary.disable();
                 }
-
             },
             error: function (xhr, status, error) {
                 console.error("AJAX Error: ", error);
-                ctaButton.text(i18n.error_loading || "⚠️ DATA ERROR");
-                ctaButton.prop("disabled", true);
+                handleAjaxError();
             },
         });
     }
+
+    /**
+     * Helper for AJAX error state
+     */
+    function handleAjaxError() {
+        ctaButton.text(i18n.error_loading || "⚠️ DATA ERROR");
+        ctaButton.prop("disabled", true);
+        tsPrimary.disable();
+        tsSecondary.disable();
+    }
+
 
     /**
      * Update button text based on product count
@@ -143,24 +160,24 @@ jQuery(document).ready(function ($) {
     }
 
     /**
-     * Update a single dropdown with new options, preserving selection if valid
+     * Update a single TomSelect dropdown with new options
      */
-    function updateDropdown(selectElement, optionsHtml, placeholderText, currentValue) {
-        const placeholderOption = '<option value="">' + placeholderText + "</option>";
-        selectElement.html(placeholderOption + optionsHtml);
+    function updateDropdown(tsInstance, options, currentValue) {
+        tsInstance.clearOptions(); // Clear existing
+        tsInstance.addOption(options); // Add new
         
         // Only enable if there are actual options to choose from
-        if (optionsHtml.length > 0) {
-            selectElement.prop("disabled", false);
+        if (options.length > 0) {
+            tsInstance.enable();
         } else {
-            selectElement.prop("disabled", true);
+            tsInstance.disable();
         }
 
         // Preserve selection if it still exists in new options
-        if (currentValue && selectElement.find('option[value="' + currentValue + '"]').length > 0) {
-            selectElement.val(currentValue);
+        if (currentValue && tsInstance.getOption(currentValue)) {
+            tsInstance.setValue(currentValue, true); // true = silent, no event
         } else {
-            selectElement.val(''); // Reset if previous selection is no longer valid
+            tsInstance.clear(true);
         }
     }
 
@@ -169,7 +186,9 @@ jQuery(document).ready(function ($) {
      */
     function clearErrors() {
         clearTimeout(errorTimer); // Stop any pending fade-outs
-        form.find('.vv-field-error').removeClass('vv-field-error');
+        // Target TomSelect wrapper
+        form.find('.ts-control.vv-field-error').removeClass('vv-field-error');
+        
         form.find('.vv-field-error-message').fadeOut(200, function() {
             $(this).text('');
         });
@@ -178,14 +197,19 @@ jQuery(document).ready(function ($) {
     /**
      * Displays an error for a specific field
      */
-    function showError(field, message) {
-        field.addClass('vv-field-error');
-        const errorDiv = $('#error-for-' + field.attr('id'));
+    function showError(fieldSelector, message) {
+        const fieldElement = $(fieldSelector);
+        
+        // Target TomSelect wrapper
+        fieldElement.parent().find('.ts-control').addClass('vv-field-error');
+        
+        const fieldID = fieldSelector.replace('#', '');
+        const errorDiv = $('#error-for-' + fieldID);
         errorDiv.text(message).fadeIn(200);
 
         // Set a timer to hide this specific error
         errorTimer = setTimeout(function() {
-            field.removeClass('vv-field-error');
+            fieldElement.parent().find('.ts-control').removeClass('vv-field-error');
             errorDiv.fadeOut(300, function() {
                 $(this).text('');
             });
@@ -202,7 +226,7 @@ jQuery(document).ready(function ($) {
         let firstErrorField = null; // To track the first error
 
         // 1. Check Type
-        if (settings.is_type_required && !typeSelect.val()) {
+        if (settings.is_type_required && !tsType.getValue()) {
             isValid = false;
             if (!silent) {
                 showError(typeSelect, i18n.error_required_type);
@@ -211,9 +235,8 @@ jQuery(document).ready(function ($) {
         }
 
         // 2. Check Primary Ingredient
-        if (settings.is_primary_required && !primaryIngredientSelect.val()) {
+        if (settings.is_primary_required && !tsPrimary.getValue()) {
             isValid = false;
-
             if (!silent) { 
                  showError(primaryIngredientSelect, i18n.error_required_primary);
                  if (!firstErrorField) firstErrorField = primaryIngredientSelect;
@@ -221,9 +244,8 @@ jQuery(document).ready(function ($) {
         }
 
         // 3. Check Secondary Ingredient (only if it's visible and required)
-        if (settings.is_secondary_required && !secondaryIngredientSelect.val() && secondaryIngredientSelect.is(':visible')) {
+        if (settings.is_secondary_required && !tsSecondary.getValue() && $(secondaryIngredientSelect).is(':visible')) {
             isValid = false;
-            
             if (!silent) { 
                 showError(secondaryIngredientSelect, i18n.error_required_secondary);
                 if (!firstErrorField) firstErrorField = secondaryIngredientSelect;
@@ -247,26 +269,28 @@ jQuery(document).ready(function ($) {
 
     // --- EVENT LISTENERS ---
 
-    // Use event delegation for change events
-    form.on('change', 'select', function(e) {
-        const selectId = $(this).attr('id');
-        
-        // Always clear errors on any change
+    // --- NEW: Create specific handlers for each dropdown ---
+
+    function onTypeChange(value) {
         clearErrors();
-
-        // If Type or Primary changes, run the full AJAX update
-        if (selectId === 'flavor_type' || selectId === 'flavor_ingredient') {
-            updateIngredientsAndCount();
-        }
-        
-        // If Secondary changes, just update the count
-        if (selectId === 'flavor_ingredient_optional') {
-            updateIngredientsAndCount(); // This function now handles all logic
-        }
-
-        // Re-validate silently to update button state
+        // Update BOTH primary and secondary
+        updateIngredientsAndCount(true, true); 
         validateForm(true);
-    });
+    }
+
+    function onPrimaryChange(value) {
+        clearErrors();
+        // Update ONLY secondary (and count)
+        updateIngredientsAndCount(false, true); 
+        validateForm(true);
+    }
+    
+    function onSecondaryChange(value) {
+        clearErrors();
+        // Update ONLY the count
+        updateIngredientsAndCount(false, false); 
+        validateForm(true);
+    }
 
     // Form submission validation
     form.on('submit', function (e) {
@@ -282,19 +306,45 @@ jQuery(document).ready(function ($) {
     $('.vv-clear-button').on('click', function () {
         clearErrors();
         
-        // Reset and disable selects
-        typeSelect.val('');
-        primaryIngredientSelect.val('').html('<option value="">' + settings.placeholder_primary + "</option>").prop('disabled', true);
-        secondaryIngredientSelect.val('').html('<option value="">' + settings.placeholder_secondary + "</option>").prop('disabled', true);
+        // Reset and disable selects using TomSelect API
+        tsType.clear(); // This will trigger onTypeChange
+        
+        // The 'onTypeChange' event will call updateIngredientsAndCount(true, true),
+        // which will automatically trigger the reset logic.
 
         // Reset button
-        ctaButton.text(settings.cta_text_default).prop('disabled', false);
+        ctaButton.text(settings.cta_text_default).prop("disabled", false);
 
         // Re-validate silently to set button state (will disable if type is required)
         validateForm(true);
     });
 
     // --- INITIALIZATION ---
+    
+    // Initialize TomSelect for each field
+    // We get the placeholder text from the original <option>
+    const typePlaceholder = $(typeSelect).find('option[value=""]').text();
+    
+    tsType = new TomSelect(typeSelect, {
+        placeholder: typePlaceholder,
+        allowEmptyOption: true,
+        onChange: onTypeChange // <-- Use specific handler
+    });
+    
+    tsPrimary = new TomSelect(primaryIngredientSelect, {
+        placeholder: settings.placeholder_primary,
+        allowEmptyOption: true,
+        onChange: onPrimaryChange // <-- Use specific handler
+    });
+
+    tsSecondary = new TomSelect(secondaryIngredientSelect, {
+        placeholder: settings.placeholder_secondary,
+        allowEmptyOption: true,
+        onChange: onSecondaryChange // <-- Use specific handler
+    });
+
+    // Run initial reset to lock fields
+    updateIngredientsAndCount(true, true);
     
     // On page load, run a silent validation to set the initial button state
     validateForm(true);

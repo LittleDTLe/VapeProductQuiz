@@ -80,19 +80,36 @@ class VV_Assets
         global $post;
         if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'vapevida_quiz')) {
 
+            // --- NEW: Enqueue Tom Select CSS ---
+            wp_enqueue_style(
+                'tom-select-css',
+                'https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.default.min.css',
+                array(),
+                '2.2.2'
+            );
+
             // Enqueue Frontend Quiz CSS
             wp_enqueue_style(
                 'vv-quiz-frontend',
                 VV_QUIZ_URL . 'assets/css/frontend-quiz.css',
-                array(),
+                array('tom-select-css'), // Add 'tom-select-css' as a dependency
                 VV_QUIZ_VERSION
+            );
+
+            // --- NEW: Enqueue Tom Select JS ---
+            wp_enqueue_script(
+                'tom-select-js',
+                'https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js',
+                array(), // Tom Select is standalone, but our script needs jQuery
+                '2.2.2',
+                true
             );
 
             // Enqueue Frontend Quiz JS
             wp_enqueue_script(
                 'vv-quiz-frontend-script',
                 VV_QUIZ_URL . 'assets/js/vv-quiz-dynamic.js',
-                array('jquery'),
+                array('jquery', 'tom-select-js'), // Add 'tom-select-js' as a dependency
                 VV_QUIZ_VERSION,
                 true
             );
