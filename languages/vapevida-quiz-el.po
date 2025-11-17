@@ -570,6 +570,7 @@ msgstr "Σφάλμα: Απαιτείται Δευτερεύον Συστατικ
 msgid "Please select a Secondary Ingredient."
 msgstr "Παρακαλώ επιλέξτε ένα Δευτερεύον Συστατικό."
 
+
 #: includes/class-vv-core.php:51
 msgid "Ingredient (Quiz)"
 msgstr "Συστατικό (Quiz)"
@@ -837,3 +838,7 @@ msgstr "Κορυφαίοι Συνδυασμοί (κατά Αναζητήσεις
 #: includes/admin/admin-analytics-view.php:280
 msgid "No search data yet."
 msgstr "Δεν υπάρχουν ακόμη δεδομένα αναζήτησης."
+
+#: includes/class-vv-assets.php:171
+msgid "No results found"
+msgstr "Δεν βρέθηκαν αποτολέσματα"

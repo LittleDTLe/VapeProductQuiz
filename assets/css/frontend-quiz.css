@@ -126,8 +126,9 @@
 }
 
 /*
- * --- CORRECTED: TOM-SELECT STYLING OVERRIDES (v4) ---
- * This version correctly styles the container *without* breaking the content.
+ * --- CORRECTED: TOM-SELECT STYLING OVERRIDES (v6) ---
+ * This version ONLY applies your original layout styles, letting the
+ * theme and TomSelect handle the visual appearance (border, background, etc.)
  */
 
 /* 1. Hide the original <select> */
@@ -143,45 +144,25 @@
 	padding: 10px;
 	margin-top: 5px;
 	box-sizing: border-box;
-
-	/* Force visual style */
-	border: 1px solid #767676 !important;
-	border-radius: 0 !important;
-	box-shadow: none !important;
-	background: #fff;
-
-	/* Layout */
-	display: flex;
-	align-items: center;
-	min-height: 42px; /* (10px padding * 2) + line-height */
+	/*
+     * We have REMOVED the forced border, border-radius, shadow,
+     * and background rules to allow your theme's styles to apply.
+     */
 }
 
-/* 3. The control box when focused */
-.vv-quiz-container .ts-wrapper.focus .ts-control {
-	box-shadow: none !important;
-	border-color: #767676 !important;
-}
-
-/*
- * 4. --- THIS IS THE FIX ---
- * We REMOVED the rules for ".ts-control input" and ".ts-control > div".
- * We let the default tom-select.default.min.css handle the
- * text styling, which makes the selected item populate correctly.
- */
-
-/* 5. The dropdown menu */
+/* 3. The dropdown menu */
 .vv-quiz-container .ts-dropdown {
-	border: 1px solid #aaa;
 	border-radius: 0;
+	/* We let the theme handle the border */
 }
 
-/* 6. The highlighted option */
+/* 4. The highlighted option */
 .vv-quiz-container .ts-dropdown .option.active {
 	background-color: #e21e51; /* Your theme's red color */
 	color: #fff;
 }
 
-/* 7. The ERROR STATE */
+/* 5. The ERROR STATE */
 .vv-quiz-container .ts-control.vv-field-error {
 	/* Replicate .vv-quiz-container select.vv-field-error */
 	border-color: #d9534f !important;
