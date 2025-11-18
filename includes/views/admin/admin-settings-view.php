@@ -113,6 +113,22 @@ function vv_render_details_page()
                                     target="_blank"><?php _e('Open Shop', 'vapevida-quiz'); ?></a>
                             </li>
                             <li style="margin-top: 5px;">
+                                <strong><?php _e('Live Preview:', 'vapevida-quiz'); ?></strong>
+                                <?php
+                                // Retrieve the self-registered ID
+                                $page_id = get_option('vv_quiz_page_id');
+                                $quiz_url = home_url(); // Fallback to home
+                            
+                                // Validate ID exists and is published
+                                if ($page_id && get_post_status($page_id) === 'publish') {
+                                    $quiz_url = get_permalink($page_id);
+                                }
+                                ?>
+                                <a href="<?php echo esc_url($quiz_url); ?>" target="_blank">
+                                    <?php _e('Open Quiz Page', 'vapevida-quiz'); ?>
+                                </a>
+                            </li>
+                            <li style="margin-top: 5px;">
                                 <strong><?php _e('Github Repository:', 'vapevida-quiz'); ?></strong>
                                 <a href="<?php echo esc_url($git_url); ?>"
                                     target="_blank"><?php _e('Go to Github', 'vapevida-quiz'); ?></a>
@@ -177,8 +193,8 @@ function vv_render_details_page()
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                                            <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                                        </code>
+                                                                        <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                                                    </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"

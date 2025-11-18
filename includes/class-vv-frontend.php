@@ -15,6 +15,23 @@ if (!defined('ABSPATH'))
  */
 function vv_recommender_quiz_shortcode()
 {
+
+    // --- SELF-REGISTRATION ---
+    // We check if we are on the frontend main query to avoid
+    // registering sidebars or widgets as the "Main Quiz Page".
+    if (!is_admin() && is_main_query()) {
+        global $post;
+        if ($post && isset($post->ID)) {
+            $current_id = $post->ID;
+            $saved_id = get_option('vv_quiz_page_id');
+
+            // Optimization: Only write to DB if the ID has changed.
+            // This prevents a database write on every single page load.
+            if ($saved_id != $current_id) {
+                update_option('vv_quiz_page_id', $current_id);
+            }
+        }
+    }
     // --- 1. GET ALL SETTINGS ---
     $settings = get_option('vv_quiz_settings');
 

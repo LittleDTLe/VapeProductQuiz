@@ -1,8 +1,8 @@
 # 📝 VapeVida Flavorshot Recommender Quiz Documentation
 
-**Plugin Version:** 1.1.2
+**Plugin Version:** 1.1.6
 
-**Version Notes:** Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export to CSV.
+**Version Notes:** Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export to CSV, Find Quiz Link.
 
 **Author:** Panagiotis Drougas
 
@@ -47,20 +47,21 @@ This tool ensures maintainability by allowing store managers to control all aspe
 - **Stepped Form Logic:** Add Step Logic to the form select tags.
 - **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - **Export Analytics:** Export Analytics to CSV file.
+- **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ---
 
 ## Working On
+
+- [x] **Localisation Files:** Update the localisation files to include latest additions for Analytics, Analytics Export & Find Quiz Link.
+- [x] **Settings Guide Section:** Update to include latest changes & additions.
+- [x] **ReadMe:** Update to include latest changes & additions.
 
 ---
 
 ## 💡 Future Development & Features
 
 This section outlines planned features that would require further development (potentially a premium version).
-
-### To Implement Features (Planned for Next Releases)
-
-- [ ] **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
 
 ### Feature Ideas (Refactoring Required)
 
