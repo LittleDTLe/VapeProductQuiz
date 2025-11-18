@@ -148,6 +148,7 @@ if (!defined('ABSPATH'))
                         <th><?php esc_html_e('Flavor Type', 'vapevida-quiz'); ?></th>
                         <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
                         <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
+                        <th class="vv-cvr-col"><?php esc_html_e('CVR', 'vapevida-quiz'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,6 +177,7 @@ if (!defined('ABSPATH'))
                                 </td>
                                 <td class="vv-count-col"><?php echo esc_html(number_format($item->sales_count)); ?></td>
                                 <td class="vv-revenue-col"><?php echo wc_price($item->sales_value); ?></td>
+                                <td class="vv-cvr-col"><?php echo esc_html($cvr); ?>%</td>
                             </tr>
                             <?php
                             $rank++;
@@ -194,6 +196,7 @@ if (!defined('ABSPATH'))
                         <th><?php esc_html_e('Ingredient', 'vapevida-quiz'); ?></th>
                         <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
                         <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
+                        <th class="vv-cvr-col"><?php esc_html_e('CVR', 'vapevida-quiz'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,6 +225,7 @@ if (!defined('ABSPATH'))
                                 </td>
                                 <td class="vv-count-col"><?php echo esc_html(number_format($item->sales_count)); ?></td>
                                 <td class="vv-revenue-col"><?php echo wc_price($item->sales_value); ?></td>
+                                <td class="vv-cvr-col"><?php echo esc_html($cvr); ?>%</td>
                             </tr>
                             <?php
                             $rank++;
@@ -298,6 +302,7 @@ if (!defined('ABSPATH'))
                         <th><?php esc_html_e('Combination', 'vapevida-quiz'); ?></th>
                         <th class="vv-count-col"><?php esc_html_e('Sales', 'vapevida-quiz'); ?></th>
                         <th class="vv-revenue-col"><?php esc_html_e('Revenue', 'vapevida-quiz'); ?></th>
+                        <th class="vv-cvr-col"><?php esc_html_e('CVR', 'vapevida-quiz'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -333,6 +338,7 @@ if (!defined('ABSPATH'))
                                 </td>
                                 <td class="vv-count-col"><?php echo esc_html(number_format($combo->sales_count)); ?></td>
                                 <td class="vv-revenue-col"><?php echo wc_price($combo->sales_value); ?></td>
+                                <td class="vv-cvr-col"><?php echo esc_html($cvr); ?>%</td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

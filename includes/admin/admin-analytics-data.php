@@ -58,22 +58,111 @@ class VV_Analytics_Data
     private function fetch_top_types($date_filter_sql)
     {
         global $wpdb;
-        $this->top_types_by_popularity = $wpdb->get_results($wpdb->prepare("SELECT type_term, type_slug, COUNT(*) as count FROM $this->analytics_table WHERE type_term != '' $date_filter_sql GROUP BY type_term, type_slug ORDER BY count DESC LIMIT %d", 10));
-        $this->top_types_by_sales = $wpdb->get_results($wpdb->prepare("SELECT type_term, type_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value FROM $this->analytics_table WHERE type_term != '' AND converted > 0 $date_filter_sql GROUP BY type_term, type_slug ORDER BY sales_value DESC, sales_count DESC LIMIT %d", 10));
+
+        // Popularity - unchanged
+        $this->top_types_by_popularity = $wpdb->get_results($wpdb->prepare(
+            "SELECT type_term, type_slug, COUNT(*) as count 
+         FROM $this->analytics_table 
+         WHERE type_term != '' $date_filter_sql 
+         GROUP BY type_term, type_slug 
+         ORDER BY count DESC 
+         LIMIT %d",
+            10
+        ));
+
+        // By Sales - FIXED: Count ALL searches, sum only converted ones
+        $this->top_types_by_sales = $wpdb->get_results($wpdb->prepare(
+            "SELECT 
+            type_term, 
+            type_slug, 
+            COUNT(*) as count,
+            SUM(CASE WHEN converted > 0 THEN 1 ELSE 0 END) as sales_count,
+            SUM(CASE WHEN converted > 0 THEN order_total ELSE 0 END) as sales_value
+         FROM $this->analytics_table 
+         WHERE type_term != '' $date_filter_sql 
+         GROUP BY type_term, type_slug 
+         HAVING sales_value > 0
+         ORDER BY sales_value DESC, sales_count DESC 
+         LIMIT %d",
+            10
+        ));
     }
 
     private function fetch_top_primary($date_filter_sql)
     {
         global $wpdb;
-        $this->top_primary_by_popularity = $wpdb->get_results($wpdb->prepare("SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count FROM $this->analytics_table WHERE primary_ingredient_term != '' $date_filter_sql GROUP BY primary_ingredient_term, ingredient_slug ORDER BY count DESC LIMIT %d", 10));
-        $this->top_primary_by_sales = $wpdb->get_results($wpdb->prepare("SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value FROM $this->analytics_table WHERE primary_ingredient_term != '' AND converted > 0 $date_filter_sql GROUP BY primary_ingredient_term, ingredient_slug ORDER BY sales_value DESC, sales_count DESC LIMIT %d", 10));
+
+        // Popularity - unchanged
+        $this->top_primary_by_popularity = $wpdb->get_results($wpdb->prepare(
+            "SELECT primary_ingredient_term, ingredient_slug, COUNT(*) as count 
+         FROM $this->analytics_table 
+         WHERE primary_ingredient_term != '' $date_filter_sql 
+         GROUP BY primary_ingredient_term, ingredient_slug 
+         ORDER BY count DESC 
+         LIMIT %d",
+            10
+        ));
+
+        // By Sales - FIXED: Count ALL searches, sum only converted ones
+        $this->top_primary_by_sales = $wpdb->get_results($wpdb->prepare(
+            "SELECT 
+            primary_ingredient_term, 
+            ingredient_slug, 
+            COUNT(*) as count,
+            SUM(CASE WHEN converted > 0 THEN 1 ELSE 0 END) as sales_count,
+            SUM(CASE WHEN converted > 0 THEN order_total ELSE 0 END) as sales_value
+         FROM $this->analytics_table 
+         WHERE primary_ingredient_term != '' $date_filter_sql 
+         GROUP BY primary_ingredient_term, ingredient_slug 
+         HAVING sales_value > 0
+         ORDER BY sales_value DESC, sales_count DESC 
+         LIMIT %d",
+            10
+        ));
     }
 
     private function fetch_top_combos($date_filter_sql)
     {
         global $wpdb;
-        $this->top_converting_combos = $wpdb->get_results($wpdb->prepare("SELECT type_term, type_slug, LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1, GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value FROM $this->analytics_table WHERE converted > 0 $date_filter_sql GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug ORDER BY sales_value DESC, sales_count DESC LIMIT %d", 15));
-        $this->top_popular_combos = $wpdb->get_results($wpdb->prepare("SELECT type_term, type_slug, LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1, GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2, ingredient_slug, COUNT(*) as count, SUM(converted) as sales_count, SUM(order_total) as sales_value FROM $this->analytics_table WHERE (type_term != '' OR primary_ingredient_term != '') $date_filter_sql GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug ORDER BY count DESC, sales_value DESC LIMIT %d", 15));
+
+        // Converting Combos - FIXED: Count ALL matching searches
+        $this->top_converting_combos = $wpdb->get_results($wpdb->prepare(
+            "SELECT 
+            type_term, 
+            type_slug, 
+            LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1, 
+            GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2, 
+            ingredient_slug, 
+            COUNT(*) as count,
+            SUM(CASE WHEN converted > 0 THEN 1 ELSE 0 END) as sales_count,
+            SUM(CASE WHEN converted > 0 THEN order_total ELSE 0 END) as sales_value
+         FROM $this->analytics_table 
+         WHERE 1=1 $date_filter_sql 
+         GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug 
+         HAVING sales_value > 0
+         ORDER BY sales_value DESC, sales_count DESC 
+         LIMIT %d",
+            15
+        ));
+
+        // Popular Combos - unchanged (already counts all)
+        $this->top_popular_combos = $wpdb->get_results($wpdb->prepare(
+            "SELECT 
+            type_term, 
+            type_slug, 
+            LEAST(primary_ingredient_term, secondary_ingredient_term) as ing1, 
+            GREATEST(primary_ingredient_term, secondary_ingredient_term) as ing2, 
+            ingredient_slug, 
+            COUNT(*) as count, 
+            SUM(converted) as sales_count, 
+            SUM(order_total) as sales_value 
+         FROM $this->analytics_table 
+         WHERE (type_term != '' OR primary_ingredient_term != '') $date_filter_sql 
+         GROUP BY type_term, type_slug, ing1, ing2, ingredient_slug 
+         ORDER BY count DESC, sales_value DESC 
+         LIMIT %d",
+            15
+        ));
     }
 
     private function fetch_top_products($date_filter_sql)
