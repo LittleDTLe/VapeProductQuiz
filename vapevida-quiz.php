@@ -160,3 +160,5 @@ function vv_quiz_plugin_row_meta($links, $file)
     return $links;
 }
 add_filter('plugin_row_meta', 'vv_quiz_plugin_row_meta', 10, 2);
+
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'vv_add_plugin_action_links');
