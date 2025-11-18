@@ -31,9 +31,6 @@ if (isset($_GET['vv_export_analytics']) && $_GET['vv_export_analytics'] == 'true
         if (defined('VV_QUIZ_DIR')) {
             // Try the main constant first (best way)
             require_once(VV_QUIZ_DIR . 'includes/admin/admin-analytics-data.php');
-        } else {
-            // Fallback path now goes UP one directory
-            require_once(plugin_dir_path(__FILE__) . '../class-vv-analytics-data.php');
         }
     }
 
