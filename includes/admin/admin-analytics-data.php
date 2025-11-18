@@ -100,8 +100,6 @@ class VV_Analytics_Data
 
     public static function export_all_to_csv()
     {
-        // VERSION CHECK - You should see "v2.0" in filename
-        $version = 'v2.0';
 
         $selected_range = isset($_GET['range']) ? sanitize_key($_GET['range']) : 'all_time';
         $date_filter_sql = '';
@@ -134,7 +132,7 @@ class VV_Analytics_Data
         }
 
         $date_label = self::get_date_label($selected_range);
-        $filename = "VapeVida-Analytics-{$version}-{$date_label}-" . date('Ymd-His') . ".csv";
+        $filename = "VapeVida-Analytics-{$date_label}-" . date('Ymd-His') . ".csv";
 
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');

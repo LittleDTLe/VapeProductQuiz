@@ -25,13 +25,17 @@ if (!defined('ABSPATH'))
                 <label for="vv-analytics-range"><?php _e('Date Range:', 'vapevida-quiz'); ?></label>
                 <select name="range" id="vv-analytics-range">
                     <option value="all_time" <?php selected($selected_range, 'all_time'); ?>>
-                        <?php _e('All Time', 'vapevida-quiz'); ?></option>
+                        <?php _e('All Time', 'vapevida-quiz'); ?>
+                    </option>
                     <option value="30_days" <?php selected($selected_range, '30_days'); ?>>
-                        <?php _e('Last 30 Days', 'vapevida-quiz'); ?></option>
+                        <?php _e('Last 30 Days', 'vapevida-quiz'); ?>
+                    </option>
                     <option value="7_days" <?php selected($selected_range, '7_days'); ?>>
-                        <?php _e('Last 7 Days', 'vapevida-quiz'); ?></option>
+                        <?php _e('Last 7 Days', 'vapevida-quiz'); ?>
+                    </option>
                     <option value="this_month" <?php selected($selected_range, 'this_month'); ?>>
-                        <?php _e('This Month', 'vapevida-quiz'); ?></option>
+                        <?php _e('This Month', 'vapevida-quiz'); ?>
+                    </option>
                 </select>
 
                 <button type="submit" class="button button-primary">
