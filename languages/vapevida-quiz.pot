@@ -768,8 +768,7 @@ msgstr ""
 msgid "Qty Sold"
 msgstr ""
 
-Type
-: includes/admin/admin-analytics-view.php:201
+#: includes/admin/admin-analytics-view.php:201
 msgid "No product sales have been tracked from the quiz yet."
 msgstr ""
 
@@ -800,4 +799,41 @@ msgstr ""
 
 #: includes/class-vv-assets.php:171
 msgid "No results found"
+msgstr ""
+
+#: includes/class-vv-assets.php:172
+#: includes/views/frontend/quiz-form-view.php:123
+msgid "Load More"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "Live Preview:"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "Open Quiz Page"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "Searchable Dropdowns"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "Live Product Preview"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "CSV Export"
+msgstr ""
+
+#: includes/admin/admin-rendering.php
+msgid "Products are displayed instantly below the form as the user searches. A \"Load More\" button handles pagination to keep the page fast."
+msgstr ""
+
+#: includes/admin/admin-analytics-view.php
+msgid "Export to CSV"
+msgstr ""
+
+#: includes/admin/class-vv-analytics-data.php
+msgid "No data."
 msgstr ""

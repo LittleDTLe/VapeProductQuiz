@@ -193,8 +193,8 @@ function vv_render_details_page()
 
                             <code id="vv-shortcode-code"
                                 style="flex-grow: 1; padding: 8px 10px; background: #fff; border: 1px dashed #ccc; font-weight: bold; border-radius: 3px;">
-                                                                        <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
-                                                                    </code>
+                                                                                    <span class="dashicons dashicons-editor-code" style="vertical-align: middle; margin-right: 5px;"></span>[vapevida_quiz]
+                                                                                </code>
 
                             <button type="button" id="vv-copy-shortcode-btn"
                                 class="button button-secondary dashicons-before dashicons-admin-page"
@@ -229,7 +229,28 @@ function vv_render_details_page()
                             <span style="font-weight: bold;"><?php _e('Real-Time Updates:', 'vapevida-quiz'); ?></span>
                             <?php _e('The dropdowns cascade dynamically, ensuring subsequent choices are always valid and have a corresponding product result.', 'vapevida-quiz'); ?>
                         </li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Searchable Dropdowns:', 'vapevida-quiz'); ?></span>
+                            <?php _e('Fields use Tom Select for instant searching, improving user navigation.', 'vapevida-quiz'); ?>
+                        </li>
+                        <li>
+                            <span style="font-weight: bold;"><?php _e('Live Preview Button:', 'vapevida-quiz'); ?></span>
+                            <?php _e('The button in the sidebar links to the current quiz page, automatically registered when the page is first viewed.', 'vapevida-quiz'); ?>
+                        </li>
                     </ul>
+
+                    <p style="margin-top: 20px;">
+                        <span class="dashicons dashicons-chart-pie"
+                            style="font-size: 1.2em; vertical-align: middle; color: #337ab7;"></span>
+                        <strong><?php _e('Analytics Data Export:', 'vapevida-quiz'); ?></strong>
+                        <?php _e('The "Export to CSV" button on the Analytics page allows you to download all current reports (Combinations, Revenue by Type, Top Products, etc.) into a structured file.', 'vapevida-quiz'); ?>
+                    </p>
+
+                    <p style="margin-top: 20px; color: #5cb85c;">
+                        <span class="dashicons dashicons-yes-alt" style="font-size: 1.2em; vertical-align: middle;"></span>
+                        <strong><?php _e('Maintenance Note (v1.1.1):', 'vapevida-quiz'); ?></strong>
+                        <?php _e('Conversion Rate (CVR) calculation has been updated to correctly use the Total Searches as the denominator, resolving the misleading 100% CVR issue in revenue reports.', 'vapevida-quiz'); ?>
+                    </p>
 
                     <h3 style="margin-top: 30px;">
                         <span class="dashicons dashicons-editor-ul"></span>

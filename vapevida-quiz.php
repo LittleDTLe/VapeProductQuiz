@@ -3,7 +3,7 @@
  * Plugin Name: VapeVida Flavorshot Recommender Quiz
  * Plugin URI: https://github.com/LittleDTLe/VapeProductQuiz
  * Description: Simple Product Finder Quiz with settings for quiz customization. Auto-populate the quiz with Global Attribute Terms with connected products.
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: Panagiotis Drougas
  * Author URI: https://github.com/LittleDTLe
  * Text Domain: vapevida-quiz
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define Plugin Constants
-define('VV_QUIZ_VERSION', '1.1.5');
+define('VV_QUIZ_VERSION', '1.1.6');
 define('VV_QUIZ_DIR', plugin_dir_path(__FILE__));
 define('VV_QUIZ_URL', plugin_dir_url(__FILE__));
 define('VV_QUIZ_BASENAME', plugin_basename(__FILE__));

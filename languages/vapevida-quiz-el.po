@@ -570,36 +570,35 @@ msgstr "Σφάλμα: Απαιτείται Δευτερεύον Συστατικ
 msgid "Please select a Secondary Ingredient."
 msgstr "Παρακαλώ επιλέξτε ένα Δευτερεύον Συστατικό."
 
-
 #: includes/class-vv-core.php:51
 msgid "Ingredient (Quiz)"
 msgstr "Συστατικό (Quiz)"
 
-#: includes/class-vv-core.php:310
+#: includes/class-vv-assets.php:158
 msgid "Searching..."
 msgstr "Αναζήτηση..."
 
-#: includes/class-vv-core.php:311
+#: includes/class-vv-assets.php:159
 msgid "Loading..."
 msgstr "Φόρτωση..."
 
-#: includes/class-vv-core.php:313
+#: includes/class-vv-assets.php:161
 msgid "🛑 0 RESULTS"
 msgstr "🛑 0 ΑΠΟΤΕΛΕΣΜΑΤΑ"
 
-#: includes/class-vv-core.php:314
+#: includes/class-vv-assets.php:162
 msgid "FIND 1 PRODUCT"
 msgstr "ΒΡΕΣ 1 ΠΡΟΪΟΝ"
 
-#: includes/class-vv-core.php:315
+#: includes/class-vv-assets.php:163
 msgid "FOUND {count} PRODUCTS"
 msgstr "ΒΡΕΘΗΚΑΝ {count} ΠΡΟΪΟΝΤΑ"
 
-#: includes/class-vv-core.php:316
+#: includes/class-vv-assets.php:164
 msgid "⚠️ DATA ERROR"
 msgstr "⚠️ ΣΦΑΛΜΑ ΔΕΔΟΜΕΝΩΝ"
 
-#: includes/class-vv-core.php:317
+#: includes/class-vv-assets.php:165
 msgid "Loading Error"
 msgstr "Σφάλμα Φόρτωσης"
 
@@ -841,4 +840,41 @@ msgstr "Δεν υπάρχουν ακόμη δεδομένα αναζήτησης
 
 #: includes/class-vv-assets.php:171
 msgid "No results found"
-msgstr "Δεν βρέθηκαν αποτολέσματα"
+msgstr "Δεν βρέθηκαν αποτελέσματα"
+
+#: includes/class-vv-assets.php:172
+#: includes/views/frontend/quiz-form-view.php:123
+msgid "Load More"
+msgstr "Φόρτωση Περισσότερων"
+
+#: includes/admin/admin-rendering.php
+msgid "Live Preview:"
+msgstr "Live Προεπισκόπηση:"
+
+#: includes/admin/admin-rendering.php
+msgid "Open Quiz Page"
+msgstr "Άνοιγμα Σελίδας Quiz"
+
+#: includes/admin/admin-rendering.php
+msgid "Searchable Dropdowns"
+msgstr "Λίστες με Αναζήτηση"
+
+#: includes/admin/admin-rendering.php
+msgid "Live Product Preview"
+msgstr "Live Προεπισκόπηση Προϊόντων"
+
+#: includes/admin/admin-rendering.php
+msgid "CSV Export"
+msgstr "Εξαγωγή CSV"
+
+#: includes/admin/admin-rendering.php
+msgid "Products are displayed instantly below the form as the user searches. A \"Load More\" button handles pagination to keep the page fast."
+msgstr "Τα προϊόντα εμφανίζονται άμεσα κάτω από τη φόρμα καθώς ο χρήστης αναζητά. Ένα κουμπί \"Φόρτωση Περισσότερων\" φροντίζει για τη σελιδοποίηση ώστε η σελίδα να παραμένει γρήγορη."
+
+#: includes/admin/admin-analytics-view.php
+msgid "Export to CSV"
+msgstr "Εξαγωγή σε CSV"
+
+#: includes/admin/class-vv-analytics-data.php
+msgid "No data."
+msgstr "Χωρίς δεδομένα."

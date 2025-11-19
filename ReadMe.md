@@ -139,6 +139,36 @@ The **Analytics** page (`VapeVida Quiz -> Analytics`) provides a comprehensive o
 
 ---
 
+### 2.4 Frontend Functionality Upgrades
+
+The quiz fields have been upgraded to use the Tom Select library, significantly enhancing the customer experience.
+
+#### Searchable Fields
+
+- **Modern UX:** Fields now include live search functionality, allowing users to **type the name of the flavor or ingredient** they are looking for instead of scrolling through long lists.
+- **Performance:** This improves navigation speed and makes the quiz much faster to complete, especially on sites with a large number of flavor attributes.
+
+#### CSV Data Export
+
+A dedicated button has been added to the **Analytics** page to facilitate external data analysis.
+
+- **Export Location:** The **Export to CSV** button is located next to the Date Range filter on the Analytics page.
+- **Comprehensive Download:** When clicked, the button exports all visible data tables (Combinations, Top Products, Revenue by Type, etc.) into a single, structured CSV file.
+- **Date Range Respect:** The export respects the date range currently selected on the Analytics page filter.
+
+---
+
+### 2.5 Admin Convenience
+
+#### Live Preview Button
+
+The **Live Preview** button provides a zero-click way for administrators to view the quiz on the frontend.
+
+- **Self-Registration Logic:** The plugin automatically detects and stores the URL of the page where the shortcode `[vapevida_quiz]` is placed when the page is first visited.
+- **Instant Access:** The button in the Admin Settings links directly to this detected URL, ensuring the preview link is always accurate, even if the page slug changes.
+
+---
+
 ## 3. Maintenance Guide: Adding New Flavors
 
 The system automatically manages the options list. Follow these steps to introduce a new flavor (e.g., "Kiwi") to the Quiz dropdowns:
