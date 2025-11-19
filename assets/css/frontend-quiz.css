@@ -126,7 +126,7 @@
 }
 
 /*
- * --- TOM-SELECT STYLING OVERRIDES  ---
+ * --- TOM-SELECT STYLING OVERRIDES (v10 - Final Stand) ---
  */
 
 /* 1. Hide the original <select> */
@@ -137,37 +137,53 @@
 
 /* 2. The main control box */
 #vv-recommender-form .ts-control {
+	/* Replicate .vv-quiz-container select LAYOUT */
 	width: 100%;
-	padding: 12px;
+	padding: 10px;
 	margin-top: 5px;
 	box-sizing: border-box;
-	min-height: 42px;
+	min-height: 42px; /* Maintain height from original rule */
 
-	border: 1px solid #d0d0d0;
-	border-radius: 4px;
-	background: rgba(255, 255, 255, 0.85);
-	box-shadow: none;
+	/* --- "PRETTY" STYLES (FORCED) --- */
+	border: 1px solid #d0d0d0 !important;
+	border-radius: 4px !important;
+	background: #fff !important;
+	box-shadow: none !important;
 	transition: border-color 0.2s, box-shadow 0.2s;
-
-	font-size: 16px;
 }
 
+/* 3. The "pretty" focus state */
 #vv-recommender-form .ts-wrapper.focus .ts-control {
-	border-color: #80a0ff;
-	box-shadow: 0 0 0 3px rgba(50, 100, 255, 0.2);
+	border-color: #80a0ff !important;
+	box-shadow: 0 0 0 3px rgba(50, 100, 255, 0.2) !important;
 }
 
-/* 4. The dropdown menu */
 #vv-recommender-form .ts-dropdown {
+	/* --- FIX: ADD MAX-HEIGHT AND SCROLLABILITY --- */
+	max-height: 250px !important;
+	overflow-y: auto !important;
+	/* --- END FIX --- */
+
 	border-radius: 4px;
 	border: 1px solid #d0d0d0;
 	margin-top: 4px;
-	background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ADD THIS NEW RULE - Target the dropdown content specifically */
+#vv-recommender-form .ts-dropdown .ts-dropdown-content {
+	max-height: 250px !important;
+	overflow-y: auto !important;
+}
+
+/* Ensure options are visible */
+#vv-recommender-form .ts-dropdown .option {
+	display: block;
+	padding: 8px 12px;
 }
 
 /* 5. The highlighted option */
 #vv-recommender-form .ts-dropdown .option.active {
-	background-color: #e21e51;
+	background-color: #e21e51; /* Your theme's red color */
 	color: #fff;
 }
 

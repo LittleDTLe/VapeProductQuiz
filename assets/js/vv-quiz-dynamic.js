@@ -18,18 +18,20 @@ jQuery(document).ready(function ($) {
     let tsType, tsPrimary, tsSecondary;
 
     // --- NEW: Create a shared config for TomSelect ---
-    const tomSelectSettings = {
-        allowEmptyOption: true,
-        // Add translated strings for the search UI
-        render: {
-            no_results: function(data, escape) {
-                return '<div class="no-results">' + escape(i18n.search_no_results || 'No results found') + '</div>';
-            },
-            loading: function(data, escape) {
-                return '<div class="loading">' + escape(i18n.search_loading || 'Loading...') + '</div>';
-            }
+    // --- NEW: Create a shared config for TomSelect ---
+const tomSelectSettings = {
+    allowEmptyOption: true,
+    maxOptions: null, // Show all options (remove any limit)
+    dropdownParent: 'body', // This helps with positioning/overflow issues
+    render: {
+        no_results: function(data, escape) {
+            return '<div class="no-results">' + escape(i18n.search_no_results || 'No results found') + '</div>';
+        },
+        loading: function(data, escape) {
+            return '<div class="loading">' + escape(i18n.search_loading || 'Loading...') + '</div>';
         }
-    };
+    }
+};
 
 
     /**
@@ -337,21 +339,24 @@ jQuery(document).ready(function ($) {
     // Initialize TomSelect for each field
     
     tsType = new TomSelect(typeSelect, {
-        ...tomSelectSettings, // <-- Use shared settings
-        placeholder: settings.placeholder_type, // <-- USE SETTINGS VARIABLE
-        onChange: onTypeChange 
+        ...tomSelectSettings,
+        placeholder: settings.placeholder_type, 
+        onChange: onTypeChange,
+        maxOptions: null
     });
     
     tsPrimary = new TomSelect(primaryIngredientSelect, {
-        ...tomSelectSettings, // <-- Use shared settings
+        ...tomSelectSettings, 
         placeholder: settings.placeholder_primary,
-        onChange: onPrimaryChange
+        onChange: onPrimaryChange,
+        maxOptions: null
     });
 
     tsSecondary = new TomSelect(secondaryIngredientSelect, {
-        ...tomSelectSettings, // <-- Use shared settings
+        ...tomSelectSettings, 
         placeholder: settings.placeholder_secondary,
-        onChange: onSecondaryChange
+        onChange: onSecondaryChange,
+        maxOptions: null
     });
 
     // Run initial reset to lock fields
