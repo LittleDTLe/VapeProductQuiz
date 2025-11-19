@@ -3,10 +3,10 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VapeVida Flavorshot Recommender Quiz 0.9.5\n"
+"Project-Id-Version: VapeVida Flavorshot Recommender Quiz 1.1.6\n"
 "Report-Msgid-Bugs-To: https://github.com/LittleDTLe/VapeProductQuiz/issues\n"
 "POT-Creation-Date: 2025-11-12 00:00+0000\n"
-"PO-Revision-Date: 2025-11-17 13:21+0200\n"
+"PO-Revision-Date: 2025-11-19 13:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Greek (Greece)\n"
 "Language: el_GR\n"
@@ -878,3 +878,34 @@ msgstr "Εξαγωγή σε CSV"
 #: includes/admin/class-vv-analytics-data.php
 msgid "No data."
 msgstr "Χωρίς δεδομένα."
+
+#: includes/admin/class-vv-admin-dashboard.php:123
+msgid "VapeVida Quiz - Weekly Stats"
+msgstr "VapeVida Quiz - Εβδομαδιαία Στατιστικά"
+
+#: includes/admin/admin-dashboard-widget-view.php:23
+msgid "Quiz Searches"
+msgstr "Αναζητήσεις Quiz"
+
+#: includes/admin/admin-dashboard-widget-view.php:57
+msgid "Orders"
+msgstr "Παραγγελίες"
+
+#: includes/admin/admin-dashboard-widget-view.php:26
+#: includes/admin/admin-dashboard-widget-view.php:40
+#: includes/admin/admin-dashboard-widget-view.php:53
+#: includes/admin/admin-dashboard-widget-view.php:67
+msgid "vs last week"
+msgstr "vs προηγούμενη εβδομάδα"
+
+#: includes/admin/admin-dashboard-widget-view.php:79
+msgid "🔥 Top Flavor This Week"
+msgstr "🔥 Κορυφαία Γεύση Αυτή την Εβδομάδα"
+
+#: includes/admin/admin-dashboard-widget-view.php:82
+msgid "searches"
+msgstr "αναζητήσεις"
+
+#: includes/admin/admin-dashboard-widget-view.php:86
+msgid "View Full Analytics"
+msgstr "Προβολή Πλήρων Αναλυτικών"

@@ -54,8 +54,6 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ## Working On
 
-- [x] **Localisation Update:** Update Localisation Files
-
 ---
 
 ## 💡 Future Development & Features
@@ -165,6 +163,13 @@ The **Live Preview** button provides a zero-click way for administrators to view
 
 - **Self-Registration Logic:** The plugin automatically detects and stores the URL of the page where the shortcode `[vapevida_quiz]` is placed when the page is first visited.
 - **Instant Access:** The button in the Admin Settings links directly to this detected URL, ensuring the preview link is always accurate, even if the page slug changes.
+
+#### Dashboard Widget (Weekly Stats)
+
+- **Location:** The widget is available on the main WordPress Dashboard screen, providing an at-a-glance summary of the quiz's performance.
+- **Key Metrics:** Displays crucial Key Performance Indicators (KPIs) for the current week, including Searches, Revenue, and CVR.
+- **Comparison:** Includes a percentage change calculation for all metrics compared to the previous week, allowing for easy performance tracking.
+- **Top Performer:** Highlights the "Top Flavor Type" by searches for the current week.
 
 ---
 

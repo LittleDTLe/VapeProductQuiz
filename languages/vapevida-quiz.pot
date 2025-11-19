@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: VapeVida Flavorshot Recommender Quiz\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 10:52+0000\n"
-"PO-Revision-Date: 2025-11-17 13:19+0000\n"
+"PO-Revision-Date: 2025-11-19 13:19+0000\n"
 "Last-Translator: Panagiotis Drougas\n"
 "Language-Team: \n"
 "Language: \n"
@@ -836,4 +836,35 @@ msgstr ""
 
 #: includes/admin/class-vv-analytics-data.php
 msgid "No data."
+msgstr ""
+
+#: includes/admin/class-vv-admin-dashboard.php:123
+msgid "VapeVida Quiz - Weekly Stats"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:23
+msgid "Quiz Searches"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:57
+msgid "Orders"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:26
+#: includes/admin/admin-dashboard-widget-view.php:40
+#: includes/admin/admin-dashboard-widget-view.php:53
+#: includes/admin/admin-dashboard-widget-view.php:67
+msgid "vs last week"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:79
+msgid "🔥 Top Flavor This Week"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:82
+msgid "searches"
+msgstr ""
+
+#: includes/admin/admin-dashboard-widget-view.php:86
+msgid "View Full Analytics"
 msgstr ""

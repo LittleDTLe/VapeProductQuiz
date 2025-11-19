@@ -240,6 +240,13 @@ function vv_render_details_page()
                     </ul>
 
                     <p style="margin-top: 20px;">
+                        <span class="dashicons dashicons-dashboard"
+                            style="font-size: 1.2em; vertical-align: middle; color: #4a67b2;"></span>
+                        <strong><?php _e('Dashboard Widget:', 'vapevida-quiz'); ?></strong>
+                        <?php _e('A custom widget is now available on the main WordPress Dashboard, providing a quick summary of weekly searches, revenue, and CVR with week-over-week comparisons.', 'vapevida-quiz'); ?>
+                    </p>
+
+                    <p style="margin-top: 20px;">
                         <span class="dashicons dashicons-chart-pie"
                             style="font-size: 1.2em; vertical-align: middle; color: #337ab7;"></span>
                         <strong><?php _e('Analytics Data Export:', 'vapevida-quiz'); ?></strong>
