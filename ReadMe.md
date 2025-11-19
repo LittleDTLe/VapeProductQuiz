@@ -53,10 +53,6 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ## Working On
 
-- [x] **Localisation Files:** Update the localisation files to include latest additions for Analytics, Analytics Export & Find Quiz Link.
-- [x] **Settings Guide Section:** Update to include latest changes & additions.
-- [x] **ReadMe:** Update to include latest changes & additions.
-
 ---
 
 ## 💡 Future Development & Features
