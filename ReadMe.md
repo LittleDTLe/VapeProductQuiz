@@ -53,6 +53,8 @@ This tool ensures maintainability by allowing store managers to control all aspe
 
 ## Working On
 
+- [x] **Dashboard Widget:** Add a Dashboard Analytics Widget with Last 7 Days filter.
+
 ---
 
 ## 💡 Future Development & Features

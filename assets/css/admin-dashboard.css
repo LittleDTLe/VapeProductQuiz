@@ -1,0 +1,106 @@
+.vv-widget-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	margin-bottom: 15px;
+}
+
+.vv-widget-card {
+	background: #f8f9fa;
+	padding: 12px;
+	border-radius: 6px;
+	border-left: 3px solid #667eea;
+}
+
+.vv-widget-card.revenue {
+	border-left-color: #28a745;
+}
+
+.vv-widget-card.sales {
+	border-left-color: #ffc107;
+}
+
+.vv-widget-card.cvr {
+	border-left-color: #17a2b8;
+}
+
+.vv-widget-label {
+	font-size: 11px;
+	color: #666;
+	text-transform: uppercase;
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.vv-widget-value {
+	font-size: 24px;
+	font-weight: 700;
+	color: #333;
+	line-height: 1.2;
+}
+
+.vv-widget-change {
+	font-size: 12px;
+	font-weight: 600;
+	margin-top: 4px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.vv-widget-change.positive {
+	color: #28a745;
+}
+
+.vv-widget-change.negative {
+	color: #dc3545;
+}
+
+.vv-widget-change.neutral {
+	color: #6c757d;
+}
+
+.vv-widget-change .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.vv-widget-footer {
+	padding-top: 12px;
+	border-top: 1px solid #ddd;
+	margin-top: 12px;
+}
+
+.vv-widget-top-type {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	padding: 10px 12px;
+	border-radius: 6px;
+	font-size: 13px;
+	margin-bottom: 10px;
+}
+
+.vv-widget-top-type strong {
+	font-size: 15px;
+	display: block;
+	margin-top: 3px;
+}
+
+.vv-widget-link {
+	text-align: center;
+}
+
+.vv-widget-link a {
+	text-decoration: none;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+@media (max-width: 782px) {
+	.vv-widget-grid {
+		grid-template-columns: 1fr;
+	}
+}

@@ -16,4 +16,5 @@ require_once VV_QUIZ_DIR . 'includes/admin/admin-menu-ui.php';
 require_once VV_QUIZ_DIR . 'includes/admin/admin-callbacks.php';
 require_once VV_QUIZ_DIR . 'includes/admin/admin-settings-api.php';
 require_once VV_QUIZ_DIR . 'includes/admin/admin-analytics-data.php';
+require_once VV_QUIZ_DIR . 'includes/admin/admin-dashboard-widget.php';
 

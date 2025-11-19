@@ -69,6 +69,16 @@ class VV_Assets
 
             $this->enqueue_analytics_assets();
         }
+
+        // --- Dashboard Widget CSS ---
+        if ('index.php' === $hook_suffix) {
+            wp_enqueue_style(
+                'vv-quiz-dashboard',
+                VV_QUIZ_URL . 'assets/css/admin-dashboard.css',
+                array(),
+                VV_QUIZ_VERSION
+            );
+        }
     }
 
     /**
@@ -118,7 +128,7 @@ class VV_Assets
             $settings = get_option('vv_quiz_settings');
             $cta_button_text = isset($settings['button_cta']) ? $settings['button_cta'] : __('FIND YOUR LIQUID', VV_QUIZ_TEXT_DOMAIN);
 
-            // --- NEW: Define placeholder for Type field ---
+            // --- Define placeholder for Type field ---
             $placeholder_type = isset($settings['placeholder_type']) ? $settings['placeholder_type'] : __('-- Select Profile --', VV_QUIZ_TEXT_DOMAIN);
 
             $placeholder_primary = isset($settings['placeholder_primary']) ? $settings['placeholder_primary'] : __('-- Select Primary Ingredient --', VV_QUIZ_TEXT_DOMAIN);
@@ -152,7 +162,7 @@ class VV_Assets
                 array(
                     'ajax_url' => admin_url('admin-ajax.php'),
 
-                    // --- NEW: Pass the Type placeholder to JS ---
+                    // --- Pass the Type placeholder to JS ---
                     'placeholder_type' => $placeholder_type,
 
                     'placeholder_primary' => $placeholder_primary,
