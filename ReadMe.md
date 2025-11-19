@@ -2,7 +2,7 @@
 
 **Plugin Version:** 1.1.6
 
-**Version Notes:** Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export to CSV, Find Quiz Link.
+**Version Notes:** Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export to CSV, Find Quiz Link, Dashboard Widget.
 
 **Author:** Panagiotis Drougas
 
@@ -48,12 +48,13 @@ This tool ensures maintainability by allowing store managers to control all aspe
 - **Search / Type in Selects:** Add search functionality to the dropdowns to easily find the term you are looking for.
 - **Export Analytics:** Export Analytics to CSV file.
 - **Live Preview Button:** Adds a direct button to immediately view this quiz instance on the frontend of your site, allowing for quick testing and verification of settings and attributes.
+- **Dashboard Widget:** Add a Dashboard Analytics Widget with Last 7 Days filter.
 
 ---
 
 ## Working On
 
-- [x] **Dashboard Widget:** Add a Dashboard Analytics Widget with Last 7 Days filter.
+- [x] **Localisation Update:** Update Localisation Files
 
 ---
 

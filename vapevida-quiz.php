@@ -12,7 +12,7 @@
  * Requires PHP: 7.4
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * VersionNotes: Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export Analytics, Find Quiz Link
+ * VersionNotes: Modularization: Admin, Modularisation: Frontend, Dynamic Text Configuration, Dynamic Required Fields, Attribute Selection, Button Color Control, Responsive Admin Page, Easy Shortcode Copy, Dynamic Clear Button, Dynamic Custom Attribute Selectors, WooCommerce Active Checker, Uninstall Script, Modularisation of Admin File, Dynamic Cascading Filters, Real-Time Result Preview, Full Localization Support, Advanced Analytics Dashboard, Sales & Revenue Conversion Tracking, Search Combination Normalization, Stepped Form Logic, Search in Selects, Export Analytics, Find Quiz Link, Dashboard Widget
  * Features: Multiple Product Recommendation Quizzes
  */
 
