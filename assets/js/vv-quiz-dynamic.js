@@ -17,8 +17,8 @@ jQuery(document).ready(function ($) {
     // Store TomSelect instances
     let tsType, tsPrimary, tsSecondary;
 
-    // --- NEW: Create a shared config for TomSelect ---
-    // --- NEW: Create a shared config for TomSelect ---
+    // --- Create a shared config for TomSelect ---
+    // --- Create a shared config for TomSelect ---
 const tomSelectSettings = {
     allowEmptyOption: true,
     maxOptions: null, // Show all options (remove any limit)
